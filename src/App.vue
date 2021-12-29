@@ -12,11 +12,14 @@ const props = defineProps({
     required: true
   }
 })
-let currentFile = ref({})
+let current = ref({})
 let metadata = ref({})
 
 function updateView (file) {
-  currentFile.value = file
+  current.value = {
+    name:file.name,
+    path:file.path
+  }
   const api = props.app.plugins.plugins.dataview?.api
   if (api) {
     metadata.value = api.index.pages.get(file.path)
@@ -25,11 +28,21 @@ function updateView (file) {
 
 onBeforeMount(() => {
   let plugin = props.app.plugins.plugins[PLUGIN_NAME]
-  console.log('register trigger updateView')
-  plugin.registerEvent(props.app.workspace.on('file-open', async (file) => {
-    updateView(file)
-  }))
-  console.log('mounted!')
+
+  plugin.registerEvent(
+      props.app.metadataCache.on('dataview:metadata-change', (_, file) => {
+        if (file.path === current.value.path) {
+          updateView(file)
+        }
+      })
+  )
+
+  plugin.registerEvent(
+      props.app.workspace.on('file-open', async (file) => {
+        updateView(file)
+      })
+  )
+
 })
 
 onMounted(() => {
@@ -43,7 +56,7 @@ onMounted(() => {
 
 <template>
   <div class="grid">
-    <div>{{ currentFile }}</div>
+    <div>{{ current }}</div>
     <div v-if="metadata">
       <div>ctime: {{ metadata.ctime }}</div>
       <div>mtime: {{ metadata.mtime }}</div>
