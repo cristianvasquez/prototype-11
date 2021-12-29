@@ -1,7 +1,1 @@
-# Playground
-
-## Facets
-
-## Linked data
-
-## SPARQL
+Using facets, linked data and SPARQL in Obsidian
