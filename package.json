@@ -1,0 +1,29 @@
+{
+  "name": "prototype-11",
+  "version": "0.1.0",
+  "description": "Prototype 11",
+  "main": "main.js",
+  "author": "Cristian Vasquez <cristianvasquez.me>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "vite build"
+  },
+  "keywords": [
+    "obsidian",
+    "vue",
+    "vite"
+  ],
+  "dependencies": {
+    "parsimmon": "^1.18.1",
+    "vue": "^3.2.24"
+  },
+  "devDependencies": {
+    "@types/parsimmon": "^1.10.6",
+    "@vitejs/plugin-vue": "^1.2.3",
+    "@vue/compiler-sfc": "^3.0.8",
+    "obsidian": "^0.12.0",
+    "obsidian-dataview": "^0.4.21",
+    "vite": "^2.3.8"
+  }
+}
