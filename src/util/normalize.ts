@@ -1,4 +1,5 @@
 import * as P from "parsimmon";
+// @ts-ignore
 import emojiRegex from "emoji-regex";
 
 /** Get the folder containing the given path (i.e., like computing 'path/..'). */

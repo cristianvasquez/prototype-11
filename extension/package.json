@@ -1,0 +1,33 @@
+{
+	"name": "prototype-11-extension",
+	"version": "0.12.0",
+	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+	"main": "main.js",
+	"scripts": {
+		"dev": "node esbuild.config.mjs",
+		"build": "node esbuild.config.mjs production"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "MIT",
+	"dependencies": {
+		"hydra-box": "^0.6.3",
+		"hydra-fetch": "https://git@github.com/zazuko/hydra-fetch.git#next",
+		"rdf-ext": "https://git@github.com/rdf-ext/rdf-ext.git#next",
+		"rdf-loader-code": "^0.3.2",
+		"rdf-sparql-builder": "^0.1.9",
+		"rdf-utils-fs": "^2.1.0",
+		"rdf-utils-namespace": "^0.1.0",
+		"sparql-http-client": "^2.4.0"
+	},
+	"devDependencies": {
+		"@types/node": "^16.11.6",
+		"@typescript-eslint/eslint-plugin": "^5.2.0",
+		"@typescript-eslint/parser": "^5.2.0",
+		"builtin-modules": "^3.2.0",
+		"esbuild": "0.13.12",
+		"obsidian": "^0.12.17",
+		"tslib": "2.3.1",
+		"typescript": "4.4.4"
+	}
+}

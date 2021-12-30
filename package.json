@@ -19,11 +19,14 @@
     "vue": "^3.2.24"
   },
   "devDependencies": {
+    "@types/debug": "^4.1.7",
     "@types/parsimmon": "^1.10.6",
     "@vitejs/plugin-vue": "^1.2.3",
     "@vue/compiler-sfc": "^3.0.8",
     "obsidian": "^0.12.0",
     "obsidian-dataview": "^0.4.21",
-    "vite": "^2.3.8"
+    "tslib": "^2.3.1",
+    "vite": "^2.3.8",
+    "vite-plugin-commonjs-externals": "^0.1.1"
   }
 }

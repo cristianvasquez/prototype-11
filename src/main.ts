@@ -1,12 +1,11 @@
 import {ItemView, Menu, Modal, Notice, Plugin, PluginSettingTab, Setting, WorkspaceLeaf} from "obsidian";
 import {createApp, ref} from 'vue'
 import App from './App.vue'
+import {PLUGIN_NAME} from "./consts";
 
 interface MyPluginSettings {
     mySetting: string
 }
-
-export const PLUGIN_NAME = 'prototype-11'
 
 const DEFAULT_SETTINGS: MyPluginSettings = {
     mySetting: 'default'
@@ -17,6 +16,7 @@ export default class Prototype_11 extends Plugin {
     private vueApp: App<Element>;
 
     async onload() {
+
         console.log(`loading ${PLUGIN_NAME}`)
         await this.loadSettings()
 
@@ -61,11 +61,8 @@ export default class Prototype_11 extends Plugin {
     }
 
     async activateSidePanel() {
-        console.log('activateSidePanel 1')
         this.app.workspace.detachLeavesOfType(SIDE_VIEW_ID);
-        console.log('activateSidePanel 2')
         await this.app.workspace.getRightLeaf(false).setViewState({type: SIDE_VIEW_ID, active: true});
-        console.log('activateSidePanel 3')
         this.app.workspace.revealLeaf(this.app.workspace.getLeavesOfType(SIDE_VIEW_ID)[0]);
     }
 
@@ -80,9 +77,9 @@ export default class Prototype_11 extends Plugin {
 export const SIDE_VIEW_ID = `${PLUGIN_NAME}-sideview`;
 
 export class CurrentFileView extends ItemView {
-    private vueApp: any;
+    private vueApp: App<Element>;
 
-    constructor(leaf: WorkspaceLeaf, vueApp) {
+    constructor(leaf: WorkspaceLeaf, vueApp: App<Element>) {
         super(leaf);
         this.vueApp = vueApp
     }

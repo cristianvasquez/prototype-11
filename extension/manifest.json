@@ -1,0 +1,9 @@
+{
+	"id": "prototype-11-extension",
+	"name": "Prototype libs",
+	"version": "1.0.1",
+	"minAppVersion": "0.12.0",
+	"author": "Obsidian",
+	"authorUrl": "https://obsidian.md",
+	"isDesktopOnly": false
+}
