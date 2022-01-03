@@ -44,15 +44,12 @@ export default class Prototype_11 extends Plugin {
             }
         })
 
-        this.vueApp = createApp(App, {
-            app: this.app,
-            register: this.registerEvent
-        })
-
+        this.vueApp = createApp(App)
+        this.vueApp.provide('register', this.registerEvent)
+        this.vueApp.provide('app', this.app)
 
         this.registerView(SIDE_VIEW_ID,
             (leaf) => new CurrentFileView(leaf, this.vueApp));
-        this.addSettingTab(new Settings(this.app, this))
     }
 
     onunload() {
@@ -76,12 +73,17 @@ export default class Prototype_11 extends Plugin {
 }
 export const SIDE_VIEW_ID = `${PLUGIN_NAME}-sideview`;
 
+
+
+
 export class CurrentFileView extends ItemView {
     private vueApp: App<Element>;
 
     constructor(leaf: WorkspaceLeaf, vueApp: App<Element>) {
         super(leaf);
         this.vueApp = vueApp
+        this.vueApp.provide('view', this)
+
     }
 
     getViewType() {
@@ -94,58 +96,10 @@ export class CurrentFileView extends ItemView {
 
     async onOpen() {
         const container = this.containerEl.children[1];
-        const app = this.vueApp.mount(container);
+        this.vueApp.mount(container);
     }
 
     async onClose() {
         this.vueApp.unmount()
-    }
-}
-
-
-class FacetsDisabledSettings extends PluginSettingTab {
-    plugin: Prototype_11
-
-    constructor(app: App, plugin: Prototype_11) {
-        super(app, plugin)
-        this.plugin = plugin
-    }
-
-    display(): void {
-        let {containerEl} = this
-        containerEl.empty()
-        containerEl.createEl('h2', {text: 'Facets depends on dataview.'})
-    }
-}
-
-
-class Settings extends PluginSettingTab {
-    plugin: Prototype_11
-
-    constructor(app: App, plugin: Prototype_11) {
-        super(app, plugin)
-        this.plugin = plugin
-    }
-
-    display(): void {
-        let {containerEl} = this
-
-        containerEl.empty()
-
-        containerEl.createEl('h2', {text: 'Obsidian facets.'})
-
-        new Setting(containerEl)
-            .setName('Setting #1')
-            .setDesc("It's a secret")
-            .addText(text =>
-                text
-                    .setPlaceholder('Enter your secret')
-                    .setValue('')
-                    .onChange(async value => {
-                        console.log('Secret: ' + value)
-                        this.plugin.settings.mySetting = value
-                        await this.plugin.saveSettings()
-                    })
-            )
     }
 }
