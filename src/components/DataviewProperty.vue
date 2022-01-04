@@ -14,7 +14,5 @@ const props = defineProps({
 </script>
 
 <template>
-  <div>
-    {{ props.labels }} {{ props.property }}
-  </div>
+  <abbr :title="props.labels">{{ props.property }}</abbr>
 </template>

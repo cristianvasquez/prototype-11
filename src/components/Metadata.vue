@@ -1,10 +1,10 @@
 <script setup>
 import DataviewValue from './DataviewValue.vue'
 import DataviewProperty from './DataviewProperty.vue'
-
 import { createBuilder } from '../lib/rdfBuilder'
 import { canonicalizeVarName } from '../lib/normalize'
 import { computed, inject } from 'vue'
+import {dateTimeFormat} from '../consts'
 
 import { RDFModal } from './RDFModal'
 
@@ -20,7 +20,7 @@ const props = defineProps({
 async function index () {
   const { metadataToRDF } = createBuilder(app)
   const data = metadataToRDF(props.metadata, dedupFields.value)
-  new RDFModal(app,data.dataset.toString()).open()
+  new RDFModal(app, data.dataset.toString()).open()
 }
 
 const isNormalized = (value) => value === canonicalizeVarName(value)
@@ -49,7 +49,7 @@ const fieldLabels = computed(() => {
         if (!labels.has(canonicalizeVarName(key))) {
           labels.set(canonicalizeVarName(key), [key])
         } else {
-          labels.get(canonicalizeVarName(key)).append(key)
+          labels.set(canonicalizeVarName(key), [key, ...labels.get(canonicalizeVarName(key))])
         }
       }
     }
@@ -60,22 +60,40 @@ const fieldLabels = computed(() => {
 </script>
 
 <template>
-  <h3><a @click="index">RDF</a></h3>
-  <div>path: {{ props.metadata.path }}</div>
-  <div>ctime: {{ props.metadata.ctime }}</div>
-  <div>mtime: {{ props.metadata.mtime }}</div>
-  <div>size: {{ props.metadata.size }}</div>
 
-  <h3 v-if="dedupFields">Fields</h3>
-  <div v-for="[key, value] in dedupFields" class="fields">
-    <dataview-property :labels="fieldLabels.get(key)" :property="key"/>
-    <dataview-value :value="value"/>
+  <div class="fields">
+    <template v-if="props.metadata.ctime">
+    <div>Created</div>
+    <div>{{ props.metadata.ctime.toLocaleString(dateTimeFormat) }}</div>
+    </template>
+
+    <template v-if="props.metadata.mtime">
+      <div>Modified</div>
+      <div>{{ props.metadata.mtime.toLocaleString(dateTimeFormat) }}</div>
+    </template>
+
+    <template v-if="props.metadata.size">
+      <div>Size</div>
+      <div>{{ props.metadata.size }}</div>
+    </template>
+
+  </div>
+
+  <div v-if="dedupFields" class="fields">
+    <h3>Fields</h3>
+    <div/>
+    <template v-for="[key, value] in dedupFields" class="fields">
+      <dataview-property :labels="fieldLabels.get(key)" :property="key"/>
+      <dataview-value :value="value"/>
+    </template>
   </div>
 
   <h3 v-if="props.metadata.links && props.metadata.links.length">Links</h3>
-  <div v-for="(value) in props.metadata.links">
+  <template v-for="(value) in props.metadata.links">
     <dataview-value :value="value"/>
-  </div>
+  </template>
+
+  <h3><a @click="index">Gimme some RDF</a></h3>
 
   <!--  <h3>Tasks</h3>-->
   <!--  <div v-for="(value) in props.metadata.tasks">-->
@@ -87,8 +105,9 @@ const fieldLabels = computed(() => {
 <style>
 
 .fields {
-  display: flex;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  padding: 10px;
 }
 
 
