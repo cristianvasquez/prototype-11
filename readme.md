@@ -1,1 +1,0 @@
-Using facets, linked data and SPARQL in Obsidian

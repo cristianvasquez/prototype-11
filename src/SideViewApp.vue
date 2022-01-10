@@ -1,28 +1,26 @@
-<script setup>
-import { ref, onMounted, onBeforeMount } from 'vue'
-import { PLUGIN_NAME } from './consts'
-import { inject } from '@vue/runtime-core'
-
+<script lang="ts" setup>
+import {onBeforeMount, onMounted, reactive, ref} from 'vue'
+import {PLUGIN_NAME} from './consts'
+import {inject} from '@vue/runtime-core'
+import {getDataByFile, getMetadata} from './lib/helpers'
 import Metadata from './components/Metadata.vue'
+import {App, TFile} from "obsidian";
 
-const app = inject('app')
+const app: App = inject('app')
 
-let current = ref({})
+let title = ref('loading')
 let metadata = ref({})
 
-function updateView (file) {
-  current.value = {
-    name: file.name,
-    path: file.path,
-    stat: file.stat
-  }
-  const api = app.plugins.plugins.dataview?.api
-  if (api) {
-    metadata.value = api.index.pages.get(file.path)
-  }
+function updateView(file) {
+  console.log('updating')
+  title.value = file.name
+  const data = getDataByFile(app, file)
+  const meta = getMetadata(data)
+  metadata.value = meta
 }
 
 onBeforeMount(() => {
+  // @ts-ignore
   let plugin = app.plugins.plugins[PLUGIN_NAME]
 
   plugin.registerEvent(
@@ -30,15 +28,18 @@ onBeforeMount(() => {
         updateView(file)
       })
   )
+
   plugin.registerEvent(
       app.vault.on('rename', (file, oldPath) => {
+        console.log('rename', file)
         updateView(file)
       })
   )
+
   plugin.registerEvent(
       app.vault.on('delete', af => {
         if (!(af instanceof TFile)) return
-        console.log('delete',af)
+        console.log('delete', af)
       })
   )
 
@@ -47,18 +48,11 @@ onBeforeMount(() => {
         updateView(file)
       })
   )
-  plugin.registerEvent(
-      app.metadataCache.on('dataview:metadata-change', (_, file) => {
-        // When loading, dataview loads data of all pages.
-        if (file.path === current.value.path) {
-          updateView(file)
-        }
-      })
-  )
 
 })
 
 onMounted(() => {
+  // @ts-ignore
   const currentFile = app.workspace?.activeLeaf?.view?.file
   if (currentFile) {
     updateView(currentFile)
@@ -69,14 +63,12 @@ onMounted(() => {
 
 <template>
   <div class="grid">
-    <h1>{{ current.name }}</h1>
+    <h1>{{ title }}</h1>
     <Metadata v-if="metadata" :metadata="metadata"/>
   </div>
 </template>
 
 <style>
-
-/*@import '../styles.css';*/
 
 .grid {
   display: grid;

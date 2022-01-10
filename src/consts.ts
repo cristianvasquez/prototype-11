@@ -1,6 +1,9 @@
+// @ts-ignore
+import {DateTimeFormatOptions} from "luxon";
+
 const PLUGIN_NAME = 'prototype-11'
 
-const dateTimeFormat = {
+const dateTimeFormat:DateTimeFormatOptions = {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -8,4 +11,5 @@ const dateTimeFormat = {
     minute: '2-digit',
 }
 
-export {PLUGIN_NAME, dateTimeFormat}
+const ID_PROPERTY = 'id'
+export {PLUGIN_NAME, dateTimeFormat, ID_PROPERTY}

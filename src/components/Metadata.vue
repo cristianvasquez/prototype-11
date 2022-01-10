@@ -1,99 +1,72 @@
-<script setup>
+<script lang="ts" setup>
 import DataviewValue from './DataviewValue.vue'
 import DataviewProperty from './DataviewProperty.vue'
-import { createBuilder } from '../lib/rdfBuilder'
-import { canonicalizeVarName } from '../lib/normalize'
-import { computed, inject } from 'vue'
+import {createBuilder} from '../lib/rdfBuilder'
+import {inject, PropType} from 'vue'
 import {dateTimeFormat} from '../consts'
+import {RDFModal} from './RDFModal'
+import {App} from 'obsidian'
+import {Metadata} from "../lib/helpers";
 
-import { RDFModal } from './RDFModal'
-
-const app = inject('app')
+const app: App = inject('app')
 
 const props = defineProps({
   metadata: {
-    type: Object,
+    type: Object as PropType<Metadata>,
     required: true
   }
 })
 
-async function index () {
-  const { metadataToRDF } = createBuilder(app)
-  const data = metadataToRDF(props.metadata, dedupFields.value)
-  new RDFModal(app, data.dataset.toString()).open()
+async function popupRDF() {
+  const {metadataToRDF} = createBuilder(app)
+  // const data = metadataToRDF(props.metadata, dedupFields.value)
+  // new RDFModal(app, data.dataset.toString()).open()
+  new RDFModal(app, 'Hi there').open()
+
 }
 
-const isNormalized = (value) => value === canonicalizeVarName(value)
-
-const ignoreFields = new Set([
-  'position'
-])
-
-const dedupFields = computed(() => {
-  const result = new Map()
-  if (props.metadata.fields) {
-    for (const [key, value] of props.metadata.fields) {
-      if (!result.has(canonicalizeVarName(key)) && !ignoreFields.has(canonicalizeVarName(key))) {
-        result.set(canonicalizeVarName(key), value)
-      }
-    }
-  }
-  return result
-})
-
-const fieldLabels = computed(() => {
-  const labels = new Map()
-  if (props.metadata.fields) {
-    for (const [key, value] of props.metadata.fields) {
-      if (!isNormalized(key)) {
-        if (!labels.has(canonicalizeVarName(key))) {
-          labels.set(canonicalizeVarName(key), [key])
-        } else {
-          labels.set(canonicalizeVarName(key), [key, ...labels.get(canonicalizeVarName(key))])
-        }
-      }
-    }
-  }
-  return labels
-})
 
 </script>
 
-<template>
+<template v-if="metadata">
 
+  {{ metadata }}
   <div class="fields">
-    <template v-if="props.metadata.ctime">
-    <div>Created</div>
-    <div>{{ props.metadata.ctime.toLocaleString(dateTimeFormat) }}</div>
+
+    <template v-if="metadata.created">
+      <div>Created</div>
+      <div>{{ metadata.created.toLocaleString(dateTimeFormat) }}</div>
     </template>
 
-    <template v-if="props.metadata.mtime">
+    <template v-if="props.metadata.updated">
       <div>Modified</div>
-      <div>{{ props.metadata.mtime.toLocaleString(dateTimeFormat) }}</div>
+      <div>{{ metadata.updated.toLocaleString(dateTimeFormat) }}</div>
     </template>
 
     <template v-if="props.metadata.size">
       <div>Size</div>
-      <div>{{ props.metadata.size }}</div>
+      <div>{{ metadata.size }}</div>
     </template>
 
   </div>
 
-  <div v-if="dedupFields" class="fields">
+  <div v-if="metadata.tuples" class="fields">
     <h3>Fields</h3>
     <div/>
-    <template v-for="[key, value] in dedupFields" class="fields">
-      <dataview-property :labels="fieldLabels.get(key)" :property="key"/>
-      <dataview-value :value="value"/>
+    <template v-for="tuple in metadata.tuples" class="fields">
+      {{tuple.property}}
+      {{tuple.value}}
+<!--      <dataview-property :labels="fieldLabels.get(key)" :property="key"/>-->
+<!--      <dataview-value :value="value"/>-->
     </template>
   </div>
 
-  <h3 v-if="props.metadata.links && props.metadata.links.length">Links</h3>
-  <template v-for="(value) in props.metadata.links">
+  <h3 v-if="metadata.links && metadata.links.length">Links</h3>
+  <template v-for="(value) in metadata.links">
     <dataview-value :value="value"/>
   </template>
 
-  <h3><a @click="index">Gimme some RDF</a></h3>
+  <h3><a @click="popupRDF">Gimme some RDF</a></h3>
 
   <!--  <h3>Tasks</h3>-->
   <!--  <div v-for="(value) in props.metadata.tasks">-->

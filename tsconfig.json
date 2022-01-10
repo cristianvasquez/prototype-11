@@ -10,7 +10,11 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "lib": ["dom", "es5", "scripthost", "es2015"],
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "types": ["vite/client", "@types/jest"]
   },
-  "include": ["**/*.ts"]
+  "include": [
+    "**/*.ts",
+    "../../../../../.cache/JetBrains/IntelliJIdea2021.2/javascript/typings/mocha/9.0.0/node_modules/@types/mocha/index.d.ts"
+  ]
 }

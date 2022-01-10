@@ -1,6 +1,6 @@
 import {ItemView, Menu, Modal, Notice, Plugin, PluginSettingTab, Setting, WorkspaceLeaf} from "obsidian";
 import {createApp, ref} from 'vue'
-import App from './App.vue'
+import SideViewApp from './SideViewApp.vue'
 import {PLUGIN_NAME} from "./consts";
 
 interface MyPluginSettings {
@@ -13,7 +13,7 @@ const DEFAULT_SETTINGS: MyPluginSettings = {
 
 export default class Prototype_11 extends Plugin {
     settings: MyPluginSettings
-    private vueApp: App<Element>;
+    private vueApp: SideViewApp<Element>;
 
     async onload() {
 
@@ -44,7 +44,7 @@ export default class Prototype_11 extends Plugin {
             }
         })
 
-        this.vueApp = createApp(App)
+        this.vueApp = createApp(SideViewApp)
         this.vueApp.provide('register', this.registerEvent)
         this.vueApp.provide('app', this.app)
 
@@ -77,9 +77,9 @@ export const SIDE_VIEW_ID = `${PLUGIN_NAME}-sideview`;
 
 
 export class CurrentFileView extends ItemView {
-    private vueApp: App<Element>;
+    private vueApp: SideViewApp<Element>;
 
-    constructor(leaf: WorkspaceLeaf, vueApp: App<Element>) {
+    constructor(leaf: WorkspaceLeaf, vueApp: SideViewApp<Element>) {
         super(leaf);
         this.vueApp = vueApp
         this.vueApp.provide('view', this)

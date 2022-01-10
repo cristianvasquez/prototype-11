@@ -1,5 +1,7 @@
 import * as P from "parsimmon";
 // @ts-ignore
+import { DateTime } from "luxon";
+// @ts-ignore
 import emojiRegex from "emoji-regex";
 
 /** Get the folder containing the given path (i.e., like computing 'path/..'). */
@@ -66,3 +68,9 @@ const HEADER_CANONICALIZER: P.Parser<string> = P.alt(
 export function normalizeHeaderForLink(header: string): string {
     return HEADER_CANONICALIZER.tryParse(header);
 }
+
+export function fromTime(time:string):DateTime {
+    return DateTime.fromMillis(time);
+
+}
+
