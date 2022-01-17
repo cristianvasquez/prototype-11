@@ -53,9 +53,33 @@ Alejandra Pizarnik
 
 ```turtle
 <pizarnik> a :Writer ;
-    :hasQuote "Tanto miente el que ríe demasiado, como el que sólo llora."@es ;
-:hasQuote "La muerte es una palabra. Fragmento de El sueño de la muerte o el lugar de los cuerpos poéticos"@es .
+    :said "Tanto miente el que ríe demasiado, como el que sólo llora."@es ;
+:said "La muerte es una palabra. Fragmento de El sueño de la muerte o el lugar de los cuerpos poéticos"@es .
+
+<quote> a :Quote ;
+    :actor "Alejandra Pizarnik" ;
+    :message "Creo que la melancolía es, en suma, un problema musical: una disonancia, un ritmo trastornado."@es .
+
 ```
 
+## Preference
 
+```markdown
+"Nocturne No.13 in C minor, Op.48 No.1", the composition by [[Chopin]], has interpreters: Rubenstein, Claudio Arrau. I prefer the later.
+```
 
+```turtle
+<1> a :Topic ;
+	:label "Nocturne No.13 in C minor, Op.48 No.1";	
+	:author <chopin> ;
+	:hasInterpreters <2>, <3> .
+
+<2> a :Interpreter ;
+	:label "Rubenstein" .
+
+<3> a :Interpreter ;
+	:label "Claudio Arrau" .
+
+<4> a :Preference ;
+	:items (<3> <2>) .
+```
