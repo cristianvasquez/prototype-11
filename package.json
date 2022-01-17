@@ -27,16 +27,17 @@
     "luxon": "^2.3.0",
     "mocha-typescript": "^1.1.17",
     "sinon": "^12.0.1",
-    "vue": "^3.2.24"
+    "vue": "^3.2.24",
+    "rdf-ext": "^2.0.1"
   },
   "devDependencies": {
     "@types/clownface": "^1.2.5",
     "@types/debug": "^4.1.7",
     "@types/expect": "^24.3.0",
     "@types/mocha": "^9.0.0",
-    "@types/parsimmon": "^1.10.6",
     "@types/rdf-ext": "^1.3.11",
     "@types/sparql-http-client": "^2.2.8",
+    "@types/luxon": "^2.0.9",
     "@vitejs/plugin-vue": "^1.2.3",
     "@vue/compiler-sfc": "^3.0.8",
     "@vue/runtime-core": "^3.2.26",
@@ -46,7 +47,6 @@
     "mocha": "^9.1.4",
     "obsidian": "^0.12.0",
     "obsidian-community-lib": "^1.4.1",
-    "rdf-ext": "^2.0.1",
     "sparql-http-client": "^2.4.0",
     "ts-node": "^10.4.0",
     "tslib": "^2.3.1",

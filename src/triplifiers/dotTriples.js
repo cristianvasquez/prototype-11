@@ -74,8 +74,8 @@ function toTerm (value) {
   }
 }
 
-const getTriples = (text) => {
+const getDotTriples = (text) => {
   return toSPO(text)
 }
 
-export { getTriples }
+export { getDotTriples }

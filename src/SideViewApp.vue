@@ -1,20 +1,21 @@
 <script lang="ts" setup>
-import {onBeforeMount, onMounted, reactive, ref} from 'vue'
+import {onBeforeMount, onMounted, ref} from 'vue'
 import {PLUGIN_NAME} from './consts'
 import {inject} from '@vue/runtime-core'
-import {getDataByFile, getMetadata} from './lib/helpers'
+import {getDataByFile} from './lib/helpers'
 import Metadata from './components/Metadata.vue'
-import {App, TFile} from "obsidian";
+import {getMetadata} from "./lib/extract";
+import {App, TAbstractFile, TFile} from "obsidian";
 
 const app: App = inject('app')
 
 let title = ref('loading')
 let metadata = ref({})
 
-function updateView(file) {
+function updateView(file: TAbstractFile) {
   console.log('updating')
   title.value = file.name
-  const data = getDataByFile(app, file)
+  const data = getDataByFile(app, file as TFile)
   metadata.value = getMetadata(data)
 }
 

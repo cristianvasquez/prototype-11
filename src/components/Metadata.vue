@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import MetadataValue from './MetadataValue.vue'
+import MetadataValues from './helpers/MetadataValues.vue'
 import {createBuilder} from '../lib/rdfBuilder'
 import {inject, PropType} from 'vue'
 import {dateTimeFormat} from '../consts'
@@ -48,21 +48,34 @@ async function popupRDF() {
 
   </div>
 
-  <template v-if="metadata.triples">
-    <h3>Triples</h3>
-    <div v-for="tuple in metadata.triples" class="fields">
-      <metadata-value :value="tuple.subject"/>
-      <metadata-value :value="tuple.predicate"/>
-      <metadata-value :value="tuple.object"/>
+  <template v-if="metadata.pairs">
+    <h3>Attributes</h3>
+    <div class="attributes">
+      <template v-for="tuple in metadata.pairs">
+        <metadata-values :value="tuple.predicate"/>
+        <metadata-values :value="tuple.object"/>
+      </template>
     </div>
   </template>
 
-<!--  <h3 v-if="metadata.links && metadata.links.length">Links</h3>-->
-<!--  <template v-for="(value) in metadata.links">-->
-<!--    <dataview-value :value="value"/>-->
-<!--  </template>-->
+  <template v-if="metadata.triads">
+    <h3>Triples</h3>
+    <div class="fields">
+      <template v-for="tuple in metadata.triads">
+        <metadata-values :value="tuple.subject"/>
+        <metadata-values :value="tuple.predicate"/>
+        <metadata-values :value="tuple.object"/>
+      </template>
+    </div>
 
-<!--  <h3><a @click="popupRDF">Gimme some RDF</a></h3>-->
+  </template>
+
+  <!--  <h3 v-if="metadata.links && metadata.links.length">Links</h3>-->
+  <!--  <template v-for="(value) in metadata.links">-->
+  <!--    <dataview-value :value="value"/>-->
+  <!--  </template>-->
+
+  <!--  <h3><a @click="popupRDF">Gimme some RDF</a></h3>-->
 
   <!--  <h3>Tasks</h3>-->
   <!--  <div v-for="(value) in props.metadata.tasks">-->
@@ -77,15 +90,14 @@ async function popupRDF() {
   display: grid;
   grid-template-columns: 1fr 5fr;
   padding: 5px;
-  gap: 5px;
+  gap: 10px;
 }
 
 .fields {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 2fr 2fr 5fr;
   padding: 5px;
   gap: 5px;
-
 }
 
 

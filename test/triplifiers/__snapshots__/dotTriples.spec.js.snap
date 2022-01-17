@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`[dotTriples] "
+exports[`[getDotTriples] "
   to simplify things, this
   mini-syntax :: spans
   only one line
@@ -19,7 +19,7 @@ Array [
 ]
 `;
 
-exports[`[dotTriples] "(number :: twenty two) (number :: 22)" 1`] = `
+exports[`[getDotTriples] "(number :: twenty two) (number :: 22)" 1`] = `
 Array [
   Object {
     "object": Object {
@@ -106,7 +106,7 @@ Array [
 ]
 `;
 
-exports[`[dotTriples] "[Maria, Bob] :: ([climbed,looked at] :: [the tree, the sun])" 1`] = `
+exports[`[getDotTriples] "[Maria, Bob] :: ([climbed,looked at] :: [the tree, the sun])" 1`] = `
 Array [
   Object {
     "object": Object {
@@ -149,7 +149,7 @@ Array [
 ]
 `;
 
-exports[`[dotTriples] "[Maria, Bob] :: ([climbed,looked at] :: the tree)" 1`] = `
+exports[`[getDotTriples] "[Maria, Bob] :: ([climbed,looked at] :: the tree)" 1`] = `
 Array [
   Object {
     "object": Object {
@@ -184,7 +184,7 @@ Array [
 ]
 `;
 
-exports[`[dotTriples] "[Maria, Bob] :: (climbed :: the tree)" 1`] = `
+exports[`[getDotTriples] "[Maria, Bob] :: (climbed :: the tree)" 1`] = `
 Array [
   Object {
     "object": Object {
@@ -211,7 +211,7 @@ Array [
 ]
 `;
 
-exports[`[dotTriples] "A :: B :: C :: D" 1`] = `
+exports[`[getDotTriples] "A :: B :: C :: D" 1`] = `
 Array [
   Object {
     "object": Object {
@@ -226,7 +226,7 @@ Array [
 ]
 `;
 
-exports[`[dotTriples] "Bob :: (has :: drivers license), (can drive :: true)" 1`] = `
+exports[`[getDotTriples] "Bob :: (has :: drivers license), (can drive :: true)" 1`] = `
 Array [
   Object {
     "object": Object {
@@ -255,7 +255,7 @@ Array [
 ]
 `;
 
-exports[`[dotTriples] "Maria :: ( climbed :: the tree )" 1`] = `
+exports[`[getDotTriples] "Maria :: ( climbed :: the tree )" 1`] = `
 Array [
   Object {
     "object": Object {
@@ -274,7 +274,7 @@ Array [
 ]
 `;
 
-exports[`[dotTriples] "That night,  (Bob :: (ate :: all the pancakes)), and (we :: (are still :: surprised))" 1`] = `
+exports[`[getDotTriples] "That night,  (Bob :: (ate :: all the pancakes)), and (we :: (are still :: surprised))" 1`] = `
 Array [
   Object {
     "object": Object {
@@ -307,7 +307,7 @@ Array [
 ]
 `;
 
-exports[`[dotTriples] "arrays :: [banana, apple]" 1`] = `
+exports[`[getDotTriples] "arrays :: [banana, apple]" 1`] = `
 Array [
   Object {
     "object": Object {
@@ -330,7 +330,7 @@ Array [
 ]
 `;
 
-exports[`[dotTriples] "date :: 2022-01-07 15:07" 1`] = `
+exports[`[getDotTriples] "date :: 2022-01-07 15:07" 1`] = `
 Array [
   Object {
     "object": Object {
@@ -359,7 +359,7 @@ Array [
 ]
 `;
 
-exports[`[dotTriples] "external link :: <http://example.org>" 1`] = `
+exports[`[getDotTriples] "external link :: <http://example.org>" 1`] = `
 Array [
   Object {
     "object": Object {
@@ -374,7 +374,7 @@ Array [
 ]
 `;
 
-exports[`[dotTriples] "internal link :: [[link]]" 1`] = `
+exports[`[getDotTriples] "internal link :: [[link]]" 1`] = `
 Array [
   Object {
     "object": Object {
@@ -393,7 +393,7 @@ Array [
 ]
 `;
 
-exports[`[dotTriples] "properties :: and values are separated by double colons" 1`] = `
+exports[`[getDotTriples] "properties :: and values are separated by double colons" 1`] = `
 Array [
   Object {
     "object": Object {
@@ -408,7 +408,7 @@ Array [
 ]
 `;
 
-exports[`[dotTriples] "properties and values can be (embedded :: using parenthesis)" 1`] = `
+exports[`[getDotTriples] "properties and values can be (embedded :: using parenthesis)" 1`] = `
 Array [
   Object {
     "object": Object {
@@ -423,7 +423,7 @@ Array [
 ]
 `;
 
-exports[`[dotTriples] "suddenly, (Maria :: (climbed :: the tree))," 1`] = `
+exports[`[getDotTriples] "suddenly, (Maria :: (climbed :: the tree))," 1`] = `
 Array [
   Object {
     "object": Object {
@@ -442,7 +442,7 @@ Array [
 ]
 `;
 
-exports[`[dotTriples] "vaccination dates :: [2022-01-07, next week]" 1`] = `
+exports[`[getDotTriples] "vaccination dates :: [2022-01-07, next week]" 1`] = `
 Array [
   Object {
     "object": Object {
