@@ -5,7 +5,7 @@ import {
   openOrSwitch,
 } from 'obsidian-community-lib'
 import { inject } from '@vue/runtime-core'
-import {getFileTitle} from '../lib/normalize'
+import {getFileTitle} from '../lib/helpers'
 
 const props = defineProps({
   linkTo: {

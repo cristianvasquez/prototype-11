@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import DataviewValue from './DataviewValue.vue'
-import DataviewProperty from './DataviewProperty.vue'
+import MetadataValue from './MetadataValue.vue'
 import {createBuilder} from '../lib/rdfBuilder'
 import {inject, PropType} from 'vue'
 import {dateTimeFormat} from '../consts'
@@ -30,8 +29,7 @@ async function popupRDF() {
 
 <template v-if="metadata">
 
-  {{ metadata }}
-  <div class="fields">
+  <div class="attributes">
 
     <template v-if="metadata.created">
       <div>Created</div>
@@ -50,23 +48,21 @@ async function popupRDF() {
 
   </div>
 
-  <div v-if="metadata.tuples" class="fields">
-    <h3>Fields</h3>
-    <div/>
-    <template v-for="tuple in metadata.tuples" class="fields">
-      {{tuple.property}}
-      {{tuple.value}}
-<!--      <dataview-property :labels="fieldLabels.get(key)" :property="key"/>-->
-<!--      <dataview-value :value="value"/>-->
-    </template>
-  </div>
-
-  <h3 v-if="metadata.links && metadata.links.length">Links</h3>
-  <template v-for="(value) in metadata.links">
-    <dataview-value :value="value"/>
+  <template v-if="metadata.triples">
+    <h3>Triples</h3>
+    <div v-for="tuple in metadata.triples" class="fields">
+      <metadata-value :value="tuple.subject"/>
+      <metadata-value :value="tuple.predicate"/>
+      <metadata-value :value="tuple.object"/>
+    </div>
   </template>
 
-  <h3><a @click="popupRDF">Gimme some RDF</a></h3>
+<!--  <h3 v-if="metadata.links && metadata.links.length">Links</h3>-->
+<!--  <template v-for="(value) in metadata.links">-->
+<!--    <dataview-value :value="value"/>-->
+<!--  </template>-->
+
+<!--  <h3><a @click="popupRDF">Gimme some RDF</a></h3>-->
 
   <!--  <h3>Tasks</h3>-->
   <!--  <div v-for="(value) in props.metadata.tasks">-->
@@ -77,9 +73,15 @@ async function popupRDF() {
 
 <style>
 
+.attributes {
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+  padding: 10px;
+}
+
 .fields {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr 1fr 1fr;
   padding: 10px;
 }
 

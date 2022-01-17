@@ -1,7 +1,7 @@
 import {App, CachedMetadata, FileStats, LinkCache, SectionCache, TFile} from "obsidian";
 import {DateTime} from "luxon";
-import {Triple, Term, TermKind} from "../types";
-import {getTriples} from "./mySyntax";
+import {Triple} from "../types";
+import {getTriples} from "../triplifiers/dotTriples";
 
 
 type Metadata = {
@@ -30,19 +30,32 @@ const collectMetadataForPath = (app: any, path: String) => {
 
 const getMetadata = (data: FileData): Metadata => {
 
+    const subject = {
+        value: 'This',
+        entities: {}
+    }
+
+
     let triples: Array<Triple> = []
     if (data.metadata) {
-        for (const [key, value] of Object.entries(data.metadata.frontmatter)) {
-            triples.push({
-                predicate: key,
-                object: value
-            })
-        }
+        // We'll deal with frontmatter later
+        // for (const [key, value] of Object.entries(data.metadata.frontmatter)) {
+        //
+        //     if (key != 'position'){
+        //         triples.push({
+        //             subject: subject,
+        //             predicate: key,
+        //             object: value
+        //         })
+        //     }
+        // }
         for (const text of getSections(data)) {
-
-            // Extract mediawiki syntax
-            for (const tuple of getTriples(text)) {
-                triples.push(tuple)
+            // Extract mini trippy syntax
+            for (const triple of getTriples(text)) {
+                if (!triple.subject) {
+                    triple.subject = subject
+                }
+                triples.push(triple)
             }
         }
     }
@@ -59,6 +72,12 @@ const getMetadata = (data: FileData): Metadata => {
 
 const getMetadataFromPath = (app: any, path: String): CachedMetadata => {
     return app.metadataCache.getCache(path)
+}
+
+function getFileTitle(path: string): string {
+    if (path.includes("/")) path = path.substring(path.lastIndexOf("/") + 1);
+    if (path.endsWith(".md")) path = path.substring(0, path.length - 3);
+    return path;
 }
 
 const getDataByFile = (app: App, file: TFile): FileData => {
@@ -89,4 +108,4 @@ const getSections = (data: FileData, filter?: (section: SectionCache) => boolean
 }
 
 
-export {collectMetadataForPath, getDataByFile, getMetadata, FileData, Metadata, getSections}
+export {collectMetadataForPath, getDataByFile, getMetadata, getFileTitle, FileData, Metadata, getSections}

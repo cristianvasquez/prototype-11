@@ -2,13 +2,14 @@ import path from 'path'
 import { defineConfig } from 'vite'
 import vuePlugin from '@vitejs/plugin-vue'
 
+
 export default defineConfig({
   plugins: [vuePlugin()],
   build: {
     minify: false,
     // Use Vite lib mode https://vitejs.dev/guide/build.html#library-mode
     lib: {
-      entry: path.resolve(__dirname, './src/main.ts'),
+      entry: path.resolve( './src/main.ts'),
       formats: ['cjs']
     },
     rollupOptions: {

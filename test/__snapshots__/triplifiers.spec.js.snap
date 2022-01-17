@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Github has Github repo has Github 1`] = `
+"<http://example/1> <http://vault.org/about> <https://github.com/cristianvasquez/prototype-11> .
+<https://github.com/cristianvasquez/prototype-11> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vault.org/GithubRepo> .
+<https://github.com/cristianvasquez/prototype-11> <http://vault.org/label> \\"prototype-11\\" .
+<https://github.com/cristianvasquez> <http://vault.org/contains> <https://github.com/cristianvasquez/prototype-11> .
+<https://github.com/cristianvasquez> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vault.org/GithubUser> .
+<https://github.com/cristianvasquez> <http://vault.org/label> \\"prototype-11\\" .
+"
+`;
+
+exports[`Github has Github repo has Github repo 1`] = `
+"<http://example/1> <http://vault.org/about> <https://github.com/cristianvasquez/prototype-11> .
+<https://github.com/cristianvasquez/prototype-11> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vault.org/GithubRepo> .
+<https://github.com/cristianvasquez/prototype-11> <http://vault.org/label> \\"prototype-11\\" .
+<https://github.com/cristianvasquez> <http://vault.org/contains> <https://github.com/cristianvasquez/prototype-11> .
+<https://github.com/cristianvasquez> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vault.org/GithubUser> .
+<https://github.com/cristianvasquez> <http://vault.org/label> \\"prototype-11\\" .
+"
+`;

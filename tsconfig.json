@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "inlineSourceMap": true,
     "inlineSources": true,
     "module": "esnext",
@@ -11,10 +11,11 @@
     "importHelpers": true,
     "lib": ["dom", "es5", "scripthost", "es2015"],
     "allowSyntheticDefaultImports": true,
-    "types": ["vite/client", "@types/jest"]
+    "types": ["vite/client", "@types/jest"],
+    "esModuleInterop": true
   },
   "include": [
-    "**/*.ts",
-    "../../../../../.cache/JetBrains/IntelliJIdea2021.2/javascript/typings/mocha/9.0.0/node_modules/@types/mocha/index.d.ts"
-  ]
+    "src/**/*"
+  ],
+  "exclude": ["node_modules"]
 }

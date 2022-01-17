@@ -1,15 +1,3 @@
-import {CachedMetadata, FileStats, LinkCache} from "obsidian";
-import {DateTime} from "luxon";
-
-enum TermKind {
-    InternalLink,
-    ExternalLink,
-    LiteralString,
-    LiteralDate,
-    Tag,
-    Array
-}
-
 type Triple = {
     subject?: Term,
     predicate: Term,
@@ -17,4 +5,4 @@ type Triple = {
 }
 type Term = any
 
-export { Triple, Term, TermKind}
+export {Triple, Term, TermKind}

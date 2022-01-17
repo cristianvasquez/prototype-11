@@ -15,8 +15,7 @@ function updateView(file) {
   console.log('updating')
   title.value = file.name
   const data = getDataByFile(app, file)
-  const meta = getMetadata(data)
-  metadata.value = meta
+  metadata.value = getMetadata(data)
 }
 
 onBeforeMount(() => {

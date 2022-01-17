@@ -1,6 +1,10 @@
 import {ID_PROPERTY} from "../consts";
-import {getFileTitle} from "./normalize";
 
+function getFileTitle(path: string): string {
+    if (path.includes("/")) path = path.substring(path.lastIndexOf("/") + 1);
+    if (path.endsWith(".md")) path = path.substring(0, path.length - 3);
+    return path;
+}
 const createBuilder = (app: any) => {
     const rdf = app.libs.rdf // Environment
     const cf = rdf.clownface

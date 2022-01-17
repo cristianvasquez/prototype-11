@@ -1,5 +1,5 @@
 import {Modal} from "obsidian";
-import App from "../App.vue";
+import App from "../SideViewApp.vue";
 
 export class RDFModal extends Modal {
     private readonly text: string;
