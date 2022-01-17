@@ -13,7 +13,7 @@ I think we should launch now, but according to [[@John]] we should wait.
 ```turtle
 
 <conversation> a :Conversation;
-               :people (<john> <me>) ;
+               :people <john>, <me> ;
                :date '09-12-2021' ;
                :text 'I think we should launch now, but according to [[@John]] we should wait.' .
 ```
