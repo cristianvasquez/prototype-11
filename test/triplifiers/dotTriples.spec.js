@@ -1,4 +1,4 @@
-import { getTriples } from '../src/triplifiers/dotTriples.js'
+import { getTriples } from '../../src/triplifiers/dotTriples.js'
 
 import expect from 'expect'
 import toMatchSnapshot from 'expect-mocha-snapshot'
@@ -30,11 +30,13 @@ const phrases = [
   'A :: B :: C :: D',
 ]
 
-describe('a suite', function () {
+describe('[dotTriples]', function () {
 
   phrases.forEach((current)=>{
-    it(current, function () {
-      expect(getTriples(current)).toMatchSnapshot(this)
+    it(`"${current}"`, function () {
+      const actual = getTriples(current)
+      // console.debug(JSON.stringify(actual,null,2))
+      expect(actual).toMatchSnapshot(this)
     })
   })
 

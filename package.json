@@ -20,11 +20,13 @@
     "@babel/core": "^7.16.7",
     "@babel/node": "^7.16.8",
     "@babel/preset-env": "^7.16.8",
+    "chai-spies": "^1.0.0",
     "compromise": "^13.11.4",
     "compromise-dates": "^2.2.1",
     "compromise-numbers": "^1.4.0",
     "luxon": "^2.3.0",
     "mocha-typescript": "^1.1.17",
+    "sinon": "^12.0.1",
     "vue": "^3.2.24"
   },
   "devDependencies": {

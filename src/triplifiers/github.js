@@ -1,21 +1,5 @@
 import rdf from 'rdf-ext'
-import { matchPatterns } from './miniNLP.js'
-
-/**
- ## URL patterns
-
- ```markdown
- has Github: <https://github.com/rdfjs-base/serializer-jsonld>
- ```
-
- ```turtle
- <https://github.com/rdfjs-base/serializer-jsonld> a :GithubRepo ;
- :label "serializer-jsonld" .
- <https://github.com/rdfjs-base> a :GithubUser ;
- :contains <https://github.com/rdfjs-base/serializer-jsonld> .
- ```
- **/
-
+import { matchFirst } from './miniNLP.js'
 
 // const ns = {
 //   schema: namespace('http://schema.org/'),
@@ -23,33 +7,58 @@ import { matchPatterns } from './miniNLP.js'
 //   rdf: namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#'),
 // }
 
-// <url> -> url
-const trim = (txt) => txt.split(' ')
-  .map((chunk) => chunk.replace(/^\<+|\>+$/gm, ''))
-  .join(' ')
+class GithubTriplifier {
+  constructor(baseUri, ns) {
+    this.baseUri = baseUri;
+    this.ns = ns;
+  }
 
-function triplify (text, baseUri, ns) {
+  triplififyText (text) {
+    const results = GithubTriplifier.getMatches(text)
+    if (results) {
+      return this.getRDF(results[0])
+    }
+    return null
+  }
 
-  const results = matchPatterns(trim(text), ['has github repo? [#Url]'])
-  if (results) {
-    const githubUrl = results[0]
-    const repoName = githubUrl.split('/').at(-1)
-    const githubUserUrl = githubUrl.split('/').slice(0, -1).join('/')
-    const userName = githubUrl.split('/').at(-1)
+  getRDF (repoUrl) {
+    const repoName = repoUrl.split('/').at(-1)
+    const userUrl = repoUrl.split('/').slice(0, -1).join('/')
+    const userName = repoUrl.split('/').at(-2)
 
     const dataset = rdf.dataset()
 
+    const _vault = this.ns.vault
+    const _rdf = this.ns.rdf
+
     dataset.addAll([
-      rdf.quad(rdf.namedNode(baseUri), ns.vault.about, rdf.namedNode(githubUrl)),
-      rdf.quad(rdf.namedNode(githubUserUrl), ns.vault.contains, rdf.namedNode(githubUrl)),
-      rdf.quad(rdf.namedNode(githubUserUrl), ns.rdf.type, ns.vault.GithubUser),
-      rdf.quad(rdf.namedNode(githubUserUrl), ns.vault.label, rdf.literal(userName)),
-      rdf.quad(rdf.namedNode(githubUrl), ns.rdf.type, ns.vault.GithubRepo),
-      rdf.quad(rdf.namedNode(githubUrl), ns.vault.label, rdf.literal(repoName)),
+      rdf.quad(rdf.namedNode(this.baseUri), _vault.about, rdf.namedNode(repoUrl)),
+
+      rdf.quad(rdf.namedNode(userUrl), _vault.contains, rdf.namedNode(repoUrl)),
+      rdf.quad(rdf.namedNode(userUrl), _rdf.type, _vault.GithubUser),
+      rdf.quad(rdf.namedNode(userUrl), _vault.label, rdf.literal(userName)),
+
+      rdf.quad(rdf.namedNode(repoUrl), _rdf.type, _vault.GithubRepo),
+      rdf.quad(rdf.namedNode(repoUrl), _vault.label, rdf.literal(repoName)),
     ])
     return dataset
   }
-  return null
+
+  static getMatches(text) {
+    // <url> -> url
+    const trim = (txt) => txt.split(' ')
+      .map((chunk) => chunk.replace(/^\<+|\>+$/gm, ''))
+      .join(' ')
+
+    return matchFirst(trim(text), [
+      'has github repo? [#Url]',
+      'github repo [#Url]'
+    ])
+  }
+
+
 }
 
-export { triplify }
+
+
+export { GithubTriplifier }

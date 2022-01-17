@@ -1,0 +1,153 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[renderingUtils] [getSpans] "[[a | b]]" 1`] = `
+Array [
+  Object {
+    "type": "link",
+    "value": "a | b",
+  },
+]
+`;
+
+exports[`[renderingUtils] [getSpans] "[[a]] [[b]] [[a]]" 1`] = `
+Array [
+  Object {
+    "type": "link",
+    "value": "a",
+  },
+  Object {
+    "type": "text",
+    "value": " ",
+  },
+  Object {
+    "type": "link",
+    "value": "b",
+  },
+  Object {
+    "type": "text",
+    "value": " ",
+  },
+  Object {
+    "type": "link",
+    "value": "a",
+  },
+]
+`;
+
+exports[`[renderingUtils] [getSpans] "[[b]] c" 1`] = `
+Array [
+  Object {
+    "type": "link",
+    "value": "b",
+  },
+  Object {
+    "type": "text",
+    "value": " c",
+  },
+]
+`;
+
+exports[`[renderingUtils] [getSpans] "[[b]]" 1`] = `
+Array [
+  Object {
+    "type": "link",
+    "value": "b",
+  },
+]
+`;
+
+exports[`[renderingUtils] [getSpans] "a [[b]] c [[d]] e [[b]] d" 1`] = `
+Array [
+  Object {
+    "type": "text",
+    "value": "a ",
+  },
+  Object {
+    "type": "link",
+    "value": "b",
+  },
+  Object {
+    "type": "text",
+    "value": " c ",
+  },
+  Object {
+    "type": "link",
+    "value": "d",
+  },
+  Object {
+    "type": "text",
+    "value": " e ",
+  },
+  Object {
+    "type": "link",
+    "value": "b",
+  },
+  Object {
+    "type": "text",
+    "value": " d",
+  },
+]
+`;
+
+exports[`[renderingUtils] [getSpans] "a [[b]] c [[d]] e [[b]] d" 2`] = `
+Array [
+  Object {
+    "type": "text",
+    "value": "a ",
+  },
+  Object {
+    "type": "link",
+    "value": "b",
+  },
+  Object {
+    "type": "text",
+    "value": " c ",
+  },
+  Object {
+    "type": "link",
+    "value": "d",
+  },
+  Object {
+    "type": "text",
+    "value": " e ",
+  },
+  Object {
+    "type": "link",
+    "value": "b",
+  },
+  Object {
+    "type": "text",
+    "value": " d",
+  },
+]
+`;
+
+exports[`[renderingUtils] [getSpans] "a [[b]] c" 1`] = `
+Array [
+  Object {
+    "type": "text",
+    "value": "a ",
+  },
+  Object {
+    "type": "link",
+    "value": "b",
+  },
+  Object {
+    "type": "text",
+    "value": " c",
+  },
+]
+`;
+
+exports[`[renderingUtils] [getSpans] "a [[b]]" 1`] = `
+Array [
+  Object {
+    "type": "text",
+    "value": "a ",
+  },
+  Object {
+    "type": "link",
+    "value": "b",
+  },
+]
+`;

@@ -6,7 +6,7 @@ nlp.extend(dates).extend(numbers)
 
 const linksRegexp = /\[\[([^\]\n]*)\]\]/g
 
-const matchPatterns = (text, patterns) => {
+const matchFirst = (text, patterns) => {
 
   const doc = nlp(text)
   for (let current of patterns) {
@@ -21,6 +21,14 @@ const matchPatterns = (text, patterns) => {
   }
 
   return undefined
+}
+
+function getInternalLinks (text) {
+  const internalLinks = []
+  for (const match of text.matchAll(linksRegexp)) {
+    internalLinks.push(match[1])
+  }
+  return internalLinks
 }
 
 function extract (text) {
@@ -38,14 +46,11 @@ function extract (text) {
     result.numbers = numbers
   }
 
-  const internalLinks = []
-  for (const match of text.matchAll(linksRegexp)) {
-    internalLinks.push(match[1])
-  }
+  const internalLinks = getInternalLinks(text)
   if (internalLinks.length) {
     result.internalLinks = internalLinks
   }
   return result
 }
 
-export { extract, matchPatterns }
+export { extract, getInternalLinks, matchFirst }
