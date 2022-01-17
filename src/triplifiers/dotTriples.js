@@ -67,34 +67,6 @@ function toTerm (value) {
       value: trimmed.slice(1, -1).split(',').map(toTerm),
     }
   }
-  // if (tryArray.length > 1
-  //     && trimmed.startsWith('[')
-  //     && trimmed.endsWith(']')) {
-  //     return {
-  //         value: trimmed.slice(1, -1).split(',').map(toTerm),
-  //         type: TermKind.Array
-  //     }
-  // } else if (trimmed.startsWith('[[') && trimmed.endsWith(']]')) {
-  //     return {
-  //         value: trimmed,
-  //         type: TermKind.InternalLink
-  //     }
-  // } else if (trimmed.startsWith('<http') && trimmed.endsWith('>')) {
-  //     return {
-  //         value: trimmed,
-  //         type: TermKind.ExternalLink
-  //     }
-  // } else if (trimmed.startsWith('#')) {
-  //     return {
-  //         value: trimmed,
-  //         type: TermKind.Tag
-  //     }
-  // }
-  //
-  // const tryDate = DateTime.fromSQL(trimmed)
-  // if (tryDate.isValid) {
-  //
-  // }
 
   return {
     value: trimmed,

@@ -1,6 +1,6 @@
 import {App, CachedMetadata, FileStats, LinkCache, SectionCache, TFile} from "obsidian";
 import {DateTime} from "luxon";
-import {Triple} from "../types";
+import {Triple,Term} from "../types";
 import {getTriples} from "../triplifiers/dotTriples";
 
 
@@ -30,7 +30,7 @@ const collectMetadataForPath = (app: any, path: String) => {
 
 const getMetadata = (data: FileData): Metadata => {
 
-    const subject = {
+    const subject:Term = {
         value: 'This',
         entities: {}
     }

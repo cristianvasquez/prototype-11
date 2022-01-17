@@ -5,4 +5,4 @@ type Triple = {
 }
 type Term = any
 
-export {Triple, Term, TermKind}
+export {Triple, Term}

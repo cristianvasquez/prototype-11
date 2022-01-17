@@ -76,13 +76,16 @@ async function popupRDF() {
 .attributes {
   display: grid;
   grid-template-columns: 1fr 5fr;
-  padding: 10px;
+  padding: 5px;
+  gap: 5px;
 }
 
 .fields {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  padding: 10px;
+  padding: 5px;
+  gap: 5px;
+
 }
 
 

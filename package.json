@@ -23,6 +23,7 @@
     "compromise": "^13.11.4",
     "compromise-dates": "^2.2.1",
     "compromise-numbers": "^1.4.0",
+    "luxon": "^2.3.0",
     "mocha-typescript": "^1.1.17",
     "vue": "^3.2.24"
   },
