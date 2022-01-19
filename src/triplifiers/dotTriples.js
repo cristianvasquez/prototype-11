@@ -77,27 +77,6 @@ function toTerm (value) {
   }
 }
 
-import split from 'binary-split'
-
-function splitTest (matcher, cb) {
-  if (!cb) {
-    cb = matcher
-    matcher = undefined
-  }
-  var splitter = split(matcher)
-  var items = []
-  splitter.on('data', function (item) {
-    items.push(item)
-  })
-  splitter.on('error', function (e) {
-    cb(e)
-  })
-  splitter.on('end', function () {
-    cb(null, items)
-  })
-  return splitter
-}
-
 function * getDotTriples (text) {
   // Poor's man line iterator
   const char = '\n'
