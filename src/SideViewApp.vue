@@ -2,7 +2,7 @@
 import {onBeforeMount, onMounted, ref} from 'vue'
 import {PLUGIN_NAME} from './consts'
 import {inject} from '@vue/runtime-core'
-import {getDataByFile} from './lib/helpers'
+import {getDataByFile} from './lib/obsidianHelpers'
 import Metadata from './components/Metadata.vue'
 import {getMetadata} from "./lib/extract";
 import {App, TAbstractFile, TFile} from "obsidian";
@@ -12,11 +12,17 @@ const app: App = inject('app')
 let title = ref('loading')
 let metadata = ref({})
 
-function updateView(file: TAbstractFile) {
-  console.log('updating')
+async function updateView(file: TAbstractFile) {
   title.value = file.name
-  const data = getDataByFile(app, file as TFile)
-  metadata.value = getMetadata(data)
+
+  const t0 = performance.now();
+  const data = await getDataByFile(app, file as TFile)
+  const t1 = performance.now();
+  console.log(`getDataByFile ${file.name}: ${t1 - t0} milliseconds.`);
+  metadata.value = await getMetadata(data)
+  const t2 = performance.now();
+  console.log(`getMetadata ${file.name}: ${t2 - t1} milliseconds.`);
+
 }
 
 onBeforeMount(() => {
@@ -44,7 +50,7 @@ onBeforeMount(() => {
   )
 
   plugin.registerEvent(
-      app.workspace.on('file-open', async (file) => {
+      app.workspace.on('file-open',  (file) => {
         updateView(file)
       })
   )

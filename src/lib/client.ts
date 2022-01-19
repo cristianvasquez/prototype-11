@@ -1,39 +1,62 @@
 import ParsingClient from "sparql-http-client/ParsingClient";
-import DatasetExt from "rdf-ext/lib/Dataset";
+import Dataset from "rdf-ext/lib/Dataset";
+import rdf from 'rdf-ext'
+import Client from 'sparql-http-client/ParsingClient'
+import {ResultRow} from "sparql-http-client/ResultParser";
 
-const createClient = (app: any) => {
-    const rdf_lib = app.libs.rdf // Environment
-    const Client = app.libs.client
-    const client: ParsingClient = new Client({
-        endpointUrl: 'http://localhost:3030/obsidian/query',
-        updateUrl: 'http://localhost:3030/obsidian/update',
-        user: '',
-        password: ''
-    })
+const client: ParsingClient = new Client({
+    endpointUrl: 'http://localhost:3030/obsidian/query',
+    updateUrl: 'http://localhost:3030/obsidian/update',
+    user: '',
+    password: ''
+})
 
-    console.log(rdf_lib)
-    return {
-        insert: (dataset: DatasetExt, graph: string) => {
-            const insertQuery = `
+async function getDataset(graphUri: string) {
+    const constructQuery = `
+      CONSTRUCT {
+        ?s ?p ?o
+      } WHERE {
+        GRAPH <${graphUri}> {
+          ?s ?p ?o
+        }
+      }
+      `
+    return rdf.dataset(await client.query.construct(constructQuery))
+}
+
+async function insertDataset(graphUri: string, dataset: Dataset) {
+    const insertQuery = `
       INSERT DATA {
-        GRAPH <${graph}> {
+        GRAPH <${graphUri}> {
           ${dataset.toString()}
         }
       }
       `
-            console.log(insertQuery)
-            return client.query.update(insertQuery)
-        },
-        construct: async (query: string) => {
-            return rdf_lib.dataset(await client.query.construct(query))
-        },
-        select: async (query: string) => {
-            return rdf_lib.dataset(await client.query.select(query))
-        },
-        rdf: rdf_lib,
-        namespace: rdf_lib.namespace,
-        cf: rdf_lib.clownface
-    }
+    return await client.query.update(insertQuery)
 }
 
-export {createClient}
+async function deleteDataset(graphUri: string) {
+    const insertQuery = `
+    DELETE {
+      GRAPH <${graphUri}> {
+       ?s ?p ?o
+      }
+    }
+    WHERE {      
+      GRAPH <${graphUri}> {
+         ?s ?p ?o
+      }
+    } 
+      `
+    return await client.query.update(insertQuery)
+}
+
+async function construct(query: string) {
+    return rdf.dataset(await client.query.construct(query))
+}
+
+async function select(query: string): Promise<Array<ResultRow>> {
+    return await client.query.select(query)
+}
+
+export {getDataset, insertDataset, deleteDataset, select, construct}

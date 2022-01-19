@@ -24,6 +24,8 @@ describe('[GithubTriplifier]', function () {
       'has Github: <https://github.com/cristianvasquez/prototype-11>',
       'github repo: <https://github.com/cristianvasquez/prototype-11>',
       'github repo: https://github.com/cristianvasquez/prototype-11',
+      'github repo: https://another.website.com/cristianvasquez/prototype-11',
+
     ]
     phrases.forEach((current) => {
       it(`"${current}"`, function () {
@@ -35,14 +37,16 @@ describe('[GithubTriplifier]', function () {
   describe('[getRDF]', function () {
     const phrases = [
       'https://github.com/cristianvasquez/prototype-11',
+      'https://github.com/cristianvasquez',
+      'https://github.com',
+      'https://other.website.com/cristianvasquez',
     ]
     const triplifier = new GithubTriplifier(baseUri,ns)
 
     phrases.forEach((current) => {
       it(`"${current}"`, function () {
         const dataset = triplifier.getRDF(current, baseUri, ns)
-        assert.notEqual(dataset, null, 'should return a dataset')
-        expect(dataset.toString()).toMatchSnapshot(this)
+        expect(dataset?dataset.toString():'not triplified').toMatchSnapshot(this)
       })
     })
   })

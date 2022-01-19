@@ -6,6 +6,12 @@ Array [
 ]
 `;
 
+exports[`[GithubTriplifier] [getMatches] "github repo: https://another.website.com/cristianvasquez/prototype-11" 1`] = `
+Array [
+  "https://another.website.com/cristianvasquez/prototype-11",
+]
+`;
+
 exports[`[GithubTriplifier] [getMatches] "github repo: https://github.com/cristianvasquez/prototype-11" 1`] = `
 Array [
   "https://github.com/cristianvasquez/prototype-11",
@@ -30,12 +36,22 @@ Array [
 ]
 `;
 
-exports[`[GithubTriplifier] [getRDF] "https://github.com/cristianvasquez/prototype-11" 1`] = `
-"<http://example/1> <http://vault.org/about> <https://github.com/cristianvasquez/prototype-11> .
-<https://github.com/cristianvasquez/prototype-11> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vault.org/GithubRepo> .
-<https://github.com/cristianvasquez/prototype-11> <http://vault.org/label> \\"prototype-11\\" .
-<https://github.com/cristianvasquez> <http://vault.org/contains> <https://github.com/cristianvasquez/prototype-11> .
-<https://github.com/cristianvasquez> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vault.org/GithubUser> .
+exports[`[GithubTriplifier] [getRDF] "https://github.com" 1`] = `"not triplified"`;
+
+exports[`[GithubTriplifier] [getRDF] "https://github.com/cristianvasquez" 1`] = `
+"<https://github.com/cristianvasquez> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vault.org/GithubUser> .
 <https://github.com/cristianvasquez> <http://vault.org/label> \\"cristianvasquez\\" .
 "
 `;
+
+exports[`[GithubTriplifier] [getRDF] "https://github.com/cristianvasquez/prototype-11" 1`] = `
+"<https://github.com/cristianvasquez> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vault.org/GithubUser> .
+<https://github.com/cristianvasquez> <http://vault.org/label> \\"cristianvasquez\\" .
+<https://github.com/cristianvasquez> <http://vault.org/has> <https://github.com/cristianvasquez/prototype-11> .
+<http://example/1> <http://vault.org/about> <https://github.com/cristianvasquez/prototype-11> .
+<https://github.com/cristianvasquez/prototype-11> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vault.org/GithubRepo> .
+<https://github.com/cristianvasquez/prototype-11> <http://vault.org/label> \\"prototype-11\\" .
+"
+`;
+
+exports[`[GithubTriplifier] [getRDF] "https://other.website.com/cristianvasquez" 1`] = `"not triplified"`;

@@ -1,27 +1,6 @@
 import {App, CachedMetadata, FileStats, LinkCache, SectionCache, TFile} from "obsidian";
-import {DateTime} from "luxon";
-import {Triple} from "../types";
-
-
-type Metadata = {
-    name: string,
-    path: string,
-    created: DateTime,
-    updated: DateTime,
-    size: number,
-    pairs?: Array<Triple>,
-    triads?: Array<Triple>
-}
-
-type FileData = {
-    name: string,
-    path: string,
-    stat: FileStats,
-    text?: string,
-    metadata?: CachedMetadata,
-    links?: Record<string, number>
-    backlinks?: Record<string, [LinkCache]>
-}
+import {FileData} from "../types";
+import {getActiveFileContent} from 'obsidian-community-lib'
 
 const collectMetadataForPath = (app: any, path: String) => {
     const dataviewApi = app.plugins.plugins.dataview?.api
@@ -38,13 +17,21 @@ function getFileTitle(path: string): string {
     return path;
 }
 
-const getDataByFile = (app: App, file: TFile): FileData => {
+async function getDataByFile(app: App, file: TFile): Promise<FileData> {
+
+
+    //I believe files without unsafeCachedData are
+    //The ones that are too big. I'll skip those in the meantime.
+
+    // @ts-ignore
+    const text = file.unsafeCachedData ? file.unsafeCachedData
+        : await getActiveFileContent(app, true)
+
     return {
         name: file.name,
         path: file.path,
         stat: file.stat,
-        // @ts-ignore
-        text: file.unsafeCachedData,
+        text: text,
         metadata: app.metadataCache.getFileCache(file),
         links: app.metadataCache.resolvedLinks[file.path],
         // @ts-ignore
@@ -54,16 +41,17 @@ const getDataByFile = (app: App, file: TFile): FileData => {
 
 // Gets text for yaml, heading, paragraph etc.
 const getSections = (data: FileData, filter?: (section: SectionCache) => boolean) => {
+
     if (!filter) {
         filter = _ => true
     }
     return data.metadata.sections
         .filter(filter)
         .map((current) =>
-            data.text.substring(current.position.start.offset,
+            data.text?.substring(current.position.start.offset,
                 current.position.end.offset)
         )
 }
 
 
-export {collectMetadataForPath, getDataByFile, getFileTitle, FileData, Metadata, getSections}
+export {collectMetadataForPath, getDataByFile, getFileTitle, getSections}

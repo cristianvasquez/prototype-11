@@ -30,11 +30,17 @@ const phrases = [
   'A :: B :: C :: D',
 ]
 
+
+
 describe('[getDotTriples]', function () {
 
   phrases.forEach((current)=>{
-    it(`"${current}"`, function () {
-      const actual = getDotTriples(current)
+    it(`"${current}"`, async function () {
+
+      let actual = []
+      for (const triples of getDotTriples(current)) {
+        actual = [...actual,...triples]
+      }
       // console.debug(JSON.stringify(actual,null,2))
       expect(actual).toMatchSnapshot(this)
     })
