@@ -2,15 +2,13 @@
 // https://chevrotain.io/docs/ (if worth the effort)
 
 import { extract } from './miniNLP.js'
-import { chunksToLinesAsync, chomp } from '@rauschma/stringio'
-import { Readable } from 'stream'
 
 //  (un :: (texto :: bonito))
-const regexpSPO = /\(\s*([^\)]+)\s*::\s*\(([^\)]+)\s*::\s*([^\)]+)\s*\)\)/g
+const regexpSPO = /\(\s*([^)]+)\s*::\s*\(([^)]+)\s*::\s*([^)]+)\s*\)\)/g
 //  un :: (texto :: bonito)
-const regexpSPOnp = /([^\n\(\)]+)\s*::\s*\(([^\)]+)\s*::\s*([^\)]+)\s*\)/g
+const regexpSPOnp = /([^\n\\)]+)\s*::\s*\(([^)]+)\s*::\s*([^)]+)\s*\)/g
 // (texto :: bonito)
-const regexpPO = /\(([^\)]+)\s*::\s*([^\)]+)\s*\)/g
+const regexpPO = /\(([^)]+)\s*::\s*([^)]+)\s*\)/g
 // texto :: bonito
 const regexpPOnp = /([^\n]+)::([^\n]+)/g
 
