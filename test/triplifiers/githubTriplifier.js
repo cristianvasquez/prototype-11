@@ -1,4 +1,4 @@
-import { GithubTriplifier } from '../../src/triplifiers/github.js'
+import { GithubTriplifier } from '../../src/triplifiers/githubTriplifier.js'
 import rdf from 'rdf-ext'
 import expect from 'expect'
 import toMatchSnapshot from 'expect-mocha-snapshot'

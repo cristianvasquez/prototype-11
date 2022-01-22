@@ -2,7 +2,7 @@ import {getDotTriples} from "../triplifiers/dotTriples";
 import {DateTime} from "luxon";
 import {getSections} from "./obsidianHelpers";
 import {FileData} from '../types'
-import {GithubTriplifier} from '../triplifiers/github'
+import {GithubTriplifier} from '../triplifiers/githubTriplifier.js'
 import {FrontMatterCache} from "obsidian";
 import {Triple,Dataset} from '../types'
 
@@ -46,7 +46,7 @@ class NoteData {
     }
 
     async getBasicDataset(): Promise<Dataset> {
-        const githubTriplifier = new GithubTriplifier(noteUri, this.ns)
+        const githubTriplifier = new GithubTriplifier(this.noteUri, this.ns)
         const result: Dataset = new Dataset()
         const textChunks = getSections(this.data, (section) => section.type !== 'code')
         for (const chunk of textChunks) {
