@@ -2,6 +2,7 @@
 // https://chevrotain.io/docs/ (if worth the effort)
 
 import { extract } from './miniNLP.js'
+import { applyToChunks } from './utils.js'
 
 //  (un :: (texto :: bonito))
 const regexpSPO = /\(\s*([^)]+)\s*::\s*\(([^)]+)\s*::\s*([^)]+)\s*\)\)/g
@@ -75,21 +76,13 @@ function toTerm (value) {
   }
 }
 
-function * getDotTriples (text) {
-  // Poor's man line iterator
-  const char = '\n'
-  if (text.indexOf(char) !== -1) {
-    let i = 0
-    let j = 0
-    while ((j = text.indexOf(char, i)) !== -1) {
-      const line = text.substring(i, j)
-      yield toSPO(line)
-      i = j + 1
-    }
-  } else {
-    yield toSPO(text)
-  }
 
+function * getDotTriples (text) {
+  for (const triples of applyToChunks(text, toSPO)) {
+    if (triples) {
+      yield triples
+    }
+  }
 }
 
 export { getDotTriples, toSPO }

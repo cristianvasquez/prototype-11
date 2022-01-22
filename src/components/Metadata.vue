@@ -1,17 +1,17 @@
 <script lang="ts" setup>
 import MetadataValues from './helpers/MetadataValues.vue'
-import {inject, onBeforeMount, onMounted, PropType, watch} from 'vue'
+import {computed, inject, onMounted, PropType, ref, toRaw, watchEffect} from 'vue'
 import {dateTimeFormat} from '../consts'
 import {RDFModal} from './RDFModal'
 import {App} from 'obsidian'
-import {Metadata, Dataset} from "../types";
-import {insertDataset, getDataset, deleteDataset} from "../lib/client";
-import {ref, toRaw, watchEffect} from 'vue'
+import {Dataset} from "../types";
+import {deleteDataset, getDataset, insertDataset} from "../lib/client";
+import {NoteData} from "../lib/extract";
 
 const app: App = inject('app')
 const props = defineProps({
-  metadata: {
-    type: Object as PropType<Metadata>,
+  noteData: {
+    type: Object as PropType<NoteData>,
     required: true
   }
 })
@@ -20,23 +20,40 @@ async function popupRDF(dataset: Dataset) {
   new RDFModal(app, dataset.toCanonical()).open()
 }
 
-async function fetchRDF() {
-  const noteUri = toRaw(props.metadata.uri)
-  console.log('fetch', noteUri)
+const currentDataset = ref()
+const triplifiedDataset = ref()
+
+const metadata = ref()
+const dotTriples = ref([])
+
+const attributes = computed(() => dotTriples.value.filter((current) => current.subject == null))
+const triples = computed(() => dotTriples.value.filter((current) => current.subject != null))
+
+
+async function fetchCurrentDataset() {
+  const noteUri = toRaw(props.noteData.noteUri)
+  console.log('fetchRDF', noteUri)
   currentDataset.value = await getDataset(noteUri)
 }
 
 async function indexRDF(dataset: Dataset) {
-  await deleteDataset(props.metadata.uri)
-  await insertDataset(props.metadata.uri, dataset)
-  await fetchRDF()
+  await deleteDataset(props.noteData.noteUri)
+  await insertDataset(props.noteData.noteUri, dataset)
+  await fetchCurrentDataset()
 }
 
-const currentDataset = ref()
+
+async function extractNotedata() {
+  await fetchCurrentDataset()
+  metadata.value = props.noteData.getMetadata()
+  const full = await props.noteData.getFullDataset()
+  triplifiedDataset.value = full.dataset
+  dotTriples.value = full.dotTriples
+}
+
+
 onMounted(async () => {
-  watchEffect(async () =>
-      await fetchRDF()
-  );
+  watchEffect(async () => extractNotedata());
 })
 
 </script>
@@ -46,42 +63,36 @@ onMounted(async () => {
   <div class="container">
     <div class="attributes">
 
-      <template v-if="metadata.uri">
+      <template v-if="noteData">
         <div>URI</div>
-        <div>{{ metadata.uri }}</div>
+        <div>{{ noteData.noteUri }}</div>
       </template>
 
-      <template v-if="metadata.created">
+      <template v-if="metadata">
         <div>Created</div>
         <div>{{ metadata.created.toLocaleString(dateTimeFormat) }}</div>
-      </template>
-
-      <template v-if="props.metadata.updated">
         <div>Modified</div>
         <div>{{ metadata.updated.toLocaleString(dateTimeFormat) }}</div>
-      </template>
-
-      <template v-if="props.metadata.size">
         <div>Size</div>
         <div>{{ metadata.size }}</div>
       </template>
 
     </div>
 
-    <template v-if="metadata.pairs">
+    <template v-if="attributes">
       <h3>Attributes</h3>
       <div class="attributes">
-        <template v-for="tuple in metadata.pairs">
+        <template v-for="tuple in attributes">
           <metadata-values :value="tuple.predicate"/>
           <metadata-values :value="tuple.object"/>
         </template>
       </div>
     </template>
 
-    <template v-if="metadata.triads">
+    <template v-if="triples">
       <h3>Triples</h3>
       <div class="fields">
-        <template v-for="tuple in metadata.triads">
+        <template v-for="tuple in triples">
           <metadata-values :value="tuple.subject"/>
           <metadata-values :value="tuple.predicate"/>
           <metadata-values :value="tuple.object"/>
@@ -92,15 +103,17 @@ onMounted(async () => {
 
     <div class="status">
       <h3>RDF</h3>
-      <div v-if="metadata.rdf">
-        {{ metadata.rdf.size }} <a class='internal-link' href="#"
-                                   @click="popupRDF(metadata.rdf)">triples</a> extracted
+      <div v-if="triplifiedDataset">
+        {{ triplifiedDataset.size }}
+        <a class='internal-link' href="#"
+           @click="popupRDF(triplifiedDataset)">triples</a> extracted
         (<a class='internal-link' href="#"
-            @click="indexRDF(metadata.rdf)">index</a>)
+            @click="indexRDF(triplifiedDataset)">index</a>)
       </div>
       <div v-if="currentDataset">
         {{ currentDataset.size }}
-        <a class='internal-link' href="#" @click="popupRDF(currentDataset)">triples</a>
+        <a class='internal-link' href="#"
+           @click="popupRDF(currentDataset)">triples</a>
         in database
       </div>
     </div>
