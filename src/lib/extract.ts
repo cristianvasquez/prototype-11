@@ -1,11 +1,10 @@
 import {getDotTriples} from "../triplifiers/dotTriples";
 import {DateTime} from "luxon";
 import {getSections} from "./obsidianHelpers";
-import {FileData} from '../types'
+import {Dataset, FileData, Triple} from '../types'
 import {GithubTriplifier} from '../triplifiers/githubTriplifier.js'
 import {FrontMatterCache} from "obsidian";
-import {Triple,Dataset} from '../types'
-
+import {BasicNoteTriplifier} from "../triplifiers/basicNoteTriplifier";
 
 function noteUri(frontMatter: FrontMatterCache, path: string) {
     const identifier = frontMatter?.id ? frontMatter.id : encodeURI(path);
@@ -36,10 +35,10 @@ class NoteData {
 
     getDotTriples(): Array<Triple> {
         const textChunks = getSections(this.data, (section) => section.type !== 'code')
-        let result:Array<Triple> = []
+        let result: Array<Triple> = []
         for (const chunk of textChunks) {
             for (const triples of getDotTriples(chunk)) {
-                result = [...result,...triples]
+                result = [...result, ...triples]
             }
         }
         return result;
@@ -59,14 +58,19 @@ class NoteData {
     }
 
     async getFullDataset() {
+
+        const noteTriplifier = new BasicNoteTriplifier(this.noteUri, this.ns)
+        const noteDataset = noteTriplifier.getRDF(this.data)
+
+        await noteDataset.import((await this.getBasicDataset()).toStream())
+
         return {
-            dataset:await this.getBasicDataset(),
-            dotTriples:this.getDotTriples()
+            dataset: noteDataset,
+            dotTriples: this.getDotTriples()
         }
     }
 
 }
-
 
 export {NoteData}
 
