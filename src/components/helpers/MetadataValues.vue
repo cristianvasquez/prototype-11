@@ -3,8 +3,8 @@ import MetadataValue from '../MetadataValue.vue'
 import {toRaw} from 'vue'
 
 /**
- * For the moment I only want one array level.
- * I want to keep this simple in the meantime.
+ * Only want one array level.
+ * I want to keep this simple for the moment.
  */
 const props = defineProps({
   value: {

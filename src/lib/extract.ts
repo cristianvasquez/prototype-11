@@ -5,10 +5,11 @@ import {Dataset, FileData, Triple} from '../types'
 import {GithubTriplifier} from '../triplifiers/githubTriplifier.js'
 import {FrontMatterCache} from "obsidian";
 import {BasicNoteTriplifier} from "../triplifiers/basicNoteTriplifier";
+import {ns} from '../namespaces'
 
 function noteUri(frontMatter: FrontMatterCache, path: string) {
     const identifier = frontMatter?.id ? frontMatter.id : encodeURI(path);
-    return `http://cristianvasquez.me/note/${identifier}`
+    return ns.this(identifier)
 }
 
 class NoteData {

@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import {onBeforeMount, onMounted, ref} from 'vue'
-import {PLUGIN_NAME} from './consts'
+import {PLUGIN_NAME} from '../consts'
 import {inject} from '@vue/runtime-core'
-import {getDataByFile} from './lib/obsidianHelpers'
-import Metadata from './components/Metadata.vue'
-import {NoteData} from "./lib/extract";
+import {getDataByFile} from '../lib/obsidianHelpers'
+import Metadata from '../components/Metadata.vue'
+import {NoteData} from "../lib/extract";
 import {App, TAbstractFile, TFile} from "obsidian";
-import {ns} from './namespaces.js'
+import {ns} from '../namespaces.js'
 
 const app: App = inject('app')
 

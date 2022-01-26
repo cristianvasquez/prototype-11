@@ -1,7 +1,8 @@
-import {ItemView, Menu, Modal, Notice, Plugin, PluginSettingTab, Setting, WorkspaceLeaf} from "obsidian";
-import {createApp, ref} from 'vue'
-import DebugView from './DebugView.vue'
+import {ItemView, Menu, Plugin, WorkspaceLeaf} from "obsidian";
+import {createApp} from 'vue'
+import DebugView from './views/DebugView.vue'
 import {PLUGIN_NAME} from "./consts";
+import {SparqlResult} from "./sparql";
 
 interface MyPluginSettings {
     mySetting: string
@@ -48,6 +49,21 @@ export default class Prototype_11 extends Plugin {
         this.vueApp.provide('register', this.registerEvent)
         this.vueApp.provide('app', this.app)
 
+        this.registerMarkdownPostProcessor((element, context) => {
+
+            const codeblocks = element.querySelectorAll("code");
+
+            for (let index = 0; index < codeblocks.length; index++) {
+                const codeblock = codeblocks.item(index);
+                if (codeblock.getAttribute('class')?.startsWith('language-sparql')) {
+                    const text = codeblock.innerText.trim();
+                    context.addChild(new SparqlResult(codeblock, text, codeblock.getAttribute('class')));
+                }
+            }
+
+        })
+
+
         this.registerView(SIDE_VIEW_ID,
             (leaf) => new CurrentFileView(leaf, this.vueApp));
     }
@@ -72,8 +88,6 @@ export default class Prototype_11 extends Plugin {
     }
 }
 export const SIDE_VIEW_ID = `${PLUGIN_NAME}-sideview`;
-
-
 
 
 export class CurrentFileView extends ItemView {

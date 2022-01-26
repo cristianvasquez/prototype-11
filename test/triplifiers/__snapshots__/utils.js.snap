@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[utils] [shrink] "http://vault.org/something" 1`] = `"vault:something"`;
+
+exports[`[utils] [shrink] "http://www.not-me.com" 1`] = `"http://www.not-me.com"`;
+
+exports[`[utils] [shrink] "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" 1`] = `"rdf:type"`;
