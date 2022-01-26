@@ -1,4 +1,4 @@
-import { shrink } from '../../src/triplifiers/utils.js'
+import { shrink,getPrefixes } from '../../src/triplifiers/utils.js'
 
 import expect from 'expect'
 import toMatchSnapshot from 'expect-mocha-snapshot'
@@ -19,4 +19,13 @@ describe('[utils]', function () {
       })
     })
   })
+
+  describe('[prefixes]', function () {
+    it(`"values"`, function () {
+      const actual = getPrefixes()
+      expect(actual).toMatchSnapshot(this)
+    })
+  })
+
+
 })

@@ -27,4 +27,9 @@ function shrink (iri) {
   return iri
 }
 
-export {applyToChunks, shrink}
+function getPrefixes(){
+  return Array.from(Object.entries(ns)).map(([key,value])=> `PREFIX ${key}: <${value().value}>` ).join('\n')
+}
+
+
+export {applyToChunks, shrink, getPrefixes}
