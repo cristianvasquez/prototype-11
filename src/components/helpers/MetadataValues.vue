@@ -20,8 +20,7 @@ function isArray() {
 </script>
 
 <template>
-  <div v-if="isArray()" class="array">
-
+  <div v-if="isArray()" class="flex-column">
     <template v-for="current in props.value.value">
       <metadata-value :value="current"/>
     </template>
@@ -32,9 +31,9 @@ function isArray() {
 
 </template>
 
-<style scoped>
+<style>
 
-.array {
+.flex-column {
   display: flex;
   flex-direction: column;
 }

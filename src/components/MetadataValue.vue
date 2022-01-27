@@ -32,10 +32,4 @@ function spanify () {
     </template>
   </div>
   <div v-else>{{ props.value.value }}</div>
-
 </template>
-
-<style scoped>
-
-
-</style>

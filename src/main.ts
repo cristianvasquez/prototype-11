@@ -2,7 +2,11 @@ import {ItemView, Menu, Plugin, WorkspaceLeaf} from "obsidian";
 import {createApp} from 'vue'
 import DebugView from './views/DebugView.vue'
 import {PLUGIN_NAME} from "./consts";
-import {SparqlResult} from "./sparql";
+import {SparqlRenderer} from "./sparql";
+import ParsingClient from "sparql-http-client/ParsingClient";
+import Client from "sparql-http-client/ParsingClient";
+import {Triplestore} from "./lib/client";
+import SparqlView from "./views/SparqlView.vue";
 
 interface MyPluginSettings {
     mySetting: string
@@ -15,6 +19,7 @@ const DEFAULT_SETTINGS: MyPluginSettings = {
 export default class Prototype_11 extends Plugin {
     settings: MyPluginSettings
     private vueApp: DebugView<Element>;
+    private triplestore: Triplestore;
 
     async onload() {
 
@@ -45,9 +50,32 @@ export default class Prototype_11 extends Plugin {
             }
         })
 
-        this.vueApp = createApp(DebugView)
-        this.vueApp.provide('register', this.registerEvent)
-        this.vueApp.provide('app', this.app)
+        const client: ParsingClient = new Client({
+            endpointUrl: 'http://localhost:3030/obsidian/query',
+            updateUrl: 'http://localhost:3030/obsidian/update',
+            user: '',
+            password: ''
+        })
+        const triplestore = new Triplestore(client)
+
+        function createDebugApp() {
+            const debugApp = createApp(DebugView)
+            debugApp.provide('register', this.registerEvent)
+            debugApp.provide('triplestore', triplestore)
+            debugApp.provide('app', this.app)
+            return debugApp
+        }
+
+        function createSparqlApp(text: string, lang: string) {
+            const sparqlApp = createApp(SparqlView)
+            sparqlApp.provide('text', text)
+            sparqlApp.provide('lang', lang)
+            sparqlApp.provide('triplestore', triplestore)
+            return sparqlApp
+        }
+
+
+        this.vueApp = createDebugApp()
 
         this.registerMarkdownPostProcessor((element, context) => {
 
@@ -55,9 +83,11 @@ export default class Prototype_11 extends Plugin {
 
             for (let index = 0; index < codeblocks.length; index++) {
                 const codeblock = codeblocks.item(index);
-                if (codeblock.getAttribute('class')?.startsWith('language-sparql')) {
+                const lang = codeblock.getAttribute('class')
+                if (lang?.startsWith('language-sparql')) {
                     const text = codeblock.innerText.trim();
-                    context.addChild(new SparqlResult(codeblock, text, codeblock.getAttribute('class')));
+                    const renderer = new SparqlRenderer(codeblock, createSparqlApp(text, lang))
+                    context.addChild(renderer)
                 }
             }
 

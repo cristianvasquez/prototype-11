@@ -1,18 +1,25 @@
 import ParsingClient from "sparql-http-client/ParsingClient";
+import Client from "sparql-http-client/ParsingClient";
 import Dataset from "rdf-ext/lib/Dataset";
 import rdf from 'rdf-ext'
-import Client from 'sparql-http-client/ParsingClient'
 import {ResultRow} from "sparql-http-client/ResultParser";
 
-const client: ParsingClient = new Client({
-    endpointUrl: 'http://localhost:3030/obsidian/query',
-    updateUrl: 'http://localhost:3030/obsidian/update',
-    user: '',
-    password: ''
-})
+// const client: ParsingClient = new Client({
+//     endpointUrl: 'http://localhost:3030/obsidian/query',
+//     updateUrl: 'http://localhost:3030/obsidian/update',
+//     user: '',
+//     password: ''
+// })
 
-async function getDataset(graphUri: string) {
-    const constructQuery = `
+class Triplestore {
+    private client: ParsingClient;
+
+    constructor(client: Client) {
+        this.client = client
+    }
+
+    async getDataset(graphUri: string) {
+        const constructQuery = `
       CONSTRUCT {
         ?s ?p ?o
       } WHERE {
@@ -21,22 +28,22 @@ async function getDataset(graphUri: string) {
         }
       }
       `
-    return rdf.dataset(await client.query.construct(constructQuery))
-}
+        return rdf.dataset(await this.client.query.construct(constructQuery))
+    }
 
-async function insertDataset(graphUri: string, dataset: Dataset) {
-    const insertQuery = `
+    async insertDataset(graphUri: string, dataset: Dataset) {
+        const insertQuery = `
       INSERT DATA {
         GRAPH <${graphUri}> {
           ${dataset.toString()}
         }
       }
       `
-    return await client.query.update(insertQuery)
-}
+        return await this.client.query.update(insertQuery)
+    }
 
-async function deleteDataset(graphUri: string) {
-    const insertQuery = `
+    async deleteDataset(graphUri: string) {
+        const insertQuery = `
     DELETE {
       GRAPH <${graphUri}> {
        ?s ?p ?o
@@ -48,15 +55,18 @@ async function deleteDataset(graphUri: string) {
       }
     } 
       `
-    return await client.query.update(insertQuery)
+        return await this.client.query.update(insertQuery)
+    }
+
+    async construct(query: string) {
+        return rdf.dataset(await this.client.query.construct(query))
+    }
+
+    async select(query: string): Promise<Array<ResultRow>> {
+        return await this.client.query.select(query)
+    }
+
 }
 
-async function construct(query: string) {
-    return rdf.dataset(await client.query.construct(query))
-}
 
-async function select(query: string): Promise<Array<ResultRow>> {
-    return await client.query.select(query)
-}
-
-export {getDataset, insertDataset, deleteDataset, select, construct}
+export {Triplestore}

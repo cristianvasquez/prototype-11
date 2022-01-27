@@ -1,27 +1,24 @@
 import {MarkdownRenderChild} from "obsidian";
-import {App, createApp} from "vue";
-import SparqlView from "./views/SparqlView.vue";
+import {App} from "vue";
 
-export class SparqlResult extends MarkdownRenderChild {
-    private vueApp: App<Element>;
+export class SparqlRenderer extends MarkdownRenderChild {
+    private app: App<Element>;
 
-    constructor(containerEl: HTMLElement, text: string, lang:string) {
+    constructor(containerEl: HTMLElement, vueApp: App<Element>) {
         super(containerEl);
-        this.vueApp = createApp(SparqlView)
-        this.vueApp.provide('text', text)
-        this.vueApp.provide('lang', lang)
+        this.app = vueApp
     }
 
     onload() {
         this.containerEl.removeAttribute('class')
         this.containerEl.setText('')
         const div = this.containerEl.createDiv()
-        this.vueApp.mount(div);
+        this.app.mount(div);
     }
 
     onunload() {
         super.onunload();
         console.log('Unload')
-        this.vueApp.unmount()
+        this.app.unmount()
     }
 }

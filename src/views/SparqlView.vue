@@ -1,16 +1,18 @@
 <script lang="ts" setup>
-import {select} from '../lib/client'
+
 import {inject} from "@vue/runtime-core";
 import {onMounted, ref} from "vue";
 import {shrink} from "../triplifiers/utils";
+import {Triplestore} from "../lib/client";
 
 const text: string = inject('text')
 const lang: string = inject('lang')
+const triplestore: Triplestore = inject('triplestore')
 
 const data = ref()
 
 onMounted(async () => {
-  const result = await select(text)
+  const result = await triplestore.select(text)
   let header = null
   let rows = []
   for (const current of result) {
@@ -43,5 +45,3 @@ onMounted(async () => {
     </table>
   </template>
 </template>
-<style>
-</style>

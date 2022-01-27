@@ -3,7 +3,7 @@ import {DateTimeFormatOptions} from "luxon";
 
 const PLUGIN_NAME = 'prototype-11'
 
-const dateTimeFormat:DateTimeFormatOptions = {
+const dateTimeFormat: DateTimeFormatOptions = {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -11,5 +11,4 @@ const dateTimeFormat:DateTimeFormatOptions = {
     minute: '2-digit',
 }
 
-const ID_PROPERTY = 'id'
-export {PLUGIN_NAME, dateTimeFormat, ID_PROPERTY}
+export {PLUGIN_NAME, dateTimeFormat}

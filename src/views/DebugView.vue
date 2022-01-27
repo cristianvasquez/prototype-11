@@ -62,7 +62,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="grid">
+  <div class="debug-view">
     <h1>{{ title }}</h1>
     <Metadata v-if="noteData" :noteData="noteData"/>
   </div>
@@ -70,7 +70,7 @@ onMounted(() => {
 
 <style>
 
-.grid {
+.debug-view {
   display: grid;
   padding: 10px;
 }
