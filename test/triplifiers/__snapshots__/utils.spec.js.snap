@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[utils] [prefixes] "values" 1`] = `
+"PREFIX schema: <http://schema.org/>
+PREFIX vault: <http://vault.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX this: <http://notes/>"
+`;
+
+exports[`[utils] [shrink] "http://vault.org/something" 1`] = `"vault:something"`;
+
+exports[`[utils] [shrink] "http://www.not-me.com" 1`] = `"http://www.not-me.com"`;
+
+exports[`[utils] [shrink] "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" 1`] = `"rdf:type"`;
+
+exports[`[utils] [templates] "prefixes" 1`] = `
+"PREFIX schema: <http://schema.org/>
+PREFIX vault: <http://vault.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX this: <http://notes/>"
+`;
+
+exports[`[utils] [templates] "template" 1`] = `
+"
+\`\`\`
+PREFIX schema: <http://schema.org/>
+PREFIX vault: <http://vault.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX this: <http://notes/>
+
+SELECT ?g ?s ?p ?o
+WHERE {
+    GRAPH ?g {
+       ?s ?p ?o .
+    }
+} LIMIT 10
+\`\`\`"
+`;

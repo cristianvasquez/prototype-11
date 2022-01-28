@@ -10,6 +10,7 @@ package-lock.json
 main.js
 *.js.map
 styles.css
+main.css
 
 # obsidian
 data.json

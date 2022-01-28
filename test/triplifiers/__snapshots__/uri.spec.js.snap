@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[uri] [pathToUri] "values" 1`] = `
+NamedNode {
+  "value": "http://notes/L2hvbGEvbXVuZG8=",
+}
+`;
+
+exports[`[uri] [uriToPath] "values" 1`] = `"/hola/mundo"`;

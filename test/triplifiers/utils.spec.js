@@ -1,4 +1,4 @@
-import { shrink,getPrefixes } from '../../src/triplifiers/utils.js'
+import { shrink, getPrefixes, getTemplate } from '../../src/triplifiers/utils.js'
 
 import expect from 'expect'
 import toMatchSnapshot from 'expect-mocha-snapshot'
@@ -6,6 +6,7 @@ import toMatchSnapshot from 'expect-mocha-snapshot'
 expect.extend({ toMatchSnapshot })
 
 describe('[utils]', function () {
+
   describe('[shrink]', function () {
     const phrases = [
       'http://vault.org/something',
@@ -20,9 +21,13 @@ describe('[utils]', function () {
     })
   })
 
-  describe('[prefixes]', function () {
-    it(`"values"`, function () {
+  describe('[templates]', function () {
+    it(`"prefixes"`, function () {
       const actual = getPrefixes()
+      expect(actual).toMatchSnapshot(this)
+    })
+    it(`"template"`, function () {
+      const actual = getTemplate()
       expect(actual).toMatchSnapshot(this)
     })
   })

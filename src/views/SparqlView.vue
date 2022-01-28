@@ -6,7 +6,6 @@ import {shrink} from "../triplifiers/utils";
 import {Triplestore} from "../lib/client";
 
 const text: string = inject('text')
-const lang: string = inject('lang')
 const triplestore: Triplestore = inject('triplestore')
 
 const data = ref()

@@ -3,14 +3,8 @@ import {DateTime} from "luxon";
 import {getSections} from "./obsidianHelpers";
 import {Dataset, FileData, Triple} from '../types'
 import {GithubTriplifier} from '../triplifiers/githubTriplifier.js'
-import {FrontMatterCache} from "obsidian";
 import {BasicNoteTriplifier} from "../triplifiers/basicNoteTriplifier";
-import {ns} from '../namespaces'
-
-function noteUri(frontMatter: FrontMatterCache, path: string) {
-    const identifier = frontMatter?.id ? frontMatter.id : encodeURI(path);
-    return ns.this(identifier)
-}
+import {pathToUri} from "../triplifiers/uri.js";
 
 class NoteData {
     public readonly noteUri: string;
@@ -20,7 +14,7 @@ class NoteData {
     constructor(data: FileData, ns: any) {
         this.data = data;
         this.ns = ns;
-        this.noteUri = noteUri(data.metadata.frontmatter, data.path)
+        this.noteUri = pathToUri(data.path)
     }
 
     getMetadata() {

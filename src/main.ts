@@ -1,12 +1,12 @@
-import {ItemView, Menu, Plugin, WorkspaceLeaf} from "obsidian";
+import {Editor, ItemView, MarkdownPostProcessorContext, Menu, Plugin, WorkspaceLeaf} from "obsidian";
 import {createApp} from 'vue'
 import DebugView from './views/DebugView.vue'
 import {PLUGIN_NAME} from "./consts";
-import {SparqlRenderer} from "./sparql";
 import ParsingClient from "sparql-http-client/ParsingClient";
 import Client from "sparql-http-client/ParsingClient";
 import {Triplestore} from "./lib/client";
 import SparqlView from "./views/SparqlView.vue";
+import {getPrefixes, getTemplate} from "./triplifiers/utils";
 
 interface MyPluginSettings {
     mySetting: string
@@ -50,6 +50,12 @@ export default class Prototype_11 extends Plugin {
             }
         })
 
+        this.addCommand({
+            id: "insert-sparql-template", name: "Insert Sparql template", editorCallback: (editor: Editor) => {
+                editor.replaceRange(getTemplate(), editor.getCursor());
+            },
+        });
+
         const client: ParsingClient = new Client({
             endpointUrl: 'http://localhost:3030/obsidian/query',
             updateUrl: 'http://localhost:3030/obsidian/update',
@@ -58,45 +64,28 @@ export default class Prototype_11 extends Plugin {
         })
         const triplestore = new Triplestore(client)
 
-        function createDebugApp() {
-            const debugApp = createApp(DebugView)
-            debugApp.provide('register', this.registerEvent)
-            debugApp.provide('triplestore', triplestore)
-            debugApp.provide('app', this.app)
-            return debugApp
-        }
+        // Debug view
 
-        function createSparqlApp(text: string, lang: string) {
+        const debugApp = createApp(DebugView)
+        debugApp.provide('register', this.registerEvent)
+        debugApp.provide('triplestore', triplestore)
+        debugApp.provide('app', this.app)
+        this.vueApp = debugApp
+
+        // Sparql post processor
+        function codeBlockProcessor(source: string, el: HTMLElement, ctx: MarkdownPostProcessorContext) {
             const sparqlApp = createApp(SparqlView)
-            sparqlApp.provide('text', text)
-            sparqlApp.provide('lang', lang)
+            sparqlApp.provide('text', source)
             sparqlApp.provide('triplestore', triplestore)
-            return sparqlApp
+            sparqlApp.mount(el)
         }
 
-
-        this.vueApp = createDebugApp()
-
-        this.registerMarkdownPostProcessor((element, context) => {
-
-            const codeblocks = element.querySelectorAll("code");
-
-            for (let index = 0; index < codeblocks.length; index++) {
-                const codeblock = codeblocks.item(index);
-                const lang = codeblock.getAttribute('class')
-                if (lang?.startsWith('language-sparql')) {
-                    const text = codeblock.innerText.trim();
-                    const renderer = new SparqlRenderer(codeblock, createSparqlApp(text, lang))
-                    context.addChild(renderer)
-                }
-            }
-
-        })
-
+        this.registerMarkdownCodeBlockProcessor("sparql", codeBlockProcessor);
 
         this.registerView(SIDE_VIEW_ID,
             (leaf) => new CurrentFileView(leaf, this.vueApp));
     }
+
 
     onunload() {
         this.app.workspace.detachLeavesOfType(SIDE_VIEW_ID);

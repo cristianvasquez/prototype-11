@@ -31,5 +31,19 @@ function getPrefixes(){
   return Array.from(Object.entries(ns)).map(([key,value])=> `PREFIX ${key}: <${value().value}>` ).join('\n')
 }
 
+function getTemplate(){
+return `
+\`\`\`sparql
+${getPrefixes()}
 
-export {applyToChunks, shrink, getPrefixes}
+SELECT ?g ?s ?p ?o
+WHERE {
+    GRAPH ?g {
+       ?s ?p ?o .
+    }
+} LIMIT 10
+\`\`\``
+}
+
+
+export {applyToChunks, shrink, getPrefixes, getTemplate}
