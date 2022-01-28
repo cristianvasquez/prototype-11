@@ -6,6 +6,7 @@ import {
 } from 'obsidian-community-lib'
 import { inject } from '@vue/runtime-core'
 import { getFileTitle } from '../lib/obsidianHelpers'
+import { SIDE_VIEW_ID } from '../main'
 
 const props = defineProps({
   linkTo: {
@@ -14,14 +15,18 @@ const props = defineProps({
   }
 })
 const app = inject('app')
-const view = inject('view')
 
 async function open (event) {
   await openOrSwitch(app, props.linkTo, event)
 }
 
 async function hover (event) {
-  await hoverPreview(event, view, props.linkTo)
+  const trickObsidianAPI = {
+    app: app,
+    getViewType: () => SIDE_VIEW_ID // 'prototype-11-sideview'
+  }
+
+  await hoverPreview(event, trickObsidianAPI, props.linkTo)
 }
 
 </script>

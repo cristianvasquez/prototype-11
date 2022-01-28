@@ -1,4 +1,4 @@
-import {Editor, ItemView, MarkdownPostProcessorContext, Menu, Plugin, WorkspaceLeaf} from "obsidian";
+import {View, App, Editor, ItemView, MarkdownPostProcessorContext, Menu, Plugin, WorkspaceLeaf} from "obsidian";
 import {createApp} from 'vue'
 import DebugView from './views/DebugView.vue'
 import {PLUGIN_NAME} from "./consts";
@@ -6,7 +6,7 @@ import ParsingClient from "sparql-http-client/ParsingClient";
 import Client from "sparql-http-client/ParsingClient";
 import {Triplestore} from "./lib/client";
 import SparqlView from "./views/SparqlView.vue";
-import {getPrefixes, getTemplate} from "./triplifiers/utils";
+import {getTemplate} from "./triplifiers/utils";
 
 interface MyPluginSettings {
     mySetting: string
@@ -72,18 +72,22 @@ export default class Prototype_11 extends Plugin {
         debugApp.provide('app', this.app)
         this.vueApp = debugApp
 
-        // Sparql post processor
-        function codeBlockProcessor(source: string, el: HTMLElement, ctx: MarkdownPostProcessorContext) {
-            const sparqlApp = createApp(SparqlView)
-            sparqlApp.provide('text', source)
-            sparqlApp.provide('triplestore', triplestore)
-            sparqlApp.mount(el)
-        }
-
-        this.registerMarkdownCodeBlockProcessor("sparql", codeBlockProcessor);
-
         this.registerView(SIDE_VIEW_ID,
             (leaf) => new CurrentFileView(leaf, this.vueApp));
+
+        // Sparql post processor
+
+        function getProcessor(app:App) {
+            return (source: string, el: HTMLElement, ctx: MarkdownPostProcessorContext) => {
+                const sparqlApp = createApp(SparqlView)
+                sparqlApp.provide('text', source)
+                sparqlApp.provide('triplestore', triplestore)
+                sparqlApp.provide('app', app)
+                sparqlApp.mount(el)
+            }
+        }
+
+        this.registerMarkdownCodeBlockProcessor("sparql", getProcessor(this.app));
     }
 
 
@@ -108,15 +112,12 @@ export default class Prototype_11 extends Plugin {
 }
 export const SIDE_VIEW_ID = `${PLUGIN_NAME}-sideview`;
 
-
 export class CurrentFileView extends ItemView {
     private vueApp: DebugView<Element>;
 
     constructor(leaf: WorkspaceLeaf, vueApp: DebugView<Element>) {
         super(leaf);
         this.vueApp = vueApp
-        this.vueApp.provide('view', this)
-
     }
 
     getViewType() {
