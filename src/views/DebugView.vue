@@ -7,15 +7,17 @@ import Metadata from '../components/Metadata.vue'
 import {NoteData} from "../lib/extract";
 import {App, TAbstractFile, TFile} from "obsidian";
 import {ns} from '../namespaces.js'
+import {AppContext} from "../types";
 
-const app: App = inject('app')
+
+const context: AppContext = inject('context')
 
 let title = ref('loading')
 let noteData = ref()
 
 async function updateView(file: TAbstractFile) {
   title.value = file.name
-  const data = await getDataByFile(app, file as TFile)
+  const data = await getDataByFile(context.app, file as TFile)
   noteData.value = new NoteData(data, ns)
 }
 
@@ -24,27 +26,27 @@ onBeforeMount(() => {
   let plugin = app.plugins.plugins[PLUGIN_NAME]
 
   plugin.registerEvent(
-      app.metadataCache.on('changed', file => {
+      context.app.metadataCache.on('changed', file => {
         updateView(file)
       })
   )
 
   plugin.registerEvent(
-      app.vault.on('rename', (file, oldPath) => {
+      context.app.vault.on('rename', (file, oldPath) => {
         console.log('rename', file)
         updateView(file)
       })
   )
 
   plugin.registerEvent(
-      app.vault.on('delete', af => {
+      context.app.vault.on('delete', af => {
         if (!(af instanceof TFile)) return
         console.log('delete', af)
       })
   )
 
   plugin.registerEvent(
-      app.workspace.on('file-open',  (file) => {
+      context.app.workspace.on('file-open', (file) => {
         updateView(file)
       })
   )

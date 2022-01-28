@@ -1,4 +1,4 @@
-import {App, CachedMetadata, FileStats, LinkCache, SectionCache, TFile} from "obsidian";
+import {App, CachedMetadata, SectionCache, TFile} from "obsidian";
 import {FileData} from "../types";
 import {getActiveFileContent} from 'obsidian-community-lib'
 

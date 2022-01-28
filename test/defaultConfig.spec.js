@@ -1,4 +1,4 @@
-import { uriToPath,pathToUri } from '../../src/triplifiers/uri.js'
+import {defaultConfig} from '../src/defaultConfig.js'
 
 import expect from 'expect'
 import toMatchSnapshot from 'expect-mocha-snapshot'
@@ -9,14 +9,14 @@ describe('[uri]', function () {
 
   describe('[pathToUri]', function () {
     it(`"values"`, function () {
-      const actual = pathToUri('/hola/mundo')
+      const actual = defaultConfig.pathToUri('/hola/mundo')
       expect(actual).toMatchSnapshot(this)
     })
   })
 
   describe('[uriToPath]', function () {
     it(`"values"`, function () {
-      const actual = uriToPath('http://notes/L2hvbGEvbXVuZG8=')
+      const actual = defaultConfig.uriToPath('http://notes/L2hvbGEvbXVuZG8=')
       expect(actual).toMatchSnapshot(this)
     })
   })
@@ -24,26 +24,25 @@ describe('[uri]', function () {
   describe('[round]', function () {
     it(`"path-uri-path"`, function () {
 
-      const uri = pathToUri('/hola/mundo')
-      const path = uriToPath(uri)
+      const uri = defaultConfig.pathToUri('/hola/mundo')
+      const path = defaultConfig.uriToPath(uri)
 
       expect(path).toBe('/hola/mundo')
     })
 
     it(`"uri-path-uri"`, function () {
 
-      const path = uriToPath('http://notes/L2hvbGEvbXVuZG8=')
-      const uri = pathToUri(path)
+      const path = defaultConfig.uriToPath('http://notes/L2hvbGEvbXVuZG8=')
+      const uri = defaultConfig.pathToUri(path)
       expect(uri.value).toBe('http://notes/L2hvbGEvbXVuZG8=')
     })
 
     it(`"emoji"`, function () {
 
-      const uri = pathToUri('/hola/🍎')
-      const path = uriToPath(uri)
+      const uri = defaultConfig.pathToUri('/hola/🍎')
+      const path = defaultConfig.uriToPath(uri)
       expect(path).toBe('/hola/🍎')
     })
   })
-
 
 })

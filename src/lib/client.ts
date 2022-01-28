@@ -63,7 +63,7 @@ class Triplestore {
     }
 
     async select(query: string): Promise<Array<ResultRow>> {
-        return await this.client.query.select(query)
+        return this.client.query.select(query)
     }
 
 }

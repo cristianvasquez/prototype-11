@@ -1,6 +1,19 @@
 import {DateTime} from "luxon";
 import Dataset from "rdf-ext/lib/Dataset";
-import {CachedMetadata, FileStats, LinkCache} from "obsidian";
+import {App, CachedMetadata, FileStats, LinkCache} from "obsidian";
+
+type AppContext = {
+    triplestore:any,
+    config:SparqlConfig,
+    app:App
+}
+
+type SparqlConfig = {
+    pathToUri:any,
+    uriToPath:any,
+    selectToTable:any,
+    datasetToTable:any,
+}
 
 type Metadata = {
     uri: string,
@@ -31,4 +44,4 @@ type Triple = {
 }
 type Term = any
 
-export {Triple, Term, FileData, Metadata, Dataset}
+export {Triple, Term, FileData, Metadata, Dataset, SparqlConfig, AppContext}

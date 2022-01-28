@@ -76,7 +76,6 @@ function toTerm (value) {
   }
 }
 
-
 function * getDotTriples (text) {
   for (const triples of applyToChunks(text, toSPO)) {
     if (triples) {

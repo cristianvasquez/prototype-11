@@ -26,7 +26,7 @@ function spanify () {
   <div v-if="hasLinks()" class="words">
     <template v-for="span in getSpans(props.value.value,props.value.entities.internalLinks)">
       <template v-if="span.type==='link'">
-        <internal-link class="clickable" :linkTo="span.value"/>
+        <internal-link :linkTo="span.value" class="clickable"/>
       </template>
       <template v-else>{{ span.value }}</template>
     </template>

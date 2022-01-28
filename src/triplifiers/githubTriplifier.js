@@ -1,6 +1,6 @@
 import rdf from 'rdf-ext'
 import { matchFirst } from './miniNLP.js'
-import 'core-js/actual/index.js';
+import 'core-js/actual/index.js'
 
 // const ns = {
 //   schema: namespace('http://schema.org/'),
@@ -8,14 +8,15 @@ import 'core-js/actual/index.js';
 //   rdf: namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#'),
 // }
 const GITHUB_URL = 'https://github.com/'
+
 class GithubTriplifier {
 
-  constructor(docUri, ns) {
-    if (!docUri || !ns){
+  constructor (docUri, ns) {
+    if (!docUri || !ns) {
       throw Error('no namespaces defined')
     }
-    this.docUri = docUri;
-    this.ns = ns;
+    this.docUri = docUri
+    this.ns = ns
   }
 
   triplififyText (text) {
@@ -28,7 +29,7 @@ class GithubTriplifier {
 
   getRDF (repoUrl) {
 
-    const [_,userName, repoName]  = repoUrl.replaceAll('https://github.com','').split('/')
+    const [_, userName, repoName] = repoUrl.replaceAll('https://github.com', '').split('/')
     // https://github.com/cristianvasquez/prototype-11
 
     if (!userName) {
@@ -44,7 +45,7 @@ class GithubTriplifier {
       rdf.quad(rdf.namedNode(userUrl), _vault.label, rdf.literal(userName)),
     ])
 
-    if (repoName){
+    if (repoName) {
       dataset.addAll([
         rdf.quad(rdf.namedNode(this.docUri), _vault.about, rdf.namedNode(repoUrl)),
         rdf.quad(rdf.namedNode(repoUrl), _rdf.type, _vault.GithubRepo),
@@ -56,7 +57,7 @@ class GithubTriplifier {
     return dataset
   }
 
-  static getMatches(text) {
+  static getMatches (text) {
     // <url> -> url
     const trim = (txt) => txt.split(' ')
       .map((chunk) => chunk.replace(/^\<+|\>+$/gm, ''))
@@ -68,9 +69,6 @@ class GithubTriplifier {
     ])
   }
 
-
 }
-
-
 
 export { GithubTriplifier }

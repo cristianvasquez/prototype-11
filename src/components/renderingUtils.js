@@ -17,7 +17,7 @@ function splitTextLink (txt, links) {
       value: match,
       type: 'link',
     })
-    return [true,result]
+    return [true, result]
   }
   return [false]
 }
@@ -28,14 +28,14 @@ function getSpans (text, links) {
   let current = 0
   for (let i = 0; i < text.length; i++) {
     let chunk = text.substring(current, i)
-    const [isMatch,matches] = splitTextLink(chunk, links)
+    const [isMatch, matches] = splitTextLink(chunk, links)
     if (isMatch) {
       current = i
       result = [...result, ...matches]
     }
     if (i === text.length - 1) { // Add the last chunk
       const tail = text.substring(current, text.length)
-      const [isMatch,matches] = splitTextLink(tail, links)
+      const [isMatch, matches] = splitTextLink(tail, links)
       if (isMatch) {
         result = [...result, ...matches]
       } else {
@@ -49,4 +49,4 @@ function getSpans (text, links) {
   return result
 }
 
-export { getSpans };
+export { getSpans }

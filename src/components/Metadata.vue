@@ -3,14 +3,11 @@ import MetadataValues from './helpers/MetadataValues.vue'
 import {computed, createApp, inject, onMounted, PropType, ref, toRaw, watchEffect} from 'vue'
 import {dateTimeFormat} from '../consts'
 import {ModalWrapper} from './ModalWrapper'
-import {App} from 'obsidian'
-import {Dataset} from "../types";
-import {Triplestore} from "../lib/client";
+import {AppContext, Dataset} from "../types";
 import {NoteData} from "../lib/extract";
 import Quads from "./Quads.vue";
 
-const app: App = inject('app')
-const triplestore: Triplestore = inject('triplestore')
+const context: AppContext = inject('context')
 
 const props = defineProps({
   noteData: {
@@ -21,9 +18,9 @@ const props = defineProps({
 
 async function popupRDF(dataset: Dataset) {
   const rdfView = createApp(Quads)
-  rdfView.provide('dataset',toRaw(dataset))
-  rdfView.provide('app',app)
-  new ModalWrapper(app, rdfView).open()
+  rdfView.provide('dataset', toRaw(dataset))
+  rdfView.provide('context', context)
+  new ModalWrapper(context.app, rdfView).open()
 }
 
 const currentDataset = ref()
@@ -40,7 +37,7 @@ const connectionStatus = ref()
 async function fetchCurrentDataset() {
   const noteUri = toRaw(props.noteData.noteUri)
   try {
-    currentDataset.value = await triplestore.getDataset(noteUri)
+    currentDataset.value = await context.triplestore.getDataset(noteUri)
     connectionStatus.value = null
   } catch (e) {
     connectionStatus.value = e
@@ -49,8 +46,8 @@ async function fetchCurrentDataset() {
 }
 
 async function indexRDF(dataset: Dataset) {
-  await triplestore.deleteDataset(props.noteData.noteUri)
-  await triplestore.insertDataset(props.noteData.noteUri, dataset)
+  await context.triplestore.deleteDataset(props.noteData.noteUri)
+  await context.triplestore.insertDataset(props.noteData.noteUri, dataset)
   await fetchCurrentDataset()
 }
 

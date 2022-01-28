@@ -1,4 +1,4 @@
-import {View, App, Editor, ItemView, MarkdownPostProcessorContext, Menu, Plugin, WorkspaceLeaf} from "obsidian";
+import {App, Editor, ItemView, MarkdownPostProcessorContext, Menu, Plugin, WorkspaceLeaf} from "obsidian";
 import {createApp} from 'vue'
 import DebugView from './views/DebugView.vue'
 import {PLUGIN_NAME} from "./consts";
@@ -7,6 +7,7 @@ import Client from "sparql-http-client/ParsingClient";
 import {Triplestore} from "./lib/client";
 import SparqlView from "./views/SparqlView.vue";
 import {getTemplate} from "./triplifiers/utils";
+import {defaultConfig} from "./defaultConfig";
 
 interface MyPluginSettings {
     mySetting: string
@@ -66,10 +67,15 @@ export default class Prototype_11 extends Plugin {
 
         // Debug view
 
+        const defaultContext = {
+            triplestore: triplestore,
+            config: defaultConfig,
+            app: this.app
+        }
+
         const debugApp = createApp(DebugView)
         debugApp.provide('register', this.registerEvent)
-        debugApp.provide('triplestore', triplestore)
-        debugApp.provide('app', this.app)
+        debugApp.provide('context', defaultContext)
         this.vueApp = debugApp
 
         this.registerView(SIDE_VIEW_ID,
@@ -77,12 +83,11 @@ export default class Prototype_11 extends Plugin {
 
         // Sparql post processor
 
-        function getProcessor(app:App) {
+        function getProcessor(app: App) {
             return (source: string, el: HTMLElement, ctx: MarkdownPostProcessorContext) => {
                 const sparqlApp = createApp(SparqlView)
                 sparqlApp.provide('text', source)
-                sparqlApp.provide('triplestore', triplestore)
-                sparqlApp.provide('app', app)
+                sparqlApp.provide('context', defaultContext)
                 sparqlApp.mount(el)
             }
         }

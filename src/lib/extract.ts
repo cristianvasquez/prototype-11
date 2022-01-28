@@ -4,7 +4,7 @@ import {getSections} from "./obsidianHelpers";
 import {Dataset, FileData, Triple} from '../types'
 import {GithubTriplifier} from '../triplifiers/githubTriplifier.js'
 import {BasicNoteTriplifier} from "../triplifiers/basicNoteTriplifier";
-import {pathToUri} from "../triplifiers/uri.js";
+import {defaultConfig} from "../defaultConfig.js";
 
 class NoteData {
     public readonly noteUri: string;
@@ -14,7 +14,7 @@ class NoteData {
     constructor(data: FileData, ns: any) {
         this.data = data;
         this.ns = ns;
-        this.noteUri = pathToUri(data.path)
+        this.noteUri = defaultConfig.pathToUri(data.path)
     }
 
     getMetadata() {
