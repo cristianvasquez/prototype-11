@@ -19,7 +19,7 @@ class BasicNoteTriplifier {
 
   getRDF (metadataBase) {
     // Add all basic fields
-    const data = rdf.clownface({ dataset: rdf.dataset(), term: rdf.namedNode(this.docUri) })
+    const data = rdf.clownface({ dataset: rdf.dataset(), term: this.docUri })
       .addOut(this.ns.rdf.type, this.ns.vault.Note)
       .addOut(this.ns.rdfs.label, getFileTitle(metadataBase.path))
       .addOut(this.ns.vault.path, metadataBase.path)

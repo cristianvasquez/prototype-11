@@ -1,12 +1,13 @@
 <script lang="ts" setup>
 import MetadataValues from './helpers/MetadataValues.vue'
-import {computed, inject, onMounted, PropType, ref, toRaw, watchEffect} from 'vue'
+import {computed, createApp, inject, onMounted, PropType, ref, toRaw, watchEffect} from 'vue'
 import {dateTimeFormat} from '../consts'
-import {RDFModal} from './RDFModal'
+import {ModalWrapper} from './ModalWrapper'
 import {App} from 'obsidian'
 import {Dataset} from "../types";
 import {Triplestore} from "../lib/client";
 import {NoteData} from "../lib/extract";
+import Quads from "./Quads.vue";
 
 const app: App = inject('app')
 const triplestore: Triplestore = inject('triplestore')
@@ -19,7 +20,10 @@ const props = defineProps({
 })
 
 async function popupRDF(dataset: Dataset) {
-  new RDFModal(app, dataset.toCanonical()).open()
+  const rdfView = createApp(Quads)
+  rdfView.provide('dataset',toRaw(dataset))
+  rdfView.provide('app',app)
+  new ModalWrapper(app, rdfView).open()
 }
 
 const currentDataset = ref()
@@ -50,8 +54,7 @@ async function indexRDF(dataset: Dataset) {
   await fetchCurrentDataset()
 }
 
-
-async function extractNotedata() {
+async function extract() {
   await fetchCurrentDataset()
   metadata.value = props.noteData.getMetadata()
   const full = await props.noteData.getFullDataset()
@@ -61,7 +64,7 @@ async function extractNotedata() {
 
 
 onMounted(async () => {
-  watchEffect(async () => extractNotedata());
+  watchEffect(async () => extract());
 })
 
 </script>

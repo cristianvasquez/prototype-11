@@ -3,10 +3,7 @@
 import {inject} from "@vue/runtime-core";
 import {onMounted, ref} from "vue";
 import {Triplestore} from "../lib/client";
-import {ns} from '../namespaces'
-import {uriToPath} from '../triplifiers/uri'
-import {shrink} from "../triplifiers/utils";
-import InternalLink from '../components/InternalLink.vue'
+import SimpleTable from '../components/SimpleTable.vue'
 
 const text: string = inject('text')
 const triplestore: Triplestore = inject('triplestore')
@@ -21,9 +18,7 @@ onMounted(async () => {
     if (!header) {
       header = Object.keys(current)
     }
-//    rows.push(Object.values(current).map((current) => shrink(current.value)))
     rows.push(Object.values(current).map((current) => current.value))
-
   }
   data.value = {
     header: header,
@@ -31,35 +26,11 @@ onMounted(async () => {
   }
 })
 
-function isInternal(value: string) {
-  return value.startsWith(ns.this())
-}
-
-function getPath(value: string) {
-  return uriToPath(value)
-}
 
 </script>
 
 <template>
-
   <template v-if="data">
-    <table>
-      <thead>
-      <tr>
-        <th v-for="header of data.header">{{ header }}</th>
-      </tr>
-      </thead>
-      <tr v-for="row of data.rows">
-        <td v-for="value of row">
-          <template v-if="isInternal(value)">
-            <internal-link :linkTo="getPath(value)" class="clickable"/>
-          </template>
-          <template v-else>
-            {{ shrink(value) }}
-          </template>
-        </td>
-      </tr>
-    </table>
+    <simple-table :header="data.header" :rows="data.rows"/>
   </template>
 </template>
