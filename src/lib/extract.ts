@@ -1,35 +1,41 @@
 import {getDotTriples} from "../triplifiers/dotTriples";
 import {DateTime} from "luxon";
 import {getSections} from "./obsidianHelpers";
-import {Dataset, FileData, Triple} from '../types'
-import {GithubTriplifier} from '../triplifiers/githubTriplifier.js'
+import {Dataset, FileData, NamedNode, Triple} from '../types'
+import {GithubTriplifier} from '../triplifiers/githubTriplifier'
 import {BasicNoteTriplifier} from "../triplifiers/basicNoteTriplifier";
-import {defaultConfig} from "../defaultConfig.js";
 
-class NoteData {
-    public readonly noteUri: string;
-    private readonly data: FileData;
+class Extract {
+    private readonly uri: NamedNode;
+    private readonly fileData: FileData;
     private readonly ns: any;
 
-    constructor(data: FileData, ns: any) {
-        this.data = data;
+    constructor(uri: NamedNode, fileData: FileData, ns: any) {
+        this.fileData = fileData;
+        this.uri = uri;
         this.ns = ns;
-        this.noteUri = defaultConfig.pathToUri(data.path)
+    }
+
+    getUri(): NamedNode {
+        return this.uri
+    }
+
+    getNS() {
+        return this.ns
     }
 
     getMetadata() {
         return {
-            uri: this.noteUri,
-            name: this.data.name,
-            path: this.data.path,
-            created: DateTime.fromMillis(this.data.stat.ctime),
-            updated: DateTime.fromMillis(this.data.stat.mtime),
-            size: this.data.stat.size,
+            name: this.fileData.name,
+            path: this.fileData.path,
+            created: DateTime.fromMillis(this.fileData.stat.ctime),
+            updated: DateTime.fromMillis(this.fileData.stat.mtime),
+            size: this.fileData.stat.size,
         }
     }
 
     getDotTriples(): Array<Triple> {
-        const textChunks = getSections(this.data, (section) => section.type !== 'code')
+        const textChunks = getSections(this.fileData, (section) => section.type !== 'code')
         let result: Array<Triple> = []
         for (const chunk of textChunks) {
             for (const triples of getDotTriples(chunk)) {
@@ -39,10 +45,12 @@ class NoteData {
         return result;
     }
 
-    async getBasicDataset(): Promise<Dataset> {
-        const githubTriplifier = new GithubTriplifier(this.noteUri, this.ns)
+    async applyTriplifiers(): Promise<Dataset> {
+        // Github triplifier
+        const githubTriplifier = new GithubTriplifier(this.uri, this.ns)
+
         const result: Dataset = new Dataset()
-        const textChunks = getSections(this.data, (section) => section.type !== 'code')
+        const textChunks = getSections(this.fileData, (section) => section.type !== 'code')
         for (const chunk of textChunks) {
             const dataset: Dataset = githubTriplifier.triplififyText(chunk)
             if (dataset) {
@@ -52,20 +60,13 @@ class NoteData {
         return result
     }
 
-    async getFullDataset() {
-
-        const noteTriplifier = new BasicNoteTriplifier(this.noteUri, this.ns)
-        const noteDataset = noteTriplifier.getRDF(this.data)
-
-        await noteDataset.import((await this.getBasicDataset()).toStream())
-
-        return {
-            dataset: noteDataset,
-            dotTriples: this.getDotTriples()
-        }
+    async getRDF() {
+        const noteTriplifier = new BasicNoteTriplifier(this.uri, this.ns)
+        const noteDataset = noteTriplifier.getRDF(this.fileData)
+        return noteDataset.import((await this.applyTriplifiers()).toStream())
     }
 
 }
 
-export {NoteData}
+export {Extract}
 

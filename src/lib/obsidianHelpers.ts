@@ -1,15 +1,6 @@
-import {App, CachedMetadata, SectionCache, TFile} from "obsidian";
+import {App, SectionCache, TFile} from "obsidian";
 import {FileData} from "../types";
 import {getActiveFileContent} from 'obsidian-community-lib'
-
-const collectMetadataForPath = (app: any, path: String) => {
-    const dataviewApi = app.plugins.plugins.dataview?.api
-    return dataviewApi ? dataviewApi.index.pages.get(path) : {}
-}
-
-const getMetadataFromPath = (app: any, path: String): CachedMetadata => {
-    return app.metadataCache.getCache(path)
-}
 
 function getFileTitle(path: string): string {
     if (path.includes("/")) path = path.substring(path.lastIndexOf("/") + 1);
@@ -17,11 +8,11 @@ function getFileTitle(path: string): string {
     return path;
 }
 
+
 async function getDataByFile(app: App, file: TFile): Promise<FileData> {
 
-
     //I believe files without unsafeCachedData are
-    //The ones that are too big. I'll skip those in the meantime.
+    //The ones that are too big.
 
     // @ts-ignore
     const text = file.unsafeCachedData ? file.unsafeCachedData
@@ -33,9 +24,9 @@ async function getDataByFile(app: App, file: TFile): Promise<FileData> {
         stat: file.stat,
         text: text,
         metadata: app.metadataCache.getFileCache(file),
-        links: app.metadataCache.resolvedLinks[file.path],
+        // links: app.metadataCache.resolvedLinks[file.path],
         // @ts-ignore
-        backlinks: app.metadataCache.getBacklinksForFile(file).data
+        // backlinks: app.metadataCache.getBacklinksForFile(file).data
     }
 }
 
@@ -54,4 +45,4 @@ const getSections = (data: FileData, filter?: (section: SectionCache) => boolean
 }
 
 
-export {collectMetadataForPath, getDataByFile, getFileTitle, getSections}
+export {getDataByFile, getFileTitle, getSections}

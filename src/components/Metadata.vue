@@ -1,17 +1,17 @@
 <script lang="ts" setup>
 import MetadataValues from './helpers/MetadataValues.vue'
 import {computed, createApp, inject, onMounted, PropType, ref, toRaw, watchEffect} from 'vue'
-import {dateTimeFormat} from '../consts'
 import {ModalWrapper} from './ModalWrapper'
 import {AppContext, Dataset} from "../types";
-import {NoteData} from "../lib/extract";
+import {Extract} from "../lib/extract";
 import Quads from "./Quads.vue";
+import {getDotTriplesRDF} from '../lib/dotTriplesRDF'
 
 const context: AppContext = inject('context')
 
 const props = defineProps({
   noteData: {
-    type: Object as PropType<NoteData>,
+    type: Object as PropType<Extract>,
     required: true
   }
 })
@@ -35,7 +35,7 @@ const triples = computed(() => dotTriples.value.filter((current) => current.subj
 const connectionStatus = ref()
 
 async function fetchCurrentDataset() {
-  const noteUri = toRaw(props.noteData.noteUri)
+  const noteUri = toRaw(props.noteData.getUri())
   try {
     currentDataset.value = await context.triplestore.getDataset(noteUri)
     connectionStatus.value = null
@@ -46,17 +46,28 @@ async function fetchCurrentDataset() {
 }
 
 async function indexRDF(dataset: Dataset) {
-  await context.triplestore.deleteDataset(props.noteData.noteUri)
-  await context.triplestore.insertDataset(props.noteData.noteUri, dataset)
+  const noteUri = toRaw(props.noteData.getUri())
+  await context.triplestore.deleteDataset(noteUri)
+  await context.triplestore.insertDataset(noteUri, dataset)
   await fetchCurrentDataset()
 }
 
 async function extract() {
   await fetchCurrentDataset()
   metadata.value = props.noteData.getMetadata()
-  const full = await props.noteData.getFullDataset()
-  triplifiedDataset.value = full.dataset
-  dotTriples.value = full.dotTriples
+  triplifiedDataset.value = await props.noteData.getRDF()
+
+
+  const dtriples = props.noteData.getDotTriples()
+  console.log(getDotTriplesRDF(
+      props.noteData.getUri(),
+      dtriples,
+      context,
+      props.noteData.getNS()
+  ))
+
+  // Used only to debug
+  dotTriples.value = dtriples
 }
 
 
@@ -72,7 +83,7 @@ onMounted(async () => {
 
     <template v-if="noteData">
       <div>URI</div>
-      <div>{{ noteData.noteUri }}</div>
+      <div>{{ noteData.getUri().value }}</div>
     </template>
 
     <template v-if="metadata">

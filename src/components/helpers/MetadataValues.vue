@@ -1,6 +1,6 @@
 <script setup>
 import MetadataValue from '../MetadataValue.vue'
-import {toRaw} from 'vue'
+import { toRaw } from 'vue'
 
 /**
  * Only want one array level.
@@ -13,8 +13,8 @@ const props = defineProps({
   }
 })
 
-function isArray() {
-  return Array.isArray(toRaw(props.value.value));
+function isArray () {
+  return Array.isArray(toRaw(props.value.value))
 }
 
 </script>

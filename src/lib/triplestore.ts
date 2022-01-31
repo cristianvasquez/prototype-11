@@ -1,8 +1,9 @@
 import ParsingClient from "sparql-http-client/ParsingClient";
 import Client from "sparql-http-client/ParsingClient";
-import Dataset from "rdf-ext/lib/Dataset";
+import {Dataset} from '../types'
 import rdf from 'rdf-ext'
 import {ResultRow} from "sparql-http-client/ResultParser";
+import {NamedNode} from "../types"
 
 // const client: ParsingClient = new Client({
 //     endpointUrl: 'http://localhost:3030/obsidian/query',
@@ -18,12 +19,12 @@ class Triplestore {
         this.client = client
     }
 
-    async getDataset(graphUri: string) {
+    async getDataset(graphUri: NamedNode) {
         const constructQuery = `
       CONSTRUCT {
         ?s ?p ?o
       } WHERE {
-        GRAPH <${graphUri}> {
+        GRAPH <${graphUri.value}> {
           ?s ?p ?o
         }
       }
@@ -31,10 +32,10 @@ class Triplestore {
         return rdf.dataset(await this.client.query.construct(constructQuery))
     }
 
-    async insertDataset(graphUri: string, dataset: Dataset) {
+    async insertDataset(graphUri: NamedNode, dataset: Dataset) {
         const insertQuery = `
       INSERT DATA {
-        GRAPH <${graphUri}> {
+        GRAPH <${graphUri.value}> {
           ${dataset.toString()}
         }
       }
@@ -42,15 +43,15 @@ class Triplestore {
         return await this.client.query.update(insertQuery)
     }
 
-    async deleteDataset(graphUri: string) {
+    async deleteDataset(graphUri: NamedNode) {
         const insertQuery = `
     DELETE {
-      GRAPH <${graphUri}> {
+      GRAPH <${graphUri.value}> {
        ?s ?p ?o
       }
     }
     WHERE {      
-      GRAPH <${graphUri}> {
+      GRAPH <${graphUri.value}> {
          ?s ?p ?o
       }
     } 

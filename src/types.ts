@@ -1,18 +1,25 @@
 import {DateTime} from "luxon";
 import Dataset from "rdf-ext/lib/Dataset";
-import {App, CachedMetadata, FileStats, LinkCache} from "obsidian";
+import NamedNode from "rdf-ext/lib/NamedNode";
+import Quad from "rdf-ext/lib/Quad";
+import Literal from "rdf-ext/lib/Literal";
+
+import {App, CachedMetadata, FileStats, TFile} from "obsidian";
 
 type AppContext = {
-    triplestore:any,
-    config:SparqlConfig,
-    app:App
+    triplestore: any,
+    config: SparqlConfig,
+    getFirstLinkpathDest: (linkpath: string) => TFile | null
+    app: App
 }
 
 type SparqlConfig = {
-    pathToUri:any,
-    uriToPath:any,
-    selectToTable:any,
-    datasetToTable:any,
+    tFileToURI: (noteName: TFile) => NamedNode,
+    uriToNoteName: (uri: NamedNode) => string,
+    replaceInternalLinks: (query: string, resolver: ((linkpath: string) => TFile | null)) => string,
+    isInternal: any,
+    selectToTable: any,
+    datasetToTable: any,
 }
 
 type Metadata = {
@@ -22,8 +29,6 @@ type Metadata = {
     created: DateTime,
     updated: DateTime,
     size: number,
-    pairs?: Array<Triple>,
-    triads?: Array<Triple>,
     rdf?: Dataset
 }
 
@@ -33,8 +38,11 @@ type FileData = {
     stat: FileStats,
     text?: string,
     metadata?: CachedMetadata,
-    links?: Record<string, number>
-    backlinks?: Record<string, [LinkCache]>
+
+    // These will naturally happen through the triplestore
+
+    // links?: Record<string, number>
+    // backlinks?: Record<string, [LinkCache]>
 }
 
 type Triple = {
@@ -44,4 +52,15 @@ type Triple = {
 }
 type Term = any
 
-export {Triple, Term, FileData, Metadata, Dataset, SparqlConfig, AppContext}
+export {
+    Quad,
+    Literal,
+    Dataset,
+    NamedNode,
+    Triple,
+    Term,
+    FileData,
+    Metadata,
+    SparqlConfig,
+    AppContext
+}

@@ -1,11 +1,7 @@
-import { getPrefixes, getTemplate, shrink } from '../../src/triplifiers/utils.js'
-
+import { getPrefixes, getSelectTemplate, shrink } from '../../src/queries/sparql'
 import expect from 'expect'
-import toMatchSnapshot from 'expect-mocha-snapshot'
 
-expect.extend({ toMatchSnapshot })
-
-describe('[utils]', function () {
+describe('[sparql]', function () {
 
   describe('[shrink]', function () {
     const phrases = [
@@ -27,7 +23,7 @@ describe('[utils]', function () {
       expect(actual).toMatchSnapshot(this)
     })
     it(`"template"`, function () {
-      const actual = getTemplate()
+      const actual = getSelectTemplate()
       expect(actual).toMatchSnapshot(this)
     })
   })

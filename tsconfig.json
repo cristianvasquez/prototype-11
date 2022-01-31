@@ -8,6 +8,7 @@
     "allowJs": true,
     "noImplicitAny": true,
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "importHelpers": true,
     "lib": [
       "DOM",
@@ -18,6 +19,6 @@
     "allowSyntheticDefaultImports": true
   },
   "include": [
-    "**/*"
+    "**/*",
   ]
 }

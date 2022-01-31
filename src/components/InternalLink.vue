@@ -21,7 +21,7 @@ async function open(event: MouseEvent) {
 }
 
 async function hover(event: MouseEvent) {
-  //@TS-Ignore
+  //@ts-Ignore
   const trickObsidianAPI:ItemView = {
     app: context.app,
     getViewType: () => SIDE_VIEW_ID // 'prototype-11-sideview'

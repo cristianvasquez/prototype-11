@@ -1,13 +1,12 @@
-import { GithubTriplifier } from '../../src/triplifiers/githubTriplifier.js'
+import { GithubTriplifier } from '../../src/triplifiers/githubTriplifier'
 import rdf from 'rdf-ext'
 import expect from 'expect'
-import toMatchSnapshot from 'expect-mocha-snapshot'
-expect.extend({ toMatchSnapshot })
 import assert from 'assert'
 import sinon from 'sinon'
 
+// @ts-ignore
 const namespace = rdf.namespace
-const baseUri = 'http://example/1'
+const baseUri = rdf.namedNode('http://example/1')
 
 const ns = {
   schema: namespace('http://schema.org/'),
@@ -41,12 +40,12 @@ describe('[GithubTriplifier]', function () {
       'https://github.com',
       'https://other.website.com/cristianvasquez',
     ]
-    const triplifier = new GithubTriplifier(baseUri,ns)
+    const triplifier = new GithubTriplifier(baseUri, ns)
 
     phrases.forEach((current) => {
       it(`"${current}"`, function () {
-        const dataset = triplifier.getRDF(current, baseUri, ns)
-        expect(dataset?dataset.toString():'not triplified').toMatchSnapshot(this)
+        const dataset = triplifier.getRDF(current)
+        expect(dataset ? dataset.toString() : 'not triplified').toMatchSnapshot(this)
       })
     })
   })
@@ -57,10 +56,10 @@ describe('[GithubTriplifier]', function () {
     ]
     phrases.forEach((current) => {
       it(`"${current}"`, function () {
-        const triplifier = new GithubTriplifier(baseUri,ns)
-        const getRDFSpy = sinon.spy(triplifier, "getRDF");
+        const triplifier = new GithubTriplifier(baseUri, ns)
+        const getRDFSpy = sinon.spy(triplifier, 'getRDF')
         triplifier.triplififyText(`has Github repo ${current}`)
-        assert(getRDFSpy.calledWith(current));
+        assert(getRDFSpy.calledWith(current))
       })
     })
   })

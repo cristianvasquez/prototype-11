@@ -1,9 +1,8 @@
 <script lang="ts" setup>
 import {PropType} from 'vue'
-import {ns} from "../namespaces";
-import {shrink} from "../triplifiers/utils";
+import {shrink} from "../queries/sparql";
 import InternalLink from "./InternalLink.vue"
-import {AppContext, SparqlConfig} from "../types";
+import {AppContext} from "../types";
 import {inject} from "@vue/runtime-core";
 
 const context: AppContext = inject('context')
@@ -19,10 +18,6 @@ const props = defineProps({
   }
 })
 
-function isInternal(value: string) {
-  return value.startsWith(ns.this())
-}
-
 </script>
 
 <!--Perhaps this could be prettier, see:-->
@@ -37,8 +32,8 @@ function isInternal(value: string) {
     </thead>
     <tr v-for="row of props.rows">
       <td v-for="value of row">
-        <template v-if="isInternal(value)">
-          <internal-link :linkTo="context.config.uriToPath(value)" class="clickable"/>
+        <template v-if="context.config.isInternal(value)">
+          <internal-link :linkTo="context.config.uriToNoteName(value)" class="clickable"/>
         </template>
         <template v-else>
           {{ shrink(value) }}

@@ -4,10 +4,11 @@ import DebugView from './views/DebugView.vue'
 import {PLUGIN_NAME} from "./consts";
 import ParsingClient from "sparql-http-client/ParsingClient";
 import Client from "sparql-http-client/ParsingClient";
-import {Triplestore} from "./lib/client";
+import {Triplestore} from "./lib/triplestore";
 import SparqlView from "./views/SparqlView.vue";
-import {getTemplate} from "./triplifiers/utils";
+import {getSelectTemplate} from "./queries/sparql";
 import {defaultConfig} from "./defaultConfig";
+import {AppContext} from "./types";
 
 interface MyPluginSettings {
     mySetting: string
@@ -20,7 +21,6 @@ const DEFAULT_SETTINGS: MyPluginSettings = {
 export default class Prototype_11 extends Plugin {
     settings: MyPluginSettings
     private vueApp: DebugView<Element>;
-    private triplestore: Triplestore;
 
     async onload() {
 
@@ -52,8 +52,8 @@ export default class Prototype_11 extends Plugin {
         })
 
         this.addCommand({
-            id: "insert-sparql-template", name: "Insert Sparql template", editorCallback: (editor: Editor) => {
-                editor.replaceRange(getTemplate(), editor.getCursor());
+            id: "insert-select-template", name: "Insert SELECT template", editorCallback: (editor: Editor) => {
+                editor.replaceRange(getSelectTemplate(), editor.getCursor());
             },
         });
 
@@ -67,10 +67,14 @@ export default class Prototype_11 extends Plugin {
 
         // Debug view
 
-        const defaultContext = {
+        const defaultContext: AppContext = {
             triplestore: triplestore,
             config: defaultConfig,
-            app: this.app
+            app: this.app,
+            getFirstLinkpathDest: (linkpath: string) => {
+                const currentFile = this.app.workspace.getActiveFile()
+                return this.app.metadataCache.getFirstLinkpathDest(linkpath, currentFile.path)
+            }
         }
 
         const debugApp = createApp(DebugView)
@@ -82,7 +86,6 @@ export default class Prototype_11 extends Plugin {
             (leaf) => new CurrentFileView(leaf, this.vueApp));
 
         // Sparql post processor
-
         function getProcessor(app: App) {
             return (source: string, el: HTMLElement, ctx: MarkdownPostProcessorContext) => {
                 const sparqlApp = createApp(SparqlView)
