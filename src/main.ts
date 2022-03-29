@@ -19,29 +19,35 @@ import SparqlView from "./views/SparqlView.vue";
 import {getTemplate} from "./triplifiers/utils";
 import {defaultConfig} from "./defaultConfig";
 
-interface MyPluginSettings {
+
+interface ClientSettings {
     endpointUrl: string,
     updateUrl: string,
     user: string,
     password: string,
+}
+
+interface PluginSettings {
+    clientSettings: ClientSettings,
     indexOnOpen: boolean,
     indexOnSave: boolean,
     allowUpdate: boolean
 }
 
-
-const DEFAULT_SETTINGS: MyPluginSettings = {
-    endpointUrl: 'http://localhost:3030/obsidian/query',
-    updateUrl: 'http://localhost:3030/obsidian/update',
-    user: '',
-    password: '',
+const DEFAULT_SETTINGS: PluginSettings = {
+    clientSettings: {
+        endpointUrl: 'http://localhost:3030/obsidian/query',
+        updateUrl: 'http://localhost:3030/obsidian/update',
+        user: '',
+        password: ''
+    },
     indexOnOpen: false,
     indexOnSave: true,
     allowUpdate: false
 }
 
 export default class Prototype_11 extends Plugin {
-    settings: MyPluginSettings
+    settings: PluginSettings
     private vueApp: DebugView<Element>;
     private triplestore: Triplestore;
 
@@ -83,12 +89,7 @@ export default class Prototype_11 extends Plugin {
         // This adds a settings tab so the user can configure various aspects of the plugin
         this.addSettingTab(new SampleSettingTab(this.app, this));
 
-        const client: ParsingClient = new Client({
-            endpointUrl: 'http://localhost:3030/obsidian/query',
-            updateUrl: 'http://localhost:3030/obsidian/update',
-            user: '',
-            password: ''
-        })
+        const client: ParsingClient = new Client(this.settings.clientSettings)
         const triplestore = new Triplestore(client)
 
         // Debug view
@@ -163,9 +164,9 @@ class SampleSettingTab extends PluginSettingTab {
             .setDesc('The query endpoint url')
             .addText(text => text
                 .setPlaceholder('http://localhost:3030/obsidian/query')
-                .setValue(this.plugin.settings.endpointUrl)
+                .setValue(this.plugin.settings.clientSettings.endpointUrl)
                 .onChange(async (value) => {
-                    this.plugin.settings.endpointUrl = value;
+                    this.plugin.settings.clientSettings.endpointUrl = value;
                     await this.plugin.saveSettings();
                 }));
 
@@ -174,9 +175,9 @@ class SampleSettingTab extends PluginSettingTab {
             .setDesc('The update endpoint url')
             .addText(text => text
                 .setPlaceholder('http://localhost:3030/obsidian/update')
-                .setValue(this.plugin.settings.updateUrl)
+                .setValue(this.plugin.settings.clientSettings.updateUrl)
                 .onChange(async (value) => {
-                    this.plugin.settings.updateUrl = value;
+                    this.plugin.settings.clientSettings.updateUrl = value;
                     await this.plugin.saveSettings();
                 }));
 
@@ -185,9 +186,9 @@ class SampleSettingTab extends PluginSettingTab {
             .setDesc('Endpoint user (if applies)')
             .addText(text => text
                 .setPlaceholder('')
-                .setValue(this.plugin.settings.user)
+                .setValue(this.plugin.settings.clientSettings.user)
                 .onChange(async (value) => {
-                    this.plugin.settings.user = value;
+                    this.plugin.settings.clientSettings.user = value;
                     await this.plugin.saveSettings();
                 }));
 
@@ -196,20 +197,11 @@ class SampleSettingTab extends PluginSettingTab {
             .setDesc('Endpoint password (if applies)')
             .addText(text => text
                 .setPlaceholder('')
-                .setValue(this.plugin.settings.password)
+                .setValue(this.plugin.settings.clientSettings.password)
                 .onChange(async (value) => {
-                    this.plugin.settings.password = value;
+                    this.plugin.settings.clientSettings.password = value;
                     await this.plugin.saveSettings();
                 }));
-
-
-        // const DEFAULT_SETTINGS: MyPluginSettings = {
-        //     user: '',
-        //     password: '',
-        //     indexOnOpen: false,
-        //     indexOnSave: true,
-        //
-        // }
 
         new Setting(containerEl)
             .setName('Index on open')

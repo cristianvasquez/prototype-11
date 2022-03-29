@@ -1,5 +1,7 @@
 import { ns } from './namespaces.js'
 
+// Things that can be configured, but only by a power user.
+
 // returns: NamedNode
 function pathToUri (path) {
   return ns.this[btoa(unescape(encodeURIComponent(path)))]
