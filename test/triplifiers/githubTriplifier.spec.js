@@ -7,7 +7,7 @@ import assert from 'assert'
 import sinon from 'sinon'
 
 const namespace = rdf.namespace
-const baseUri = 'http://example/1'
+const docUri = rdf.namedNode('http://example/1')
 
 const ns = {
   schema: namespace('http://schema.org/'),
@@ -41,11 +41,11 @@ describe('[GithubTriplifier]', function () {
       'https://github.com',
       'https://other.website.com/cristianvasquez',
     ]
-    const triplifier = new GithubTriplifier(baseUri,ns)
+    const triplifier = new GithubTriplifier(docUri,ns)
 
     phrases.forEach((current) => {
       it(`"${current}"`, function () {
-        const dataset = triplifier.getRDF(current, baseUri, ns)
+        const dataset = triplifier.getRDF(current)
         expect(dataset?dataset.toString():'not triplified').toMatchSnapshot(this)
       })
     })
@@ -57,7 +57,7 @@ describe('[GithubTriplifier]', function () {
     ]
     phrases.forEach((current) => {
       it(`"${current}"`, function () {
-        const triplifier = new GithubTriplifier(baseUri,ns)
+        const triplifier = new GithubTriplifier(docUri,ns)
         const getRDFSpy = sinon.spy(triplifier, "getRDF");
         triplifier.triplififyText(`has Github repo ${current}`)
         assert(getRDFSpy.calledWith(current));

@@ -9,7 +9,6 @@ package-lock.json
 # build
 main.js
 *.js.map
-styles.css
 main.css
 
 # obsidian

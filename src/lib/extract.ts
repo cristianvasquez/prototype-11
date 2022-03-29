@@ -5,9 +5,10 @@ import {Dataset, FileData, Triple} from '../types'
 import {GithubTriplifier} from '../triplifiers/githubTriplifier.js'
 import {BasicNoteTriplifier} from "../triplifiers/basicNoteTriplifier";
 import {defaultConfig} from "../defaultConfig.js";
+import NamedNodeExt from "rdf-ext/lib/NamedNode";
 
 class NoteData {
-    public readonly noteUri: string;
+    public readonly noteUri: NamedNodeExt;
     private readonly data: FileData;
     private readonly ns: any;
 

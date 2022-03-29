@@ -44,7 +44,7 @@ onMounted(async () => {
       await doConstruct()
     } else {
       error.value = `
-      Don't know how to handle:
+      Don't know how, or I don't want to handle:
 
       ${JSON.stringify(query, null, 2)}
       `

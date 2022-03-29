@@ -12,11 +12,26 @@ const GITHUB_URL = 'https://github.com/'
 class GithubTriplifier {
 
   constructor (docUri, ns) {
-    if (!docUri || !ns) {
+    if (!docUri || !docUri.termType || docUri.termType !== 'NamedNode') {
+      throw Error('no document URI defined')
+    }
+    if (!ns) {
       throw Error('no namespaces defined')
     }
     this.docUri = docUri
     this.ns = ns
+  }
+
+  static getMatches (text) {
+    // <url> -> url
+    const trim = (txt) => txt.split(' ')
+      .map((chunk) => chunk.replace(/^\<+|\>+$/gm, ''))
+      .join(' ')
+
+    return matchFirst(trim(text), [
+      'has github repo? [#Url]',
+      'github repo [#Url]'
+    ])
   }
 
   triplififyText (text) {
@@ -29,8 +44,8 @@ class GithubTriplifier {
 
   getRDF (repoUrl) {
 
-    const [_, userName, repoName] = repoUrl.replaceAll('https://github.com', '').split('/')
     // https://github.com/cristianvasquez/prototype-11
+    const [_, userName, repoName] = repoUrl.replaceAll('https://github.com', '').split('/')
 
     if (!userName) {
       return null
@@ -47,7 +62,7 @@ class GithubTriplifier {
 
     if (repoName) {
       dataset.addAll([
-        rdf.quad(rdf.namedNode(this.docUri), _vault.about, rdf.namedNode(repoUrl)),
+        rdf.quad(this.docUri, _vault.about, rdf.namedNode(repoUrl)),
         rdf.quad(rdf.namedNode(repoUrl), _rdf.type, _vault.GithubRepo),
         rdf.quad(rdf.namedNode(userUrl), _vault.has, rdf.namedNode(repoUrl)),
         rdf.quad(rdf.namedNode(repoUrl), _vault.label, rdf.literal(repoName)),
@@ -55,18 +70,6 @@ class GithubTriplifier {
     }
 
     return dataset
-  }
-
-  static getMatches (text) {
-    // <url> -> url
-    const trim = (txt) => txt.split(' ')
-      .map((chunk) => chunk.replace(/^\<+|\>+$/gm, ''))
-      .join(' ')
-
-    return matchFirst(trim(text), [
-      'has github repo? [#Url]',
-      'github repo [#Url]'
-    ])
   }
 
 }

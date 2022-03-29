@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {onBeforeMount, onMounted, ref} from 'vue'
+import {onBeforeMount, onMounted, ref, toRaw} from 'vue'
 import {PLUGIN_NAME} from '../consts'
 import {inject} from '@vue/runtime-core'
 import {getDataByFile} from '../lib/obsidianHelpers'
@@ -18,7 +18,8 @@ let noteData = ref()
 async function updateView(file: TAbstractFile) {
   title.value = file.name
   const data = await getDataByFile(context.app, file as TFile)
-  noteData.value = new NoteData(data, ns)
+
+  noteData.value = new NoteData(toRaw(data), ns)
 }
 
 onBeforeMount(() => {
