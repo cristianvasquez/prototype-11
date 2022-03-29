@@ -1,4 +1,14 @@
-import {App, Editor, ItemView, MarkdownPostProcessorContext, Menu, Plugin, WorkspaceLeaf} from "obsidian";
+import {
+    App,
+    Editor,
+    ItemView,
+    MarkdownPostProcessorContext,
+    Menu,
+    Plugin,
+    PluginSettingTab,
+    Setting,
+    WorkspaceLeaf
+} from "obsidian";
 import {createApp} from 'vue'
 import DebugView from './views/DebugView.vue'
 import {PLUGIN_NAME} from "./consts";
@@ -10,11 +20,24 @@ import {getTemplate} from "./triplifiers/utils";
 import {defaultConfig} from "./defaultConfig";
 
 interface MyPluginSettings {
-    mySetting: string
+    endpointUrl: string,
+    updateUrl: string,
+    user: string,
+    password: string,
+    indexOnOpen: boolean,
+    indexOnSave: boolean,
+    allowUpdate: boolean
 }
 
+
 const DEFAULT_SETTINGS: MyPluginSettings = {
-    mySetting: 'default'
+    endpointUrl: 'http://localhost:3030/obsidian/query',
+    updateUrl: 'http://localhost:3030/obsidian/update',
+    user: '',
+    password: '',
+    indexOnOpen: false,
+    indexOnSave: true,
+    allowUpdate: false
 }
 
 export default class Prototype_11 extends Plugin {
@@ -57,6 +80,9 @@ export default class Prototype_11 extends Plugin {
             },
         });
 
+        // This adds a settings tab so the user can configure various aspects of the plugin
+        this.addSettingTab(new SampleSettingTab(this.app, this));
+
         const client: ParsingClient = new Client({
             endpointUrl: 'http://localhost:3030/obsidian/query',
             updateUrl: 'http://localhost:3030/obsidian/update',
@@ -66,7 +92,6 @@ export default class Prototype_11 extends Plugin {
         const triplestore = new Triplestore(client)
 
         // Debug view
-
         const defaultContext = {
             triplestore: triplestore,
             config: defaultConfig,
@@ -82,7 +107,6 @@ export default class Prototype_11 extends Plugin {
             (leaf) => new CurrentFileView(leaf, this.vueApp));
 
         // Sparql post processor
-
         function getProcessor(app: App) {
             return (source: string, el: HTMLElement, ctx: MarkdownPostProcessorContext) => {
                 const sparqlApp = createApp(SparqlView)
@@ -93,8 +117,9 @@ export default class Prototype_11 extends Plugin {
         }
 
         this.registerMarkdownCodeBlockProcessor("sparql", getProcessor(this.app));
-    }
 
+
+    }
 
     onunload() {
         this.app.workspace.detachLeavesOfType(SIDE_VIEW_ID);
@@ -116,6 +141,113 @@ export default class Prototype_11 extends Plugin {
     }
 }
 export const SIDE_VIEW_ID = `${PLUGIN_NAME}-sideview`;
+
+class SampleSettingTab extends PluginSettingTab {
+    plugin: Prototype_11;
+
+    constructor(app: App, plugin: Prototype_11) {
+        super(app, plugin);
+        this.plugin = plugin;
+    }
+
+    display(): void {
+        const {containerEl} = this;
+
+        containerEl.empty();
+
+        containerEl.createEl('h2', {text: 'Settings for prototype 11'});
+
+
+        new Setting(containerEl)
+            .setName('Endpoint url')
+            .setDesc('The query endpoint url')
+            .addText(text => text
+                .setPlaceholder('http://localhost:3030/obsidian/query')
+                .setValue(this.plugin.settings.endpointUrl)
+                .onChange(async (value) => {
+                    this.plugin.settings.endpointUrl = value;
+                    await this.plugin.saveSettings();
+                }));
+
+        new Setting(containerEl)
+            .setName('Update url')
+            .setDesc('The update endpoint url')
+            .addText(text => text
+                .setPlaceholder('http://localhost:3030/obsidian/update')
+                .setValue(this.plugin.settings.updateUrl)
+                .onChange(async (value) => {
+                    this.plugin.settings.updateUrl = value;
+                    await this.plugin.saveSettings();
+                }));
+
+        new Setting(containerEl)
+            .setName('User')
+            .setDesc('Endpoint user (if applies)')
+            .addText(text => text
+                .setPlaceholder('')
+                .setValue(this.plugin.settings.user)
+                .onChange(async (value) => {
+                    this.plugin.settings.user = value;
+                    await this.plugin.saveSettings();
+                }));
+
+        new Setting(containerEl)
+            .setName('Password')
+            .setDesc('Endpoint password (if applies)')
+            .addText(text => text
+                .setPlaceholder('')
+                .setValue(this.plugin.settings.password)
+                .onChange(async (value) => {
+                    this.plugin.settings.password = value;
+                    await this.plugin.saveSettings();
+                }));
+
+
+        // const DEFAULT_SETTINGS: MyPluginSettings = {
+        //     user: '',
+        //     password: '',
+        //     indexOnOpen: false,
+        //     indexOnSave: true,
+        //
+        // }
+
+        new Setting(containerEl)
+            .setName('Index on open')
+            .setDesc('Index a note each time you open it')
+            .addToggle((toggle) => {
+                toggle.setValue(this.plugin.settings.indexOnOpen);
+                toggle.onChange(async (value) => {
+                    this.plugin.settings.indexOnOpen = value;
+                    await this.plugin.saveSettings();
+                });
+            });
+
+        new Setting(containerEl)
+            .setName('Index on save')
+            .setDesc('Index a note each time you save it')
+            .addToggle((toggle) => {
+                toggle.setValue(this.plugin.settings.indexOnSave);
+                toggle.onChange(async (value) => {
+                    this.plugin.settings.indexOnSave = value;
+                    await this.plugin.saveSettings();
+                });
+            });
+
+        new Setting(containerEl)
+            .setName('Allow updates')
+            .setDesc('Can execute updates in sparql snippets')
+            .addToggle((toggle) => {
+                toggle.setValue(this.plugin.settings.allowUpdate);
+                toggle.onChange(async (value) => {
+                    this.plugin.settings.allowUpdate = value;
+                    await this.plugin.saveSettings();
+                });
+            });
+
+
+    }
+}
+
 
 export class CurrentFileView extends ItemView {
     private vueApp: DebugView<Element>;
