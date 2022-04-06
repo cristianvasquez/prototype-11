@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import MetadataValues from './helpers/MetadataValues.vue'
 import {computed, createApp, inject, onMounted, PropType, ref, toRaw, watchEffect} from 'vue'
-import {dateTimeFormat} from '../consts'
+import {dateTimeFormat} from '../../consts'
 import {ModalWrapper} from './ModalWrapper'
-import {AppContext, Dataset} from "../types";
+import {AppContext, Dataset} from "../../types";
 import {NoteData} from "../lib/extract";
 import Quads from "./Quads.vue";
 

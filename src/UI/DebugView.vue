@@ -3,8 +3,8 @@ import {onBeforeMount, onMounted, ref, toRaw} from 'vue'
 import {PLUGIN_NAME} from '../consts'
 import {inject} from '@vue/runtime-core'
 import {getDataByFile} from '../lib/obsidianHelpers'
-import Metadata from '../components/Metadata.vue'
-import {NoteData} from "../lib/extract";
+import Metadata from './components/Metadata.vue'
+import {NoteData} from "../lib/NoteData";
 import {App, TAbstractFile, TFile} from "obsidian";
 import {ns} from '../namespaces.js'
 import {AppContext} from "../types";

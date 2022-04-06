@@ -2,7 +2,7 @@
 
 import {inject} from "@vue/runtime-core";
 import {onMounted, ref} from "vue";
-import SimpleTable from '../components/SimpleTable.vue'
+import SimpleTable from './components/SimpleTable.vue'
 import {Parser} from 'sparqljs'
 import {AppContext} from "../types";
 

@@ -1,5 +1,6 @@
 import rdf from 'rdf-ext'
-import {VAULT_NAMESPACE} from './config.js'
+
+const VAULT_NAMESPACE = 'http://notes/'
 
 const ns = {
   schema: rdf.namespace('http://schema.org/'),

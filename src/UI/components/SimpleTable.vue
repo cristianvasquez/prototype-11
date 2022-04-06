@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import {PropType} from 'vue'
-import {ns} from "../namespaces";
-import {shrink} from "../triplifiers/utils";
+import {ns} from "../../namespaces";
+import {shrink} from "../../triplifiers/utils";
 import InternalLink from "./InternalLink.vue"
-import {AppContext, SparqlConfig} from "../types";
+import {AppContext, SparqlConfig} from "../../types";
 import {inject} from "@vue/runtime-core";
 
 const context: AppContext = inject('context')

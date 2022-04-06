@@ -10,14 +10,14 @@ import {
     WorkspaceLeaf
 } from "obsidian";
 import {createApp} from 'vue'
-import DebugView from './views/DebugView.vue'
+import DebugView from './UI/DebugView.vue'
 import {PLUGIN_NAME} from "./consts";
 import ParsingClient from "sparql-http-client/ParsingClient";
 import Client from "sparql-http-client/ParsingClient";
-import {Triplestore} from "./lib/client";
-import SparqlView from "./views/SparqlView.vue";
+import Triplestore from "./lib/Triplestore";
+import SparqlView from "./UI/SparqlView.vue";
 import {getTemplate} from "./triplifiers/utils";
-import {defaultConfig} from "./defaultConfig";
+import config from "./config";
 
 
 interface ClientSettings {
@@ -93,32 +93,32 @@ export default class Prototype_11 extends Plugin {
         const triplestore = new Triplestore(client)
 
         // Debug view
-        const defaultContext = {
+        const appContext = {
             triplestore: triplestore,
-            config: defaultConfig,
+            config: config,
             app: this.app
         }
 
         const debugApp = createApp(DebugView)
         debugApp.provide('register', this.registerEvent)
-        debugApp.provide('context', defaultContext)
+        debugApp.provide('context', appContext)
         this.vueApp = debugApp
 
         this.registerView(SIDE_VIEW_ID,
             (leaf) => new CurrentFileView(leaf, this.vueApp));
 
-        // Sparql post processor
+        // Sparql result renderer
         function getProcessor(app: App) {
             return (source: string, el: HTMLElement, ctx: MarkdownPostProcessorContext) => {
+
                 const sparqlApp = createApp(SparqlView)
-                sparqlApp.provide('text', source)
-                sparqlApp.provide('context', defaultContext)
+                sparqlApp.provide('context', appContext)
+                sparqlApp.provide('text', config.sparqlPreprocessor(source))
                 sparqlApp.mount(el)
             }
         }
 
         this.registerMarkdownCodeBlockProcessor("sparql", getProcessor(this.app));
-
 
     }
 

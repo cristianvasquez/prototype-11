@@ -2,9 +2,9 @@ import {getDotTriples} from "../triplifiers/dotTriples";
 import {DateTime} from "luxon";
 import {getSections} from "./obsidianHelpers";
 import {Dataset, FileData, Triple} from '../types'
-import {GithubTriplifier} from '../triplifiers/githubTriplifier.js'
-import {BasicNoteTriplifier} from "../triplifiers/basicNoteTriplifier";
-import {defaultConfig} from "../defaultConfig.js";
+import {GithubTriplifier} from '../triplifiers/GithubTriplifier.js'
+import {BasicNoteTriplifier} from "../triplifiers/BasicNoteTriplifier";
+import config from "../config.js";
 import NamedNodeExt from "rdf-ext/lib/NamedNode";
 
 class NoteData {
@@ -15,7 +15,7 @@ class NoteData {
     constructor(data: FileData, ns: any) {
         this.data = data;
         this.ns = ns;
-        this.noteUri = defaultConfig.pathToUri(data.path)
+        this.noteUri = config.pathToUri(data.path)
     }
 
     getMetadata() {

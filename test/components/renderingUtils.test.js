@@ -1,6 +1,6 @@
 import expect from 'expect'
 import toMatchSnapshot from 'expect-mocha-snapshot'
-import { getSpans } from '../../src/components/renderingUtils.js'
+import { getSpans } from '../../src/UI/components/renderingUtils.js'
 import { getInternalLinks } from '../../src/triplifiers/miniNLP.js'
 
 expect.extend({ toMatchSnapshot })

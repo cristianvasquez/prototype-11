@@ -69,4 +69,4 @@ class Triplestore {
 }
 
 
-export {Triplestore}
+export default Triplestore

@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import {hoverPreview, isInVault, openOrSwitch,} from 'obsidian-community-lib'
 import {inject} from '@vue/runtime-core'
-import {getFileTitle} from '../lib/obsidianHelpers'
-import {SIDE_VIEW_ID} from '../main'
-import {AppContext} from '../types'
+import {getFileTitle} from '../../lib/obsidianHelpers'
+import {SIDE_VIEW_ID} from '../../main'
+import {AppContext} from '../../types'
 import {PropType} from "vue";
 import {ItemView} from "obsidian";
 

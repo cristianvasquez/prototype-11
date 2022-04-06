@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {inject} from "@vue/runtime-core";
-import {AppContext, Dataset} from '../types'
+import {AppContext, Dataset} from '../../types'
 import {onMounted, ref} from "vue";
 import SimpleTable from "./SimpleTable.vue"
 
