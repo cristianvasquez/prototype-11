@@ -3,9 +3,9 @@ import {onBeforeMount, onMounted, ref, toRaw} from 'vue'
 import {PLUGIN_NAME} from '../consts'
 import {inject} from '@vue/runtime-core'
 import {getDataByFile} from '../lib/obsidianHelpers'
-import Metadata from './components/Metadata.vue'
+import NoteInfo from './components/NoteInfo.vue'
 import {NoteData} from "../lib/NoteData";
-import {App, TAbstractFile, TFile} from "obsidian";
+import {TAbstractFile, TFile} from "obsidian";
 import {ns} from '../namespaces.js'
 import {AppContext} from "../types";
 
@@ -18,7 +18,6 @@ let noteData = ref()
 async function updateView(file: TAbstractFile) {
   title.value = file.name
   const data = await getDataByFile(context.app, file as TFile)
-
   noteData.value = new NoteData(toRaw(data), ns)
 }
 
@@ -35,6 +34,7 @@ onBeforeMount(() => {
   plugin.registerEvent(
       context.app.vault.on('rename', (file, oldPath) => {
         console.log('rename', file)
+        console.log('TODO: delete the last graph')
         updateView(file)
       })
   )
@@ -43,6 +43,7 @@ onBeforeMount(() => {
       context.app.vault.on('delete', af => {
         if (!(af instanceof TFile)) return
         console.log('delete', af)
+        console.log('TODO: delete the last graph')
       })
   )
 
@@ -67,7 +68,8 @@ onMounted(() => {
 <template>
   <div class="debug-view">
     <h1>{{ title }}</h1>
-    <Metadata v-if="noteData" :noteData="noteData"/>
+
+    <NoteInfo v-if="noteData" :noteData="noteData"/>
   </div>
 </template>
 

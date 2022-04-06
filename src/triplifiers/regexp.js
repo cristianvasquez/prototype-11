@@ -1,4 +1,4 @@
-const LINKS_REGEXP = /\[\[([^\]\n]*)/g
+const LINKS_REGEXP = /(\[\[[^\]\n]*\]\])/g
 
 //  (un :: (texto :: bonito))
 const SPO_REGEXP = /\(\s*([^)]+)\s*::\s*\(([^)]+)\s*::\s*([^)]+)\s*\)\)/g

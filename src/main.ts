@@ -113,7 +113,7 @@ export default class Prototype_11 extends Plugin {
 
                 const sparqlApp = createApp(SparqlView)
                 sparqlApp.provide('context', appContext)
-                sparqlApp.provide('text', config.sparqlPreprocessor(source))
+                sparqlApp.provide('text', config.replaceNotesToURIs(source, app))
                 sparqlApp.mount(el)
             }
         }

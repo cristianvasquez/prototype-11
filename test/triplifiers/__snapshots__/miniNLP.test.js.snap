@@ -53,3 +53,19 @@ Array [
   "b",
 ]
 `;
+
+exports[`[miniNLP] [replaceInternalLinks] "[[a | b]]" 1`] = `"<A | B>"`;
+
+exports[`[miniNLP] [replaceInternalLinks] "[[a]] [[b]] [[a]]" 1`] = `"<A> <B> <A>"`;
+
+exports[`[miniNLP] [replaceInternalLinks] "[[b]]" 1`] = `"<B>"`;
+
+exports[`[miniNLP] [replaceInternalLinks] "[[dfs]] c" 1`] = `"<DFS> c"`;
+
+exports[`[miniNLP] [replaceInternalLinks] "a [[]] c" 1`] = `"a <> c"`;
+
+exports[`[miniNLP] [replaceInternalLinks] "a [[b]] c [[d]] e [[b]] d" 1`] = `"a <B> c <D> e <B> d"`;
+
+exports[`[miniNLP] [replaceInternalLinks] "a [[b]] c [[d]] e [[b]] d" 2`] = `"a <B> c <D> e <B> d"`;
+
+exports[`[miniNLP] [replaceInternalLinks] "a [[b]]" 1`] = `"a <B>"`;

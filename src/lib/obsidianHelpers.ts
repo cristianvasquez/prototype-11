@@ -2,11 +2,6 @@ import {App, CachedMetadata, SectionCache, TFile} from "obsidian";
 import {FileData} from "../types";
 import {getActiveFileContent} from 'obsidian-community-lib'
 
-const collectMetadataForPath = (app: any, path: String) => {
-    const dataviewApi = app.plugins.plugins.dataview?.api
-    return dataviewApi ? dataviewApi.index.pages.get(path) : {}
-}
-
 const getMetadataFromPath = (app: any, path: String): CachedMetadata => {
     return app.metadataCache.getCache(path)
 }
@@ -24,8 +19,7 @@ async function getDataByFile(app: App, file: TFile): Promise<FileData> {
     //The ones that are too big. I'll skip those in the meantime.
 
     // @ts-ignore
-    const text = file.unsafeCachedData ? file.unsafeCachedData
-        : await getActiveFileContent(app, true)
+    const text = file.unsafeCachedData ? file.unsafeCachedData : await getActiveFileContent(app, true)
 
     return {
         name: file.name,
@@ -42,8 +36,12 @@ async function getDataByFile(app: App, file: TFile): Promise<FileData> {
 // Gets text for yaml, heading, paragraph etc.
 const getSections = (data: FileData, filter?: (section: SectionCache) => boolean) => {
 
+    
     if (!filter) {
         filter = _ => true
+    }
+    if (!data.metadata.sections) {
+        return []
     }
     return data.metadata.sections
         .filter(filter)
@@ -51,7 +49,8 @@ const getSections = (data: FileData, filter?: (section: SectionCache) => boolean
             data.text?.substring(current.position.start.offset,
                 current.position.end.offset)
         )
+
 }
 
 
-export {collectMetadataForPath, getDataByFile, getFileTitle, getSections}
+export {getDataByFile, getFileTitle, getSections}

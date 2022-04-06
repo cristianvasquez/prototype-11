@@ -36,6 +36,7 @@ onMounted(async () => {
   // @ts-ignore
   const parser = new Parser({skipValidation: true, sparqlStar: true});
 
+  console.log('query', text)
   try {
     const query: any = parser.parse(text)
     if (query.queryType === 'SELECT') {
@@ -61,9 +62,14 @@ onMounted(async () => {
 <template>
   <template v-if="data">
     <simple-table :header="data.header" :rows="data.rows"/>
+    <template v-if="!data.rows.length">
+      <div>No results</div>
+    </template>
+
   </template>
 
-  <div v-if="error">{{ error }}</div>
-
+  <div v-if="error">
+    {{ error }}
+  </div>
 
 </template>

@@ -1,4 +1,4 @@
-import { getInternalLinks } from '../../src/triplifiers/miniNLP.js'
+import { getInternalLinks,replaceInternalLinks } from '../../src/triplifiers/miniNLP.js'
 
 import expect from 'expect'
 import toMatchSnapshot from 'expect-mocha-snapshot'
@@ -25,4 +25,27 @@ describe('[miniNLP]', function () {
       })
     })
   })
+
+  describe('[replaceInternalLinks]', function () {
+    const phrases = [
+      '[[b]]',
+      'a [[]] c',
+      'a [[b]]',
+      '[[dfs]] c',
+      '[[a]] [[b]] [[a]]',
+      'a [[b]] c [[d]] e [[b]] d',
+      'a [[b]] c [[d]] e [[b]] d',
+      '[[a | b]]',
+    ]
+    phrases.forEach((current) => {
+      it(`"${current}"`, function () {
+        const actual = replaceInternalLinks(current,(str)=>`<${str.toUpperCase()}>`)
+        expect(actual).toMatchSnapshot(this)
+      })
+    })
+  })
+
+
+
+
 })

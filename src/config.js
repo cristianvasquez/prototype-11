@@ -1,4 +1,5 @@
 import { ns } from './namespaces.js'
+import { replaceInternalLinks } from './triplifiers/miniNLP.js'
 
 // returns: NamedNode
 function pathToUri (path) {
@@ -12,8 +13,27 @@ function uriToPath (uri) {
   return decodeURIComponent(escape(atob(coding)))
 }
 
-function sparqlPreprocessor (sparql) {
-  return sparql
+function getCache (note, app) {
+  const activePath = app.workspace.getActiveFile().path
+  const noteMD = `${note}.md`
+  return app.metadataCache.getFirstLinkpathDest(noteMD, activePath)
+}
+
+function getCurrentURI (app) {
+  const uri =  pathToUri(app.workspace.getActiveFile().path)
+  return `<${uri}>`
+}
+
+function replaceNotesToURIs (sparql, app) {
+
+  sparql = sparql.replaceAll('__THIS__', getCurrentURI(app))
+
+  return replaceInternalLinks(sparql, (str) => {
+    const cache = getCache(str, app)
+    const uri = cache?.path ? pathToUri(cache?.path) : `${str} NOT_FOUND`
+
+    return `<${uri}>`
+  })
 }
 
 function selectToTable (sparqlSelectResult) {
@@ -51,7 +71,7 @@ const config = {
   uriToPath,
   selectToTable,
   datasetToTable,
-  sparqlPreprocessor
+  replaceNotesToURIs
 }
 
 export default config

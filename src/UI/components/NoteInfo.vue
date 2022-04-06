@@ -2,9 +2,9 @@
 import MetadataValues from './helpers/MetadataValues.vue'
 import {computed, createApp, inject, onMounted, PropType, ref, toRaw, watchEffect} from 'vue'
 import {dateTimeFormat} from '../../consts'
-import {ModalWrapper} from './ModalWrapper'
+import {ModalWrapper} from './helpers/ModalWrapper'
 import {AppContext, Dataset} from "../../types";
-import {NoteData} from "../lib/extract";
+import {NoteData} from "../../lib/NoteData";
 import Quads from "./Quads.vue";
 
 const context: AppContext = inject('context')
@@ -15,6 +15,28 @@ const props = defineProps({
     required: true
   }
 })
+
+onMounted(async () => {
+  watchEffect(async () => extract());
+})
+
+async function extract() {
+  await fetchCurrentDataset()
+  metadata.value = props.noteData.getMetadata()
+  const full = await props.noteData.getFullDataset()
+  triplifiedDataset.value = full.dataset
+  dotTriples.value = full.dotTriples
+}
+
+async function fetchCurrentDataset() {
+  const noteUri = toRaw(props.noteData.noteUri)
+  try {
+    currentDataset.value = await context.triplestore.getDataset(noteUri)
+    connectionStatus.value = null
+  } catch (e) {
+    connectionStatus.value = e
+  }
+}
 
 async function popupRDF(dataset: Dataset) {
   const rdfView = createApp(Quads)
@@ -34,35 +56,11 @@ const triples = computed(() => dotTriples.value.filter((current) => current.subj
 
 const connectionStatus = ref()
 
-async function fetchCurrentDataset() {
-  const noteUri = toRaw(props.noteData.noteUri)
-  try {
-    currentDataset.value = await context.triplestore.getDataset(noteUri)
-    connectionStatus.value = null
-  } catch (e) {
-    connectionStatus.value = e
-  }
-
-}
-
 async function indexRDF(dataset: Dataset) {
   await context.triplestore.deleteDataset(props.noteData.noteUri)
   await context.triplestore.insertDataset(props.noteData.noteUri, dataset)
   await fetchCurrentDataset()
 }
-
-async function extract() {
-  await fetchCurrentDataset()
-  metadata.value = props.noteData.getMetadata()
-  const full = await props.noteData.getFullDataset()
-  triplifiedDataset.value = full.dataset
-  dotTriples.value = full.dotTriples
-}
-
-
-onMounted(async () => {
-  watchEffect(async () => extract());
-})
 
 </script>
 
