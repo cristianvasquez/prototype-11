@@ -1,10 +1,9 @@
 import nlp from 'compromise'
 import dates from 'compromise-dates'
 import numbers from 'compromise-numbers'
+import {LINKS_REGEXP} from './regexp.js'
 
 nlp.extend(dates).extend(numbers)
-
-const linksRegexp = /\[\[([^\]\n]*)\]\]/g
 
 const matchFirst = (text, patterns) => {
 
@@ -25,13 +24,13 @@ const matchFirst = (text, patterns) => {
 
 function getInternalLinks (text) {
   const internalLinks = []
-  for (const match of text.matchAll(linksRegexp)) {
+  for (const match of text.matchAll(LINKS_REGEXP)) {
     internalLinks.push(match[1])
   }
   return internalLinks
 }
 
-function extract (text) {
+function getNLPstuff (text) {
   const doc = nlp(text)
   const dates = doc.dates().json()
 
@@ -53,4 +52,4 @@ function extract (text) {
   return result
 }
 
-export { extract, getInternalLinks, matchFirst }
+export { getNLPstuff, getInternalLinks, matchFirst }
