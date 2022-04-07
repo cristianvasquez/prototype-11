@@ -29,7 +29,6 @@ const triples = computed(() => dotTriples.value.filter((current) => current.subj
 </script>
 
 <template>
-  DOT TRIPLES: {{ dotTriples }}
   <template v-if="attributes">
     <h3>Attributes</h3>
     <div class="metadata-attributes">

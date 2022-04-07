@@ -92,21 +92,6 @@ export default class Prototype_11 extends Plugin {
         const client: ParsingClient = new Client(this.settings.clientSettings)
         const triplestore = new Triplestore(client)
 
-        // // Source for save setting
-        // // https://github.com/hipstersmoothie/obsidian-plugin-prettier/blob/main/src/main.ts
-        const saveCommandDefinition = (this.app as any).commands?.commands?.[
-            'editor:save-file'
-            ];
-        const save = saveCommandDefinition?.callback;
-
-        if (typeof save === 'function') {
-            saveCommandDefinition.callback = () => {
-                    const file = this.app.workspace.getActiveFile();
-                    // should index file
-                    console.log('Indexme!')
-            };
-        }
-
         // Debug view
         const appContext = {
             app: this.app,
@@ -119,6 +104,21 @@ export default class Prototype_11 extends Plugin {
         debugApp.provide('register', this.registerEvent)
         debugApp.provide('context', appContext)
         this.vueApp = debugApp
+
+        // // Source for save setting
+        // // https://github.com/hipstersmoothie/obsidian-plugin-prettier/blob/main/src/main.ts
+        const saveCommandDefinition = (this.app as any).commands?.commands?.[
+            'editor:save-file'
+            ];
+        const save = saveCommandDefinition?.callback;
+        if (typeof save === 'function') {
+            saveCommandDefinition.callback = async () => {
+                const file = this.app.workspace.getActiveFile();
+                await this.vueApp.updateView(file)
+                // should index file
+                console.log('Index me please!')
+            };
+        }
 
         this.registerView(SIDE_VIEW_ID,
             (leaf) => new CurrentFileView(leaf, this.vueApp));
