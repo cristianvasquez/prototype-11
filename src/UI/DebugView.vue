@@ -2,23 +2,34 @@
 import {onBeforeMount, onMounted, ref, toRaw} from 'vue'
 import {PLUGIN_NAME} from '../consts'
 import {inject} from '@vue/runtime-core'
-import {getDataByFile} from '../lib/obsidianHelpers'
 import NoteInfo from './components/NoteInfo.vue'
-import {NoteData} from "../lib/NoteData";
+import {Note} from "../lib/Note";
 import {TAbstractFile, TFile} from "obsidian";
-import {ns} from '../namespaces.js'
 import {AppContext} from "../types";
-
+import {Prototype11} from "../lib/Prototype11";
+import Status from "./components/Status.vue";
+import DotTriples from "./components/DotTriples.vue";
 
 const context: AppContext = inject('context')
 
 let title = ref('loading')
-let noteData = ref()
+let note = ref()
+
+onMounted(() => {
+  // @ts-ignore
+  const currentFile = app.workspace?.activeLeaf?.view?.file
+  if (currentFile) {
+    updateView(currentFile)
+  }
+})
 
 async function updateView(file: TAbstractFile) {
+
+  const prototype = new Prototype11(context.app, file as TFile)
+  const data = await prototype.getRawData()
+
   title.value = file.name
-  const data = await getDataByFile(context.app, file as TFile)
-  noteData.value = new NoteData(toRaw(data), ns)
+  note.value = new Note(toRaw(data))
 }
 
 onBeforeMount(() => {
@@ -27,6 +38,7 @@ onBeforeMount(() => {
 
   plugin.registerEvent(
       context.app.metadataCache.on('changed', file => {
+        console.log('changed')
         updateView(file)
       })
   )
@@ -52,15 +64,6 @@ onBeforeMount(() => {
         updateView(file)
       })
   )
-
-})
-
-onMounted(() => {
-  // @ts-ignore
-  const currentFile = app.workspace?.activeLeaf?.view?.file
-  if (currentFile) {
-    updateView(currentFile)
-  }
 })
 
 </script>
@@ -68,8 +71,11 @@ onMounted(() => {
 <template>
   <div class="debug-view">
     <h1>{{ title }}</h1>
-
-    <NoteInfo v-if="noteData" :noteData="noteData"/>
+    <template v-if="note">
+      <NoteInfo :note="note"/>
+      <DotTriples :note="note"/>
+      <Status :note="note"/>
+    </template>
   </div>
 </template>
 

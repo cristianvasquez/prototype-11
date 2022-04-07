@@ -2,7 +2,7 @@
 import {PropType} from 'vue'
 import {ns} from "../../namespaces";
 import {shrink} from "../../triplifiers/utils";
-import InternalLink from "./InternalLink.vue"
+import InternalLink from "./helpers/InternalLink.vue"
 import {AppContext} from "../../types";
 import {inject} from "@vue/runtime-core";
 

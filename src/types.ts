@@ -15,7 +15,17 @@ type SparqlConfig = {
     datasetToTable:any,
 }
 
-type Metadata = {
+type ObsidianRawData = {
+    name: string,
+    path: string,
+    stat: FileStats,
+    text?: string,
+    metadata?: CachedMetadata,
+    links?: Record<string, number>
+    backlinks?: Record<string, [LinkCache]>
+}
+
+type StructuredData = {
     uri: string,
     name: string,
     path: string,
@@ -27,16 +37,6 @@ type Metadata = {
     rdf?: Dataset
 }
 
-type FileData = {
-    name: string,
-    path: string,
-    stat: FileStats,
-    text?: string,
-    metadata?: CachedMetadata,
-    links?: Record<string, number>
-    backlinks?: Record<string, [LinkCache]>
-}
-
 type Triple = {
     subject?: Term,
     predicate: Term,
@@ -44,4 +44,4 @@ type Triple = {
 }
 type Term = any
 
-export {Triple, Term, FileData, Metadata, Dataset, SparqlConfig, AppContext}
+export {Triple, Term, ObsidianRawData, StructuredData, Dataset, SparqlConfig, AppContext}

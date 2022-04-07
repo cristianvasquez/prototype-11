@@ -1,5 +1,5 @@
 <script setup>
-import InternalLink from './InternalLink.vue'
+import InternalLink from './helpers/InternalLink.vue'
 import { toRaw } from 'vue'
 import { getSpans } from './renderingUtils'
 

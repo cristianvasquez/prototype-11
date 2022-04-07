@@ -1,11 +1,17 @@
 <script lang="ts" setup>
 import {hoverPreview, isInVault, openOrSwitch,} from 'obsidian-community-lib'
 import {inject} from '@vue/runtime-core'
-import {getFileTitle} from '../../lib/obsidianHelpers'
-import {SIDE_VIEW_ID} from '../../main'
-import {AppContext} from '../../types'
+import {SIDE_VIEW_ID} from '../../../main'
+import {AppContext} from '../../../types'
 import {PropType} from "vue";
 import {ItemView} from "obsidian";
+
+
+function getFileTitle(path: string): string {
+  if (path.includes("/")) path = path.substring(path.lastIndexOf("/") + 1);
+  if (path.endsWith(".md")) path = path.substring(0, path.length - 3);
+  return path;
+}
 
 const context: AppContext = inject('context')
 
@@ -22,7 +28,7 @@ async function open(event: MouseEvent) {
 
 async function hover(event: MouseEvent) {
   //@TS-Ignore
-  const trickObsidianAPI:ItemView = {
+  const trickObsidianAPI: ItemView = {
     app: context.app,
     getViewType: () => SIDE_VIEW_ID // 'prototype-11-sideview'
   }

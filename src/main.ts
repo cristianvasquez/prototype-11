@@ -18,6 +18,7 @@ import Triplestore from "./lib/Triplestore";
 import SparqlView from "./UI/SparqlView.vue";
 import {getTemplate} from "./triplifiers/utils";
 import config from "./config";
+import { ns } from './namespaces'
 
 
 interface ClientSettings {
@@ -56,15 +57,6 @@ export default class Prototype_11 extends Plugin {
         console.log(`loading ${PLUGIN_NAME}`)
         await this.loadSettings()
 
-        this.addRibbonIcon("dice", "Open menu", (event) => {
-            const menu = new Menu(this.app);
-            // Here one can add several items
-            menu.addItem((item) => item.setTitle("A nice 🍎").setIcon("paste").onClick(() => {
-                this.activateSidePanel()
-            }));
-            menu.showAtMouseEvent(event);
-        });
-
         this.addCommand({
             id: 'open-prototype-11',
             name: 'Open prototype 11',
@@ -86,17 +78,41 @@ export default class Prototype_11 extends Plugin {
             },
         });
 
-        // This adds a settings tab so the user can configure various aspects of the plugin
+        this.addCommand({
+            id: "index-current-note",
+            name: "Index current note",
+            checkCallback: (checking: boolean) => {
+                console.log('TODO')
+                return false
+            }
+        });
+
         this.addSettingTab(new SampleSettingTab(this.app, this));
 
         const client: ParsingClient = new Client(this.settings.clientSettings)
         const triplestore = new Triplestore(client)
 
+        // // Source for save setting
+        // // https://github.com/hipstersmoothie/obsidian-plugin-prettier/blob/main/src/main.ts
+        const saveCommandDefinition = (this.app as any).commands?.commands?.[
+            'editor:save-file'
+            ];
+        const save = saveCommandDefinition?.callback;
+
+        if (typeof save === 'function') {
+            saveCommandDefinition.callback = () => {
+                    const file = this.app.workspace.getActiveFile();
+                    // should index file
+                    console.log('Indexme!')
+            };
+        }
+
         // Debug view
         const appContext = {
+            app: this.app,
             triplestore: triplestore,
             config: config,
-            app: this.app
+            ns: ns
         }
 
         const debugApp = createApp(DebugView)
@@ -107,10 +123,9 @@ export default class Prototype_11 extends Plugin {
         this.registerView(SIDE_VIEW_ID,
             (leaf) => new CurrentFileView(leaf, this.vueApp));
 
-        // Sparql result renderer
+        // Renders the results of a SPARQL query
         function getProcessor(app: App) {
             return (source: string, el: HTMLElement, ctx: MarkdownPostProcessorContext) => {
-
                 const sparqlApp = createApp(SparqlView)
                 sparqlApp.provide('context', appContext)
                 sparqlApp.provide('text', config.replaceNotesToURIs(source, app))
