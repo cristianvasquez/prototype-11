@@ -1,11 +1,13 @@
 import {DateTime} from "luxon";
 import Dataset from "rdf-ext/lib/Dataset";
 import {App, CachedMetadata, FileStats, LinkCache} from "obsidian";
+import {EventEmitter} from "./lib/EventEmitter";
 
 type AppContext = {
     triplestore:any,
     config:SparqlConfig,
-    app:App
+    app:App,
+    events:EventEmitter
 }
 
 type SparqlConfig = {

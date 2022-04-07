@@ -1,6 +1,5 @@
 import {TFile, App} from "obsidian";
 import {getActiveFileContent} from "obsidian-community-lib";
-import Triplestore from "./Triplestore";
 
 class Prototype11 {
 
@@ -17,7 +16,9 @@ class Prototype11 {
         // I don't have a clue what's the life-cycle in Obsidian. I'll skip those in the meantime
 
         // @ts-ignore
-        const text = this.file.unsafeCachedData ? this.file.unsafeCachedData : await getActiveFileContent(app, true)
+        // const text = this.file.unsafeCachedData ? this.file.unsafeCachedData : await getActiveFileContent(app, true)
+
+        const text = await getActiveFileContent(app, true)
 
         return {
             name: this.file.name,
@@ -29,10 +30,6 @@ class Prototype11 {
             // @ts-ignore
             backlinks: app.metadataCache.getBacklinksForFile(this.file).data
         }
-    }
-
-    async indexAt(triplestore:Triplestore){
-
     }
 
 }

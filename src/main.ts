@@ -3,10 +3,10 @@ import {
     Editor,
     ItemView,
     MarkdownPostProcessorContext,
-    Menu,
     Plugin,
     PluginSettingTab,
     Setting,
+    TFile,
     WorkspaceLeaf
 } from "obsidian";
 import {createApp} from 'vue'
@@ -18,8 +18,11 @@ import Triplestore from "./lib/Triplestore";
 import SparqlView from "./UI/SparqlView.vue";
 import {getTemplate} from "./triplifiers/utils";
 import config from "./config";
-import { ns } from './namespaces'
-
+import {ns} from './namespaces'
+import {EventEmitter} from "./lib/EventEmitter.js";
+import {Prototype11} from "./lib/Prototype11";
+import {Note} from "./lib/Note";
+import {indexNote} from "./lib/indexer";
 
 interface ClientSettings {
     endpointUrl: string,
@@ -50,7 +53,6 @@ const DEFAULT_SETTINGS: PluginSettings = {
 export default class Prototype_11 extends Plugin {
     settings: PluginSettings
     private vueApp: DebugView<Element>;
-    private triplestore: Triplestore;
 
     async onload() {
 
@@ -78,33 +80,32 @@ export default class Prototype_11 extends Plugin {
             },
         });
 
-        this.addCommand({
-            id: "index-current-note",
-            name: "Index current note",
-            checkCallback: (checking: boolean) => {
-                console.log('TODO')
-                return false
-            }
-        });
-
         this.addSettingTab(new SampleSettingTab(this.app, this));
 
         const client: ParsingClient = new Client(this.settings.clientSettings)
         const triplestore = new Triplestore(client)
 
-        // Debug view
-        const appContext = {
-            app: this.app,
-            triplestore: triplestore,
-            config: config,
-            ns: ns
+
+        async function indexFile(file: TFile, app:App) {
+            console.log('Indexing', file.path)
+            const rawData = await new Prototype11(app, file).getRawData()
+            const note = new Note(rawData)
+            await indexNote(triplestore, note, ns)
+            console.log('Done')
         }
 
-        const debugApp = createApp(DebugView)
-        debugApp.provide('register', this.registerEvent)
-        debugApp.provide('context', appContext)
-        this.vueApp = debugApp
+        async function deleteIndex(path: String) {
+            console.log('Deleting', path)
+            const uri = config.pathToUri(path)
+            await triplestore.deleteDataset(uri)
+            console.log('Done')
+        }
 
+        /**
+         * Event logic
+         */
+
+        const events = new EventEmitter()
         // // Source for save setting
         // // https://github.com/hipstersmoothie/obsidian-plugin-prettier/blob/main/src/main.ts
         const saveCommandDefinition = (this.app as any).commands?.commands?.[
@@ -114,11 +115,57 @@ export default class Prototype_11 extends Plugin {
         if (typeof save === 'function') {
             saveCommandDefinition.callback = async () => {
                 const file = this.app.workspace.getActiveFile();
-                await this.vueApp.updateView(file)
-                // should index file
-                console.log('Index me please!')
+                await indexFile(file, this.app)
+                events.emit('update', file)
             };
         }
+
+        // @ts-ignore
+        let plugin = app.plugins.plugins[PLUGIN_NAME]
+        plugin.registerEvent(
+            this.app.metadataCache.on('changed', file => {
+                console.log('file modified')
+            })
+        )
+        plugin.registerEvent(
+            this.app.vault.on('rename', async (file, oldPath) => {
+                if (!(file instanceof TFile)) return
+                console.log('renaming')
+                await deleteIndex(oldPath)
+                events.emit('update', file)
+            })
+        )
+        plugin.registerEvent(
+            this.app.vault.on('delete', async af => {
+                if (!(af instanceof TFile)) return
+                console.log('deleting')
+                await deleteIndex(af.path)
+                events.emit('update', undefined)
+            })
+        )
+        plugin.registerEvent(
+            this.app.workspace.on('file-open', (file) => {
+                events.emit('update', file)
+            })
+        )
+
+        /**
+         * The apps
+         */
+
+            // Debug view
+        const appContext = {
+                app: this.app,
+                triplestore: triplestore,
+                events: events,
+                config: config,
+                ns: ns
+            }
+
+        const debugApp = createApp(DebugView)
+        debugApp.provide('register', this.registerEvent)
+        debugApp.provide('context', appContext)
+        this.vueApp = debugApp
 
         this.registerView(SIDE_VIEW_ID,
             (leaf) => new CurrentFileView(leaf, this.vueApp));
@@ -134,7 +181,6 @@ export default class Prototype_11 extends Plugin {
         }
 
         this.registerMarkdownCodeBlockProcessor("sparql", getProcessor(this.app));
-
     }
 
     onunload() {
