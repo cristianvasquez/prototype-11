@@ -13,8 +13,10 @@ const context: AppContext = inject('context')
 
 let title = ref('loading')
 let note = ref()
+let ver = ref(0)
 
 onMounted(() => {
+
   // @ts-ignore
   const currentFile = app.workspace?.activeLeaf?.view?.file
   if (currentFile) {
@@ -22,20 +24,28 @@ onMounted(() => {
   }
   context.events.on('update', (file: TFile) => {
     updateView(file)
+    ver.value = ver.value++
   })
+
 })
 
 async function updateView(file: TAbstractFile) {
-  const prototype = new Prototype11(context.app, file as TFile)
-  const data = await prototype.getRawData()
-  title.value = file.name
-  note.value = new Note(toRaw(data))
+  if (file) {
+    title.value = file.name
+    const prototype = new Prototype11(context.app, file as TFile)
+    const data = await prototype.getRawData()
+    note.value = new Note(toRaw(data))
+    console.log('updated note')
+  } else {
+    title.value = 'None'
+    note.value = undefined
+  }
 }
 
 </script>
 
 <template>
-  <div class="debug-view">
+  <div :id="ver" class="debug-view" >
     <h1>{{ title }}</h1>
     <template v-if="note">
       <NoteInfo :note="note"/>

@@ -91,14 +91,13 @@ export default class Prototype_11 extends Plugin {
             const rawData = await new Prototype11(app, file).getRawData()
             const note = new Note(rawData)
             await indexNote(triplestore, note, ns)
-            console.log('Done')
+            console.log('Index done')
+            events.emit('update', file)
         }
 
         async function deleteIndex(path: String) {
-            console.log('Deleting', path)
             const uri = config.pathToUri(path)
             await triplestore.deleteDataset(uri)
-            console.log('Done')
         }
 
         /**
@@ -116,17 +115,16 @@ export default class Prototype_11 extends Plugin {
             saveCommandDefinition.callback = async () => {
                 const file = this.app.workspace.getActiveFile();
                 await indexFile(file, this.app)
-                events.emit('update', file)
             };
         }
 
         // @ts-ignore
         let plugin = app.plugins.plugins[PLUGIN_NAME]
-        plugin.registerEvent(
-            this.app.metadataCache.on('changed', file => {
-                console.log('file modified')
-            })
-        )
+        // plugin.registerEvent(
+        //     this.app.metadataCache.on('changed', file => {
+        //         console.log('file modified')
+        //     })
+        // )
         plugin.registerEvent(
             this.app.vault.on('rename', async (file, oldPath) => {
                 if (!(file instanceof TFile)) return

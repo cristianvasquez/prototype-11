@@ -28,6 +28,7 @@ const phrases = [
   'vaccination dates :: [2022-01-07, next week]',
   '(number :: twenty two) (number :: 22)',
   'A :: B :: C :: D',
+  'is a :: [[Editor]], [[Jour]]'
 ]
 
 

@@ -18,9 +18,9 @@ onMounted(async () => {
 })
 
 async function update() {
+  console.log('updated dotTriples')
   dotTriples.value = rawDataToDotTriples(toRaw(props.note.getRawData()))
 }
-
 
 const dotTriples = ref([])
 const attributes = computed(() => dotTriples.value.filter((current) => current.subject == null))
@@ -30,6 +30,8 @@ const triples = computed(() => dotTriples.value.filter((current) => current.subj
 
 <template>
   <template v-if="attributes">
+
+    {{dotTriples}}
     <h3>Attributes</h3>
     <div class="metadata-attributes">
       <template v-for="tuple in attributes">

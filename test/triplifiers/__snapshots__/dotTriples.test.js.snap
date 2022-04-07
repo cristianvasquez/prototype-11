@@ -393,6 +393,29 @@ Array [
 ]
 `;
 
+exports[`[getDotTriples] "is a :: [[Editor]], [[Jour]]" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "value": Array [
+        Object {
+          "entities": Object {},
+          "value": "[Editor]]",
+        },
+        Object {
+          "entities": Object {},
+          "value": "[[Jour]",
+        },
+      ],
+    },
+    "predicate": Object {
+      "entities": Object {},
+      "value": "is a",
+    },
+  },
+]
+`;
+
 exports[`[getDotTriples] "properties :: and values are separated by double colons" 1`] = `
 Array [
   Object {
