@@ -19,193 +19,31 @@ Array [
 ]
 `;
 
-exports[`[getDotTriples] "(number :: twenty two) (number :: 22)" 1`] = `
+exports[`[getDotTriples] " something :: points at :: __THIS__" 1`] = `
 Array [
   Object {
     "object": Object {
-      "entities": Object {
-        "numbers": Array [
-          Object {
-            "cardinal": "22",
-            "normal": "twenty two",
-            "number": 22,
-            "ordinal": "22nd",
-            "prefix": "",
-            "suffix": "",
-            "terms": Array [
-              Object {
-                "post": " ",
-                "pre": "",
-                "tags": Array [
-                  "TextValue",
-                  "Value",
-                  "Cardinal",
-                ],
-                "text": "twenty",
-              },
-              Object {
-                "post": "",
-                "pre": "",
-                "tags": Array [
-                  "TextValue",
-                  "Value",
-                  "Cardinal",
-                ],
-                "text": "two",
-              },
-            ],
-            "text": "twenty two",
-            "textCardinal": "twenty two",
-            "textOrdinal": "twenty second",
-          },
-        ],
-      },
-      "value": "twenty two",
+      "entities": Object {},
+      "value": "__THIS__",
     },
     "predicate": Object {
       "entities": Object {},
-      "value": "number",
-    },
-  },
-  Object {
-    "object": Object {
-      "entities": Object {
-        "numbers": Array [
-          Object {
-            "cardinal": "22",
-            "normal": "22",
-            "number": 22,
-            "ordinal": "22nd",
-            "prefix": "",
-            "suffix": "",
-            "terms": Array [
-              Object {
-                "post": "",
-                "pre": "",
-                "tags": Array [
-                  "Cardinal",
-                  "Value",
-                  "NumericValue",
-                ],
-                "text": "22",
-              },
-            ],
-            "text": "22",
-            "textCardinal": "twenty two",
-            "textOrdinal": "twenty second",
-          },
-        ],
-      },
-      "value": "22",
-    },
-    "predicate": Object {
-      "entities": Object {},
-      "value": "number",
+      "value": "something :: points at",
     },
   },
 ]
 `;
 
-exports[`[getDotTriples] "[Maria, Bob] :: ([climbed,looked at] :: [the tree, the sun])" 1`] = `
-Array [
-  Object {
-    "object": Object {
-      "value": Array [
-        Object {
-          "entities": Object {},
-          "value": "the tree",
-        },
-        Object {
-          "entities": Object {},
-          "value": "the sun",
-        },
-      ],
-    },
-    "predicate": Object {
-      "value": Array [
-        Object {
-          "entities": Object {},
-          "value": "climbed",
-        },
-        Object {
-          "entities": Object {},
-          "value": "looked at",
-        },
-      ],
-    },
-    "subject": Object {
-      "value": Array [
-        Object {
-          "entities": Object {},
-          "value": "Maria",
-        },
-        Object {
-          "entities": Object {},
-          "value": "Bob",
-        },
-      ],
-    },
-  },
-]
-`;
-
-exports[`[getDotTriples] "[Maria, Bob] :: ([climbed,looked at] :: the tree)" 1`] = `
+exports[`[getDotTriples] "__THIS__ :: is a :: note" 1`] = `
 Array [
   Object {
     "object": Object {
       "entities": Object {},
-      "value": "the tree",
-    },
-    "predicate": Object {
-      "value": Array [
-        Object {
-          "entities": Object {},
-          "value": "climbed",
-        },
-        Object {
-          "entities": Object {},
-          "value": "looked at",
-        },
-      ],
-    },
-    "subject": Object {
-      "value": Array [
-        Object {
-          "entities": Object {},
-          "value": "Maria",
-        },
-        Object {
-          "entities": Object {},
-          "value": "Bob",
-        },
-      ],
-    },
-  },
-]
-`;
-
-exports[`[getDotTriples] "[Maria, Bob] :: (climbed :: the tree)" 1`] = `
-Array [
-  Object {
-    "object": Object {
-      "entities": Object {},
-      "value": "the tree",
+      "value": "note",
     },
     "predicate": Object {
       "entities": Object {},
-      "value": "climbed",
-    },
-    "subject": Object {
-      "value": Array [
-        Object {
-          "entities": Object {},
-          "value": "Maria",
-        },
-        Object {
-          "entities": Object {},
-          "value": "Bob",
-        },
-      ],
+      "value": "__THIS__ :: is a",
     },
   },
 ]
@@ -226,36 +64,7 @@ Array [
 ]
 `;
 
-exports[`[getDotTriples] "Bob :: (has :: drivers license), (can drive :: true)" 1`] = `
-Array [
-  Object {
-    "object": Object {
-      "entities": Object {},
-      "value": "drivers license",
-    },
-    "predicate": Object {
-      "entities": Object {},
-      "value": "has",
-    },
-    "subject": Object {
-      "entities": Object {},
-      "value": "Bob",
-    },
-  },
-  Object {
-    "object": Object {
-      "entities": Object {},
-      "value": "true",
-    },
-    "predicate": Object {
-      "entities": Object {},
-      "value": "can drive",
-    },
-  },
-]
-`;
-
-exports[`[getDotTriples] "Maria :: ( climbed :: the tree )" 1`] = `
+exports[`[getDotTriples] "Maria :: climbed :: the tree" 1`] = `
 Array [
   Object {
     "object": Object {
@@ -264,44 +73,7 @@ Array [
     },
     "predicate": Object {
       "entities": Object {},
-      "value": "climbed",
-    },
-    "subject": Object {
-      "entities": Object {},
-      "value": "Maria",
-    },
-  },
-]
-`;
-
-exports[`[getDotTriples] "That night,  (Bob :: (ate :: all the pancakes)), and (we :: (are still :: surprised))" 1`] = `
-Array [
-  Object {
-    "object": Object {
-      "entities": Object {},
-      "value": "all the pancakes",
-    },
-    "predicate": Object {
-      "entities": Object {},
-      "value": "ate",
-    },
-    "subject": Object {
-      "entities": Object {},
-      "value": "Bob",
-    },
-  },
-  Object {
-    "object": Object {
-      "entities": Object {},
-      "value": "surprised",
-    },
-    "predicate": Object {
-      "entities": Object {},
-      "value": "are still",
-    },
-    "subject": Object {
-      "entities": Object {},
-      "value": "we",
+      "value": "Maria :: climbed",
     },
   },
 ]
@@ -374,6 +146,21 @@ Array [
 ]
 `;
 
+exports[`[getDotTriples] "external link :: http://example.org" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "entities": Object {},
+      "value": "http://example.org",
+    },
+    "predicate": Object {
+      "entities": Object {},
+      "value": "external link",
+    },
+  },
+]
+`;
+
 exports[`[getDotTriples] "internal link :: [[link]]" 1`] = `
 Array [
   Object {
@@ -431,85 +218,38 @@ Array [
 ]
 `;
 
-exports[`[getDotTriples] "properties and values can be (embedded :: using parenthesis)" 1`] = `
+exports[`[getDotTriples] "subject :: 'Quotes escape :: characters' :: object" 1`] = `
 Array [
   Object {
     "object": Object {
       "entities": Object {},
-      "value": "using parenthesis",
+      "value": "object",
     },
     "predicate": Object {
       "entities": Object {},
-      "value": "embedded",
+      "value": "subject :: 'Quotes escape :: characters'",
     },
   },
 ]
 `;
 
-exports[`[getDotTriples] "suddenly, (Maria :: (climbed :: the tree))," 1`] = `
+exports[`[getDotTriples] "vaccination dates :: 2022-01-07, next week" 1`] = `
 Array [
   Object {
     "object": Object {
-      "entities": Object {},
-      "value": "the tree",
-    },
-    "predicate": Object {
-      "entities": Object {},
-      "value": "climbed",
-    },
-    "subject": Object {
-      "entities": Object {},
-      "value": "Maria",
-    },
-  },
-]
-`;
-
-exports[`[getDotTriples] "vaccination dates :: [2022-01-07, next week]" 1`] = `
-Array [
-  Object {
-    "object": Object {
-      "value": Array [
-        Object {
-          "entities": Object {
-            "dates": Array [
-              Object {
-                "duration": Object {
-                  "days": 1,
-                  "hours": 24,
-                  "minutes": 1440,
-                },
-                "end": "2022-01-07T23:59:59.999+01:00",
-                "start": "2022-01-07T00:00:00.000+01:00",
-                "text": "2022-01-07",
-                "tz": "Europe/Brussels",
-                "unit": "day",
-              },
-            ],
+      "entities": Object {
+        "dates": Array [
+          Object {
+            "duration": Object {},
+            "end": null,
+            "start": null,
+            "text": "2022-01-07, next week",
+            "tz": "Europe/Brussels",
+            "unit": "time",
           },
-          "value": "2022-01-07",
-        },
-        Object {
-          "entities": Object {
-            "dates": Array [
-              Object {
-                "duration": Object {
-                  "days": 7,
-                  "hours": 168,
-                  "minutes": 10080,
-                  "weeks": 1,
-                },
-                "end": "2022-04-17T23:59:59.999+02:00",
-                "start": "2022-04-11T00:00:00.000+02:00",
-                "text": "next week",
-                "tz": "Europe/Brussels",
-                "unit": "week",
-              },
-            ],
-          },
-          "value": "next week",
-        },
-      ],
+        ],
+      },
+      "value": "2022-01-07, next week",
     },
     "predicate": Object {
       "entities": Object {},
