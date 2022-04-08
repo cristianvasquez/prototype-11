@@ -17,7 +17,7 @@ import Client from "sparql-http-client/ParsingClient";
 import Triplestore from "./lib/Triplestore";
 import SparqlView from "./UI/SparqlView.vue";
 import {getTemplate} from "./triplifiers/utils";
-import config from "./config";
+import {config, uriResolvers} from "./config";
 import {ns} from './namespaces'
 import {EventEmitter} from "./lib/EventEmitter.js";
 import {Prototype11} from "./lib/Prototype11";
@@ -86,7 +86,7 @@ export default class Prototype_11 extends Plugin {
         const triplestore = new Triplestore(client)
 
 
-        async function indexFile(file: TFile, app:App) {
+        async function indexFile(file: TFile, app: App) {
             console.log('Indexing', file.path)
             const rawData = await new Prototype11(app, file).getRawData()
             const note = new Note(rawData)
@@ -96,7 +96,7 @@ export default class Prototype_11 extends Plugin {
         }
 
         async function deleteIndex(path: String) {
-            const uri = config.pathToUri(path)
+            const uri = config.encodeURI(path)
             await triplestore.deleteDataset(uri)
         }
 
@@ -157,11 +157,11 @@ export default class Prototype_11 extends Plugin {
                 triplestore: triplestore,
                 events: events,
                 config: config,
-                ns: ns
+                ns: ns,
+                uriResolvers: uriResolvers(app)
             }
 
         const debugApp = createApp(DebugView)
-        debugApp.provide('register', this.registerEvent)
         debugApp.provide('context', appContext)
         this.vueApp = debugApp
 
@@ -173,7 +173,7 @@ export default class Prototype_11 extends Plugin {
             return (source: string, el: HTMLElement, ctx: MarkdownPostProcessorContext) => {
                 const sparqlApp = createApp(SparqlView)
                 sparqlApp.provide('context', appContext)
-                sparqlApp.provide('text', config.replaceNotesToURIs(source, app))
+                sparqlApp.provide('text', config.replaceSPARQL(source, appContext.uriResolvers))
                 sparqlApp.mount(el)
             }
         }

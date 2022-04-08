@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import MetadataValues from './helpers/MetadataValues.vue'
-import {computed, inject, onMounted, PropType, ref, toRaw, watchEffect} from 'vue'
+import {inject, onMounted, PropType, ref, toRaw, watchEffect} from 'vue'
 import {AppContext} from "../../types";
 import {Note, rawDataToDotTriples} from "../../lib/Note";
+import {withEntities} from "../../triplifiers/dotTriples.js";
+import MetadataValue from "./helpers/MetadataValue.vue"
 
 const context: AppContext = inject('context')
 
@@ -19,38 +20,33 @@ onMounted(async () => {
 
 async function update() {
   console.log('updated dotTriples')
-  dotTriples.value = rawDataToDotTriples(toRaw(props.note.getRawData()))
+
+  const spo = rawDataToDotTriples(toRaw(props.note.getRawData()))
+  console.log(context.uriResolvers)
+  dotTriples.value = spo.map((triple) => withEntities(triple, context.uriResolvers))
 }
 
 const dotTriples = ref([])
-const attributes = computed(() => dotTriples.value.filter((current) => current.subject == null))
-const triples = computed(() => dotTriples.value.filter((current) => current.subject != null))
+// const attributes = computed(() => dotTriples.value.filter((current) => current.subject == null))
+// const triples = computed(() => dotTriples.value.filter((current) => current.subject != null))
 
 </script>
 
 <template>
-  <template v-if="attributes">
 
-    {{dotTriples}}
-    <h3>Attributes</h3>
-    <div class="metadata-attributes">
-      <template v-for="tuple in attributes">
-        <metadata-values :value="tuple.predicate"/>
-        <metadata-values :value="tuple.object"/>
-      </template>
-    </div>
-  </template>
+  {{ dotTriples }}
 
-  <template v-if="triples">
-    <h3>Triples</h3>
-    <div class="metadata-fields">
-      <template v-for="tuple in triples">
-        <metadata-values :value="tuple.subject"/>
-        <metadata-values :value="tuple.predicate"/>
-        <metadata-values :value="tuple.object"/>
-      </template>
-    </div>
-  </template>
+
+<!--    <template v-if="dotTriples">-->
+<!--      <h3>Triples</h3>-->
+<!--      <div class="metadata-fields">-->
+<!--        <template v-for="triple in dotTriples">-->
+<!--          <metadata-value :value="triple.subject"/>-->
+<!--          <metadata-value :value="triple.predicate"/>-->
+<!--          <metadata-value :value="triple.object"/>-->
+<!--        </template>-->
+<!--      </div>-->
+<!--    </template>-->
 
   <!--  <h3 v-if="metadata.links && metadata.links.length">Links</h3>-->
   <!--  <template v-for="(value) in metadata.links">-->

@@ -1,5 +1,5 @@
 <script setup>
-import MetadataValue from '../MetadataValue.vue'
+import MetadataValue from './MetadataValue.vue'
 import {toRaw} from 'vue'
 
 /**

@@ -1,7 +1,7 @@
 <script setup>
-import InternalLink from './helpers/InternalLink.vue'
+import InternalLink from './InternalLink.vue'
 import { toRaw } from 'vue'
-import { getSpans } from './renderingUtils'
+import { getSpans } from '../renderingUtils'
 
 const props = defineProps({
   value: {

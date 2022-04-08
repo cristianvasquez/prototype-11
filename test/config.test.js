@@ -1,4 +1,4 @@
-import config from '../src/config.js'
+import { config, uriResolvers } from '../src/config.js'
 
 import expect from 'expect'
 import toMatchSnapshot from 'expect-mocha-snapshot'
@@ -7,9 +7,9 @@ expect.extend({ toMatchSnapshot })
 
 describe('[uri]', function () {
 
-  describe('[pathToUri]', function () {
+  describe('[encodeURI]', function () {
     it(`"values"`, function () {
-      const actual = config.pathToUri('/hola/mundo')
+      const actual = config.encodeURI('/hola/mundo')
       expect(actual).toMatchSnapshot(this)
     })
   })
@@ -24,7 +24,7 @@ describe('[uri]', function () {
   describe('[round]', function () {
     it(`"path-uri-path"`, function () {
 
-      const uri = config.pathToUri('/hola/mundo')
+      const uri = config.encodeURI('/hola/mundo')
       const path = config.uriToPath(uri)
 
       expect(path).toBe('/hola/mundo')
@@ -33,16 +33,24 @@ describe('[uri]', function () {
     it(`"uri-path-uri"`, function () {
 
       const path = config.uriToPath('http://notes/L2hvbGEvbXVuZG8=')
-      const uri = config.pathToUri(path)
+      const uri = config.encodeURI(path)
       expect(uri.value).toBe('http://notes/L2hvbGEvbXVuZG8=')
     })
 
     it(`"emoji"`, function () {
 
-      const uri = config.pathToUri('/hola/🍎')
+      const uri = config.encodeURI('/hola/🍎')
       const path = config.uriToPath(uri)
       expect(path).toBe('/hola/🍎')
     })
+
+    it(`"undefined"`, function () {
+
+      const uri = config.encodeURI(undefined)
+      const path = config.uriToPath(uri)
+      expect(path).toBe("undefined")
+    })
+
   })
 
   describe('[sparql preprocessor]', function () {
@@ -55,7 +63,34 @@ describe('[uri]', function () {
             }
         } LIMIT 10`
 
-      const actual = config.sparqlPreprocessor(query)
+      const uriResolvers = {
+        resolvePathByNoteName: (str) => 'PATH_RESOLVED',
+        getCurrentURI: () => {
+          return config.encodeURI('/hola/')
+        }
+      }
+
+      const actual = config.replaceSPARQL(query,uriResolvers)
+      expect(actual).toMatchSnapshot(this)
+    })
+
+    it(`"__THIS__ preprocessing"`, function () {
+
+      const query = `SELECT ?g ?p ?o
+        WHERE {
+            GRAPH ?g {
+               __THIS__ ?p ?o .
+            }
+        } LIMIT 10`
+
+      const uriResolvers = {
+        resolvePathByNoteName: (str) => 'PATH_RESOLVED',
+        getCurrentURI: () => {
+          return config.encodeURI('/hola/')
+        }
+      }
+
+      const actual = config.replaceSPARQL(query,uriResolvers)
       expect(actual).toMatchSnapshot(this)
     })
 

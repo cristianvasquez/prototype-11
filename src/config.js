@@ -1,8 +1,9 @@
 import { ns } from './namespaces.js'
 import { replaceInternalLinks } from './triplifiers/miniNLP.js'
+import { THIS } from './consts.js'
 
 // returns: NamedNode
-function pathToUri (path) {
+function encodeURI (path) {
   return ns.this[btoa(unescape(encodeURIComponent(path)))]
 }
 
@@ -13,27 +14,43 @@ function uriToPath (uri) {
   return decodeURIComponent(escape(atob(coding)))
 }
 
-function getCache (note, app) {
-  const activePath = app.workspace.getActiveFile().path
-  const noteMD = `${note}.md`
-  return app.metadataCache.getFirstLinkpathDest(noteMD, activePath)
+function uriResolvers (app) {
+
+  function getObsidianCache (note, app) {
+    const activePath = app.workspace.getActiveFile().path
+    const noteMD = `${note}.md`
+    return app.metadataCache.getFirstLinkpathDest(noteMD, activePath)
+  }
+
+  return {
+    resolvePathByNoteName: (str) => {
+      const cache = getObsidianCache(str, app)
+      return cache?.path
+    },
+    resolveURIByNoteName: (str) => {
+      const cache = getObsidianCache(str, app)
+      return encodeURI(cache?.path)
+
+    },
+    getCurrentURI: () => {
+      return encodeURI(app.workspace.getActiveFile().path)
+    }
+  }
+
 }
 
-function getCurrentURI (app) {
-  const uri =  pathToUri(app.workspace.getActiveFile().path)
-  return `<${uri}>`
-}
+function replaceSPARQL (sparql, uriResolvers) {
 
-function replaceNotesToURIs (sparql, app) {
+  if (sparql.includes(THIS)) {
+    sparql = sparql.replaceAll(THIS, `<${uriResolvers.getCurrentURI()}>`)
+  }
 
-  sparql = sparql.replaceAll('__THIS__', getCurrentURI(app))
+  const replacer = (str) => {
+    const path = uriResolvers.resolvePathByNoteName(str)
+    return path ? `<${encodeURI(path)}>` : `[${str} NOT_FOUND]`
+  }
 
-  return replaceInternalLinks(sparql, (str) => {
-    const cache = getCache(str, app)
-    const uri = cache?.path ? pathToUri(cache?.path) : `${str} NOT_FOUND`
-
-    return `<${uri}>`
-  })
+  return replaceInternalLinks(sparql, replacer)
 }
 
 function selectToTable (sparqlSelectResult) {
@@ -67,11 +84,11 @@ function datasetToTable (dataset) {
 }
 
 const config = {
-  pathToUri,
+  encodeURI,
   uriToPath,
   selectToTable,
   datasetToTable,
-  replaceNotesToURIs
+  replaceSPARQL
 }
 
-export default config
+export { config, uriResolvers }

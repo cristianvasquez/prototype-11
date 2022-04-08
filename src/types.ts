@@ -4,17 +4,18 @@ import {App, CachedMetadata, FileStats, LinkCache} from "obsidian";
 import {EventEmitter} from "./lib/EventEmitter";
 
 type AppContext = {
-    triplestore:any,
-    config:SparqlConfig,
-    app:App,
-    events:EventEmitter
+    triplestore: any,
+    config: SparqlConfig,
+    app: App,
+    events: EventEmitter,
+    uriResolvers: any
 }
 
 type SparqlConfig = {
-    pathToUri:any,
-    uriToPath:any,
-    selectToTable:any,
-    datasetToTable:any,
+    pathToUri: any,
+    uriToPath: any,
+    selectToTable: any,
+    datasetToTable: any,
 }
 
 type ObsidianRawData = {

@@ -1,16 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`[uri] [pathToUri] "values" 1`] = `
+exports[`[uri] [encodeURI] "values" 1`] = `
 NamedNode {
   "value": "http://notes/L2hvbGEvbXVuZG8=",
 }
+`;
+
+exports[`[uri] [sparql preprocessor] "__THIS__ preprocessing" 1`] = `
+"SELECT ?g ?p ?o
+        WHERE {
+            GRAPH ?g {
+               <http://notes/L2hvbGEv> ?p ?o .
+            }
+        } LIMIT 10"
 `;
 
 exports[`[uri] [sparql preprocessor] "basic preprocessing" 1`] = `
 "SELECT ?g ?p ?o
         WHERE {
             GRAPH ?g {
-               <http://notes/L2hvbGEvbXVuZG8=> ?p ?o .
+               <http://notes/UEFUSF9SRVNPTFZFRA==> ?p ?o .
             }
         } LIMIT 10"
 `;

@@ -38,26 +38,27 @@ function replaceInternalLinks (text, replacer) {
   return result
 }
 
-function getNLPstuff (text) {
-  const doc = nlp(text)
-  const dates = doc.dates().json()
+// This thing is expensive!
+// function getNLPstuff (text) {
+//   const doc = nlp(text)
+//   const dates = doc.dates().json()
+//
+//   let result = {}
+//   if (dates.length) {
+//     result.dates = dates
+//   }
+//
+//   // @ts-ignore
+//   const numbers = doc.numbers().json()
+//   if (numbers.length) {
+//     result.numbers = numbers
+//   }
+//
+//   const internalLinks = getInternalLinks(text)
+//   if (internalLinks.length) {
+//     result.internalLinks = internalLinks
+//   }
+//   return result
+// }
 
-  let result = {}
-  if (dates.length) {
-    result.dates = dates
-  }
-
-  // @ts-ignore
-  const numbers = doc.numbers().json()
-  if (numbers.length) {
-    result.numbers = numbers
-  }
-
-  const internalLinks = getInternalLinks(text)
-  if (internalLinks.length) {
-    result.internalLinks = internalLinks
-  }
-  return result
-}
-
-export { getNLPstuff, getInternalLinks, replaceInternalLinks, matchFirst }
+export {  getInternalLinks, replaceInternalLinks, matchFirst }

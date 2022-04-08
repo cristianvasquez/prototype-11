@@ -1,5 +1,667 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`[getDotTriples withEntities not found] "
+  to simplify things, this
+  mini-syntax :: spans
+  only one line
+  " 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "raw": "spans",
+    },
+    "predicate": Object {
+      "raw": "mini-syntax",
+    },
+    "raw": "  mini-syntax :: spans",
+    "subject": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": "CURRENT_URI",
+        },
+      ],
+      "raw": "__THIS__",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities not found] " something :: points at :: [[Note]]" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": undefined,
+        },
+      ],
+      "raw": "[[Note]]",
+    },
+    "predicate": Object {
+      "raw": "points at",
+    },
+    "raw": " something :: points at :: [[Note]]",
+    "subject": Object {
+      "raw": "something",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities not found] " something :: points at :: __THIS__" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": "CURRENT_URI",
+        },
+      ],
+      "raw": "__THIS__",
+    },
+    "predicate": Object {
+      "raw": "points at",
+    },
+    "raw": " something :: points at :: __THIS__",
+    "subject": Object {
+      "raw": "something",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities not found] "[[Note]] :: is a :: note" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "raw": "note",
+    },
+    "predicate": Object {
+      "raw": "is a",
+    },
+    "raw": "[[Note]] :: is a :: note",
+    "subject": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": undefined,
+        },
+      ],
+      "raw": "[[Note]]",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities not found] "__THIS__ :: is a :: note" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "raw": "note",
+    },
+    "predicate": Object {
+      "raw": "is a",
+    },
+    "raw": "__THIS__ :: is a :: note",
+    "subject": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": "CURRENT_URI",
+        },
+      ],
+      "raw": "__THIS__",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities not found] "A :: B :: C :: D" 1`] = `
+Array [
+  Object {
+    "exception": "ambiguous",
+    "raw": "A :: B :: C :: D",
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities not found] "Maria :: climbed :: the tree" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "raw": "the tree",
+    },
+    "predicate": Object {
+      "raw": "climbed",
+    },
+    "raw": "Maria :: climbed :: the tree",
+    "subject": Object {
+      "raw": "Maria",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities not found] "date :: 2022-01-07 15:07" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "raw": "2022-01-07 15:07",
+    },
+    "predicate": Object {
+      "raw": "date",
+    },
+    "raw": "date :: 2022-01-07 15:07",
+    "subject": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": "CURRENT_URI",
+        },
+      ],
+      "raw": "__THIS__",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities not found] "external link :: <http://example.org>" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "raw": "<http://example.org>",
+    },
+    "predicate": Object {
+      "raw": "external link",
+    },
+    "raw": "external link :: <http://example.org>",
+    "subject": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": "CURRENT_URI",
+        },
+      ],
+      "raw": "__THIS__",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities not found] "external link :: http://example.org" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "raw": "http://example.org",
+    },
+    "predicate": Object {
+      "raw": "external link",
+    },
+    "raw": "external link :: http://example.org",
+    "subject": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": "CURRENT_URI",
+        },
+      ],
+      "raw": "__THIS__",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities not found] "internal link :: [[link]]" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": undefined,
+        },
+      ],
+      "raw": "[[link]]",
+    },
+    "predicate": Object {
+      "raw": "internal link",
+    },
+    "raw": "internal link :: [[link]]",
+    "subject": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": "CURRENT_URI",
+        },
+      ],
+      "raw": "__THIS__",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities not found] "is a :: [[Editor]], [[Jour]]" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": undefined,
+        },
+        Object {
+          "type": "uri",
+          "value": undefined,
+        },
+      ],
+      "raw": "[[Editor]], [[Jour]]",
+    },
+    "predicate": Object {
+      "raw": "is a",
+    },
+    "raw": "is a :: [[Editor]], [[Jour]]",
+    "subject": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": "CURRENT_URI",
+        },
+      ],
+      "raw": "__THIS__",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities not found] "properties :: and values are separated by double colons" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "raw": "and values are separated by double colons",
+    },
+    "predicate": Object {
+      "raw": "properties",
+    },
+    "raw": "properties :: and values are separated by double colons",
+    "subject": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": "CURRENT_URI",
+        },
+      ],
+      "raw": "__THIS__",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities not found] "subject :: 'Quotes escape :: characters' :: object" 1`] = `
+Array [
+  Object {
+    "exception": "ambiguous",
+    "raw": "subject :: 'Quotes escape :: characters' :: object",
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities not found] "vaccination dates :: 2022-01-07, next week" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "raw": "2022-01-07, next week",
+    },
+    "predicate": Object {
+      "raw": "vaccination dates",
+    },
+    "raw": "vaccination dates :: 2022-01-07, next week",
+    "subject": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": "CURRENT_URI",
+        },
+      ],
+      "raw": "__THIS__",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities] "
+  to simplify things, this
+  mini-syntax :: spans
+  only one line
+  " 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "raw": "spans",
+    },
+    "predicate": Object {
+      "raw": "mini-syntax",
+    },
+    "raw": "  mini-syntax :: spans",
+    "subject": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": "CURRENT_URI",
+        },
+      ],
+      "raw": "__THIS__",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities] " something :: points at :: [[Note]]" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": "Note_URI",
+        },
+      ],
+      "raw": "[[Note]]",
+    },
+    "predicate": Object {
+      "raw": "points at",
+    },
+    "raw": " something :: points at :: [[Note]]",
+    "subject": Object {
+      "raw": "something",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities] " something :: points at :: __THIS__" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": "CURRENT_URI",
+        },
+      ],
+      "raw": "__THIS__",
+    },
+    "predicate": Object {
+      "raw": "points at",
+    },
+    "raw": " something :: points at :: __THIS__",
+    "subject": Object {
+      "raw": "something",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities] "[[Note]] :: is a :: note" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "raw": "note",
+    },
+    "predicate": Object {
+      "raw": "is a",
+    },
+    "raw": "[[Note]] :: is a :: note",
+    "subject": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": "Note_URI",
+        },
+      ],
+      "raw": "[[Note]]",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities] "__THIS__ :: is a :: note" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "raw": "note",
+    },
+    "predicate": Object {
+      "raw": "is a",
+    },
+    "raw": "__THIS__ :: is a :: note",
+    "subject": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": "CURRENT_URI",
+        },
+      ],
+      "raw": "__THIS__",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities] "A :: B :: C :: D" 1`] = `
+Array [
+  Object {
+    "exception": "ambiguous",
+    "raw": "A :: B :: C :: D",
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities] "Maria :: climbed :: the tree" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "raw": "the tree",
+    },
+    "predicate": Object {
+      "raw": "climbed",
+    },
+    "raw": "Maria :: climbed :: the tree",
+    "subject": Object {
+      "raw": "Maria",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities] "date :: 2022-01-07 15:07" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "raw": "2022-01-07 15:07",
+    },
+    "predicate": Object {
+      "raw": "date",
+    },
+    "raw": "date :: 2022-01-07 15:07",
+    "subject": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": "CURRENT_URI",
+        },
+      ],
+      "raw": "__THIS__",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities] "external link :: <http://example.org>" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "raw": "<http://example.org>",
+    },
+    "predicate": Object {
+      "raw": "external link",
+    },
+    "raw": "external link :: <http://example.org>",
+    "subject": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": "CURRENT_URI",
+        },
+      ],
+      "raw": "__THIS__",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities] "external link :: http://example.org" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "raw": "http://example.org",
+    },
+    "predicate": Object {
+      "raw": "external link",
+    },
+    "raw": "external link :: http://example.org",
+    "subject": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": "CURRENT_URI",
+        },
+      ],
+      "raw": "__THIS__",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities] "internal link :: [[link]]" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": "link_URI",
+        },
+      ],
+      "raw": "[[link]]",
+    },
+    "predicate": Object {
+      "raw": "internal link",
+    },
+    "raw": "internal link :: [[link]]",
+    "subject": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": "CURRENT_URI",
+        },
+      ],
+      "raw": "__THIS__",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities] "is a :: [[Editor]], [[Jour]]" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": "Editor_URI",
+        },
+        Object {
+          "type": "uri",
+          "value": "Jour_URI",
+        },
+      ],
+      "raw": "[[Editor]], [[Jour]]",
+    },
+    "predicate": Object {
+      "raw": "is a",
+    },
+    "raw": "is a :: [[Editor]], [[Jour]]",
+    "subject": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": "CURRENT_URI",
+        },
+      ],
+      "raw": "__THIS__",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities] "properties :: and values are separated by double colons" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "raw": "and values are separated by double colons",
+    },
+    "predicate": Object {
+      "raw": "properties",
+    },
+    "raw": "properties :: and values are separated by double colons",
+    "subject": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": "CURRENT_URI",
+        },
+      ],
+      "raw": "__THIS__",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities] "subject :: 'Quotes escape :: characters' :: object" 1`] = `
+Array [
+  Object {
+    "exception": "ambiguous",
+    "raw": "subject :: 'Quotes escape :: characters' :: object",
+  },
+]
+`;
+
+exports[`[getDotTriples withEntities] "vaccination dates :: 2022-01-07, next week" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "raw": "2022-01-07, next week",
+    },
+    "predicate": Object {
+      "raw": "vaccination dates",
+    },
+    "raw": "vaccination dates :: 2022-01-07, next week",
+    "subject": Object {
+      "entities": Array [
+        Object {
+          "type": "uri",
+          "value": "CURRENT_URI",
+        },
+      ],
+      "raw": "__THIS__",
+    },
+  },
+]
+`;
+
 exports[`[getDotTriples] "
   to simplify things, this
   mini-syntax :: spans
@@ -8,12 +670,31 @@ exports[`[getDotTriples] "
 Array [
   Object {
     "object": Object {
-      "entities": Object {},
-      "value": "spans",
+      "raw": " spans",
     },
     "predicate": Object {
-      "entities": Object {},
-      "value": "mini-syntax",
+      "raw": "  mini-syntax ",
+    },
+    "raw": "  mini-syntax :: spans",
+    "subject": Object {
+      "raw": "__THIS__",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples] " something :: points at :: [[Note]]" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "raw": " [[Note]]",
+    },
+    "predicate": Object {
+      "raw": " points at ",
+    },
+    "raw": " something :: points at :: [[Note]]",
+    "subject": Object {
+      "raw": " something ",
     },
   },
 ]
@@ -23,12 +704,31 @@ exports[`[getDotTriples] " something :: points at :: __THIS__" 1`] = `
 Array [
   Object {
     "object": Object {
-      "entities": Object {},
-      "value": "__THIS__",
+      "raw": " __THIS__",
     },
     "predicate": Object {
-      "entities": Object {},
-      "value": "something :: points at",
+      "raw": " points at ",
+    },
+    "raw": " something :: points at :: __THIS__",
+    "subject": Object {
+      "raw": " something ",
+    },
+  },
+]
+`;
+
+exports[`[getDotTriples] "[[Note]] :: is a :: note" 1`] = `
+Array [
+  Object {
+    "object": Object {
+      "raw": " note",
+    },
+    "predicate": Object {
+      "raw": " is a ",
+    },
+    "raw": "[[Note]] :: is a :: note",
+    "subject": Object {
+      "raw": "[[Note]] ",
     },
   },
 ]
@@ -38,12 +738,14 @@ exports[`[getDotTriples] "__THIS__ :: is a :: note" 1`] = `
 Array [
   Object {
     "object": Object {
-      "entities": Object {},
-      "value": "note",
+      "raw": " note",
     },
     "predicate": Object {
-      "entities": Object {},
-      "value": "__THIS__ :: is a",
+      "raw": " is a ",
+    },
+    "raw": "__THIS__ :: is a :: note",
+    "subject": Object {
+      "raw": "__THIS__ ",
     },
   },
 ]
@@ -52,14 +754,8 @@ Array [
 exports[`[getDotTriples] "A :: B :: C :: D" 1`] = `
 Array [
   Object {
-    "object": Object {
-      "entities": Object {},
-      "value": "D",
-    },
-    "predicate": Object {
-      "entities": Object {},
-      "value": "A :: B :: C",
-    },
+    "exception": "ambiguous",
+    "raw": "A :: B :: C :: D",
   },
 ]
 `;
@@ -68,35 +764,14 @@ exports[`[getDotTriples] "Maria :: climbed :: the tree" 1`] = `
 Array [
   Object {
     "object": Object {
-      "entities": Object {},
-      "value": "the tree",
+      "raw": " the tree",
     },
     "predicate": Object {
-      "entities": Object {},
-      "value": "Maria :: climbed",
+      "raw": " climbed ",
     },
-  },
-]
-`;
-
-exports[`[getDotTriples] "arrays :: [banana, apple]" 1`] = `
-Array [
-  Object {
-    "object": Object {
-      "value": Array [
-        Object {
-          "entities": Object {},
-          "value": "banana",
-        },
-        Object {
-          "entities": Object {},
-          "value": "apple",
-        },
-      ],
-    },
-    "predicate": Object {
-      "entities": Object {},
-      "value": "arrays",
+    "raw": "Maria :: climbed :: the tree",
+    "subject": Object {
+      "raw": "Maria ",
     },
   },
 ]
@@ -106,26 +781,14 @@ exports[`[getDotTriples] "date :: 2022-01-07 15:07" 1`] = `
 Array [
   Object {
     "object": Object {
-      "entities": Object {
-        "dates": Array [
-          Object {
-            "duration": Object {
-              "hours": 8,
-              "minutes": 533,
-            },
-            "end": "2022-01-07T23:59:59.999+01:00",
-            "start": "2022-01-07T15:07:00.000+01:00",
-            "text": "2022-01-07 15:07",
-            "tz": "Europe/Brussels",
-            "unit": "time",
-          },
-        ],
-      },
-      "value": "2022-01-07 15:07",
+      "raw": " 2022-01-07 15:07",
     },
     "predicate": Object {
-      "entities": Object {},
-      "value": "date",
+      "raw": "date ",
+    },
+    "raw": "date :: 2022-01-07 15:07",
+    "subject": Object {
+      "raw": "__THIS__",
     },
   },
 ]
@@ -135,12 +798,14 @@ exports[`[getDotTriples] "external link :: <http://example.org>" 1`] = `
 Array [
   Object {
     "object": Object {
-      "entities": Object {},
-      "value": "<http://example.org>",
+      "raw": " <http://example.org>",
     },
     "predicate": Object {
-      "entities": Object {},
-      "value": "external link",
+      "raw": "external link ",
+    },
+    "raw": "external link :: <http://example.org>",
+    "subject": Object {
+      "raw": "__THIS__",
     },
   },
 ]
@@ -150,12 +815,14 @@ exports[`[getDotTriples] "external link :: http://example.org" 1`] = `
 Array [
   Object {
     "object": Object {
-      "entities": Object {},
-      "value": "http://example.org",
+      "raw": " http://example.org",
     },
     "predicate": Object {
-      "entities": Object {},
-      "value": "external link",
+      "raw": "external link ",
+    },
+    "raw": "external link :: http://example.org",
+    "subject": Object {
+      "raw": "__THIS__",
     },
   },
 ]
@@ -165,16 +832,14 @@ exports[`[getDotTriples] "internal link :: [[link]]" 1`] = `
 Array [
   Object {
     "object": Object {
-      "entities": Object {
-        "internalLinks": Array [
-          "link",
-        ],
-      },
-      "value": "[[link]]",
+      "raw": " [[link]]",
     },
     "predicate": Object {
-      "entities": Object {},
-      "value": "internal link",
+      "raw": "internal link ",
+    },
+    "raw": "internal link :: [[link]]",
+    "subject": Object {
+      "raw": "__THIS__",
     },
   },
 ]
@@ -184,20 +849,14 @@ exports[`[getDotTriples] "is a :: [[Editor]], [[Jour]]" 1`] = `
 Array [
   Object {
     "object": Object {
-      "value": Array [
-        Object {
-          "entities": Object {},
-          "value": "[Editor]]",
-        },
-        Object {
-          "entities": Object {},
-          "value": "[[Jour]",
-        },
-      ],
+      "raw": " [[Editor]], [[Jour]]",
     },
     "predicate": Object {
-      "entities": Object {},
-      "value": "is a",
+      "raw": "is a ",
+    },
+    "raw": "is a :: [[Editor]], [[Jour]]",
+    "subject": Object {
+      "raw": "__THIS__",
     },
   },
 ]
@@ -207,12 +866,14 @@ exports[`[getDotTriples] "properties :: and values are separated by double colon
 Array [
   Object {
     "object": Object {
-      "entities": Object {},
-      "value": "and values are separated by double colons",
+      "raw": " and values are separated by double colons",
     },
     "predicate": Object {
-      "entities": Object {},
-      "value": "properties",
+      "raw": "properties ",
+    },
+    "raw": "properties :: and values are separated by double colons",
+    "subject": Object {
+      "raw": "__THIS__",
     },
   },
 ]
@@ -221,14 +882,8 @@ Array [
 exports[`[getDotTriples] "subject :: 'Quotes escape :: characters' :: object" 1`] = `
 Array [
   Object {
-    "object": Object {
-      "entities": Object {},
-      "value": "object",
-    },
-    "predicate": Object {
-      "entities": Object {},
-      "value": "subject :: 'Quotes escape :: characters'",
-    },
+    "exception": "ambiguous",
+    "raw": "subject :: 'Quotes escape :: characters' :: object",
   },
 ]
 `;
@@ -237,23 +892,14 @@ exports[`[getDotTriples] "vaccination dates :: 2022-01-07, next week" 1`] = `
 Array [
   Object {
     "object": Object {
-      "entities": Object {
-        "dates": Array [
-          Object {
-            "duration": Object {},
-            "end": null,
-            "start": null,
-            "text": "2022-01-07, next week",
-            "tz": "Europe/Brussels",
-            "unit": "time",
-          },
-        ],
-      },
-      "value": "2022-01-07, next week",
+      "raw": " 2022-01-07, next week",
     },
     "predicate": Object {
-      "entities": Object {},
-      "value": "vaccination dates",
+      "raw": "vaccination dates ",
+    },
+    "raw": "vaccination dates :: 2022-01-07, next week",
+    "subject": Object {
+      "raw": "__THIS__",
     },
   },
 ]
