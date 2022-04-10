@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import {createApp, inject, onMounted, PropType, ref, toRaw, watchEffect} from 'vue'
+import {createApp, inject, onMounted, ref, toRaw, watchEffect} from 'vue'
 import {ModalWrapper} from './helpers/ModalWrapper'
 import {AppContext, Dataset} from "../../types";
-import {Note} from "../../lib/Note";
 import Quads from "./Quads.vue";
 
 const context: AppContext = inject('context')
@@ -10,22 +9,21 @@ const currentDataset = ref()
 const connectionStatus = ref()
 
 const props = defineProps({
-  note: {
-    type: Object as PropType<Note>,
+  noteUri: {
     required: true
   }
 })
 
 onMounted(async () => {
-  watchEffect(async () => extract());
+  watchEffect(async () => update());
 })
 
-async function extract() {
+async function update() {
   await fetchCurrentDataset()
 }
 
 async function fetchCurrentDataset() {
-  const noteUri = toRaw(props.note.noteUri)
+  const noteUri = toRaw(props.noteUri)
   try {
     currentDataset.value = await context.triplestore.getDataset(noteUri)
     connectionStatus.value = null
@@ -42,8 +40,8 @@ async function popupRDF(dataset: Dataset) {
 }
 
 async function indexRDF(dataset: Dataset) {
-  await context.triplestore.deleteDataset(props.note.noteUri)
-  await context.triplestore.insertDataset(props.note.noteUri, dataset)
+  await context.triplestore.deleteDataset(props.noteUri)
+  await context.triplestore.insertDataset(props.noteUri, dataset)
   await fetchCurrentDataset()
 }
 

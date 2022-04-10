@@ -1,52 +1,39 @@
 <script lang="ts" setup>
-import {inject, onMounted, PropType, ref, toRaw, watchEffect} from 'vue'
-import {AppContext} from "../../types";
-import {Note, rawDataToDotTriples} from "../../lib/Note";
-import {withEntities} from "../../triplifiers/dotTriples.js";
-import MetadataValue from "./helpers/MetadataValue.vue"
-
-const context: AppContext = inject('context')
+import MetadataValue from "./helpers/Term.vue"
 
 const props = defineProps({
-  note: {
-    type: Object as PropType<Note>,
+  dotTriples: {
     required: true
   }
 })
 
-onMounted(async () => {
-  watchEffect(async () => update());
-})
 
-async function update() {
-  console.log('updated dotTriples')
-
-  const spo = rawDataToDotTriples(toRaw(props.note.getRawData()))
-  console.log(context.uriResolvers)
-  dotTriples.value = spo.map((triple) => withEntities(triple, context.uriResolvers))
-}
-
-const dotTriples = ref([])
-// const attributes = computed(() => dotTriples.value.filter((current) => current.subject == null))
-// const triples = computed(() => dotTriples.value.filter((current) => current.subject != null))
+// onMounted(async () => {
+//   watchEffect(async () => update());
+// })
 
 </script>
 
 <template>
 
-  {{ dotTriples }}
+  <template v-if="dotTriples">
+    <h3>Triples</h3>
+    <div class="metadata-fields">
+      <template v-for="triple in dotTriples">
+        <template v-if="triple.subject && triple.predicate && triple.object">
+          <metadata-value :term="triple.subject"/>
+          <metadata-value :term="triple.predicate"/>
+          <metadata-value :term="triple.object"/>
+        </template>
+        <template v-else>
+          <div>{{ triple.raw }}</div>
+          <div>{{ triple.exception }}</div>
+          <div></div>
+        </template>
 
-
-<!--    <template v-if="dotTriples">-->
-<!--      <h3>Triples</h3>-->
-<!--      <div class="metadata-fields">-->
-<!--        <template v-for="triple in dotTriples">-->
-<!--          <metadata-value :value="triple.subject"/>-->
-<!--          <metadata-value :value="triple.predicate"/>-->
-<!--          <metadata-value :value="triple.object"/>-->
-<!--        </template>-->
-<!--      </div>-->
-<!--    </template>-->
+      </template>
+    </div>
+  </template>
 
   <!--  <h3 v-if="metadata.links && metadata.links.length">Links</h3>-->
   <!--  <template v-for="(value) in metadata.links">-->
@@ -75,8 +62,8 @@ const dotTriples = ref([])
 }
 
 .metadata-fields {
-  display: grid;
-  grid-template-columns: 2fr 2fr 5fr;
+  /*display: grid;*/
+  /*grid-template-columns: 2fr 2fr 5fr;*/
   padding: 5px;
   gap: 5px;
 }

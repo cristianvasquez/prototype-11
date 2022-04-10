@@ -19,8 +19,8 @@
 
 /* sfc-style:/home/cvasquez/obsidian/workspace/.obsidian/plugins/prototype-11/src/UI/components/DotTriples.vue?type=style&index=0 */
 .metadata-attributes {
-  display: grid;
-  grid-template-columns: 1fr 5fr;
+  /*display: grid;*/
+  /*grid-template-columns: 1fr 5fr;*/
   padding: 5px;
   gap: 10px;
 }

@@ -17,9 +17,7 @@ class Prototype11 {
 
         // @ts-ignore
         // const text = this.file.unsafeCachedData ? this.file.unsafeCachedData : await getActiveFileContent(app, true)
-
-        const text = await getActiveFileContent(app, true)
-
+        const text = await getActiveFileContent(app, false)
         return {
             name: this.file.name,
             path: this.file.path,

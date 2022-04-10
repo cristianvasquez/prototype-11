@@ -1,49 +1,27 @@
 <script lang="ts" setup>
-import {inject, onMounted, PropType, ref, watchEffect} from 'vue'
 import {dateTimeFormat} from '../../consts'
-import {AppContext} from "../../types";
-import {Note} from "../../lib/Note";
-
-const context: AppContext = inject('context')
-const fileInfo = ref()
 
 const props = defineProps({
-  note: {
-    type: Object as PropType<Note>,
+  noteInfo: {
+    type: Object,
     required: true
   }
 })
 
-onMounted(async () => {
-  watchEffect(async () => update());
-})
-
-async function update() {
-  fileInfo.value = props.note.getFileInfo()
-}
-
-
 </script>
 
-<template v-if="fileInfo">
+<template v-if="noteInfo">
 
   <div class="file-info">
-
-    <template v-if="note">
-      <div>URI</div>
-      <div>{{ note.noteUri }}</div>
-    </template>
-
-    <template v-if="fileInfo">
-      <div>Created</div>
-      <div>{{ fileInfo.created.toLocaleString(dateTimeFormat) }}</div>
-      <div>Modified</div>
-      <div>{{ fileInfo.updated.toLocaleString(dateTimeFormat) }}</div>
-      <div>Size</div>
-      <div>{{ fileInfo.size }}</div>
-    </template>
+    <div>URI</div>
+    <div>{{ noteInfo.noteUri }}</div>
+    <div>Created</div>
+    <div>{{ noteInfo.created.toLocaleString(dateTimeFormat) }}</div>
+    <div>Modified</div>
+    <div>{{ noteInfo.updated.toLocaleString(dateTimeFormat) }}</div>
+    <div>Size</div>
+    <div>{{ noteInfo.size }}</div>
   </div>
-
 
 </template>
 

@@ -20,9 +20,6 @@ import {getTemplate} from "./triplifiers/utils";
 import {config, uriResolvers} from "./config";
 import {ns} from './namespaces'
 import {EventEmitter} from "./lib/EventEmitter.js";
-import {Prototype11} from "./lib/Prototype11";
-import {Note} from "./lib/Note";
-import {indexNote} from "./lib/indexer";
 
 interface ClientSettings {
     endpointUrl: string,
@@ -86,14 +83,13 @@ export default class Prototype_11 extends Plugin {
         const triplestore = new Triplestore(client)
 
 
-        async function indexFile(file: TFile, app: App) {
-            console.log('Indexing', file.path)
-            const rawData = await new Prototype11(app, file).getRawData()
-            const note = new Note(rawData)
-            await indexNote(triplestore, note, ns)
-            console.log('Index done')
-            events.emit('update', file)
-        }
+        // async function indexFile(file: TFile, app: App) {
+        //     console.log('Indexing', file.path)
+        //     const rawData = await new Prototype11(app, file).getRawData()
+        //     const note = new Note(rawData)
+        //     await indexNote(triplestore, note, ns)
+        //     console.log('Index done')
+        // }
 
         async function deleteIndex(path: String) {
             const uri = config.encodeURI(path)
@@ -114,17 +110,19 @@ export default class Prototype_11 extends Plugin {
         if (typeof save === 'function') {
             saveCommandDefinition.callback = async () => {
                 const file = this.app.workspace.getActiveFile();
-                await indexFile(file, this.app)
+                events.emit('index', file)
+                // await indexFile(file, this.app)
             };
         }
 
         // @ts-ignore
         let plugin = app.plugins.plugins[PLUGIN_NAME]
-        // plugin.registerEvent(
-        //     this.app.metadataCache.on('changed', file => {
-        //         console.log('file modified')
-        //     })
-        // )
+        plugin.registerEvent(
+            this.app.metadataCache.on('changed', file => {
+                console.log('file changed')
+                events.emit('update', file)
+            })
+        )
         plugin.registerEvent(
             this.app.vault.on('rename', async (file, oldPath) => {
                 if (!(file instanceof TFile)) return

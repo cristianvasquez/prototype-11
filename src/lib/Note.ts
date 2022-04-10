@@ -36,6 +36,7 @@ function rawDataToDotTriples(data: ObsidianRawData): Array<Triple> {
     const textChunks = getSections(data, (section) => section.type !== 'code')
     let result: Array<Triple> = []
     for (const chunk of textChunks) {
+        console.log(chunk)
         for (const triple of getDotTriples(chunk)) {
             if (triple) {
                 result.push(triple)

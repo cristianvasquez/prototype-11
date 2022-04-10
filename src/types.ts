@@ -1,4 +1,3 @@
-import {DateTime} from "luxon";
 import Dataset from "rdf-ext/lib/Dataset";
 import {App, CachedMetadata, FileStats, LinkCache} from "obsidian";
 import {EventEmitter} from "./lib/EventEmitter";
@@ -8,7 +7,8 @@ type AppContext = {
     config: SparqlConfig,
     app: App,
     events: EventEmitter,
-    uriResolvers: any
+    uriResolvers: any,
+    ns: any
 }
 
 type SparqlConfig = {
@@ -28,23 +28,14 @@ type ObsidianRawData = {
     backlinks?: Record<string, [LinkCache]>
 }
 
-type StructuredData = {
-    uri: string,
-    name: string,
-    path: string,
-    created: DateTime,
-    updated: DateTime,
-    size: number,
-    pairs?: Array<Triple>,
-    triads?: Array<Triple>,
-    rdf?: Dataset
-}
-
 type Triple = {
-    subject?: Term,
+    raw: String,
+    subject: Term,
     predicate: Term,
     object: Term
 }
-type Term = any
+type Term = {
+    entities:any
+}
 
-export {Triple, Term, ObsidianRawData, StructuredData, Dataset, SparqlConfig, AppContext}
+export {Triple, Term, ObsidianRawData, Dataset, SparqlConfig, AppContext}

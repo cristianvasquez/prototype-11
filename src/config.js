@@ -32,8 +32,14 @@ function uriResolvers (app) {
       return encodeURI(cache?.path)
 
     },
-    getCurrentURI: () => {
-      return encodeURI(app.workspace.getActiveFile().path)
+    getCurrentNote: () => {
+
+      const currentFile = app.workspace.getActiveFile()
+      return {
+        name: currentFile.name,
+        path: currentFile.path,
+        uri: encodeURI(currentFile.path)
+      }
     }
   }
 
@@ -42,7 +48,8 @@ function uriResolvers (app) {
 function replaceSPARQL (sparql, uriResolvers) {
 
   if (sparql.includes(THIS)) {
-    sparql = sparql.replaceAll(THIS, `<${uriResolvers.getCurrentURI()}>`)
+    const { name, path, uri } = uriResolvers.getCurrentNote()
+    sparql = sparql.replaceAll(THIS, `<${uri}>`)
   }
 
   const replacer = (str) => {

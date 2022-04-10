@@ -1,7 +1,6 @@
 // This should be done at some point with
 // https://chevrotain.io/docs/ (if worth the effort)
 
-import { applyToChunks } from './utils.js'
 import { getInternalLinks } from './miniNLP.js'
 import { THIS } from '../consts.js'
 
@@ -53,16 +52,18 @@ function setEntities (term, uriResolvers) {
   const entities = []
 
   if (term.raw === THIS) {
+    const { name, path, uri } = uriResolvers.getCurrentNote()
     entities.push({
-      type: 'uri',
-      value: uriResolvers.getCurrentURI()
+      uri: uri,
+      name: name
     })
+    term.raw = `[[${name}]]`
   }
 
-  for (const current of getInternalLinks(term.raw)) {
+  for (const name of getInternalLinks(term.raw)) {
     entities.push({
-      type: 'uri',
-      value: uriResolvers.resolveURIByNoteName(current)
+      uri: uriResolvers.resolveURIByNoteName(name),
+      name: name
     })
   }
 
@@ -83,7 +84,9 @@ function withEntities (triple, uriResolvers) {
 }
 
 function * getDotTriples (fullText) {
-  for (const triple of applyToChunks(fullText, toSPO)) {
+
+  const triples = fullText.split('\n').map(toSPO)
+  for (const triple of triples) {
     if (triple) {
       yield triple
     }

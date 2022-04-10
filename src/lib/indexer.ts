@@ -28,6 +28,7 @@ async function indexNote(triplestore: Triplestore, note: Note, ns: any) {
     const dataset = await getAllTriples(note.getRawData(), note.noteUri, ns)
     await triplestore.deleteDataset(note.noteUri)
     await triplestore.insertDataset(note.noteUri, dataset)
+    return dataset.size
 }
 
 

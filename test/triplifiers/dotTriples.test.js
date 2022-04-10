@@ -8,10 +8,21 @@ expect.extend({ toMatchSnapshot })
 const phrases = [
   'properties :: and values are separated by double colons',
   `
-  to simplify things, this
-  mini-syntax :: spans
-  only one line
+  to simplify things, each
+  property :: value
+  spans one line
   `,
+  `
+  a :: b
+  c :: d  
+  `,
+  `
+  a :: b
+  a :: b  
+  `,
+  `a :: h
+a :: i
+a :: i`,
   'Maria :: climbed :: the tree',
   'subject :: \'Quotes escape :: characters\' :: object',
   'internal link :: [[link]]',
@@ -43,7 +54,10 @@ describe('[getDotTriples]', function () {
         actual = [...actual, triple]
       }
       // console.debug(JSON.stringify(actual,null,2))
-      expect(actual).toMatchSnapshot(this)
+      expect({
+        size:actual.length,
+        triples:actual,
+      }).toMatchSnapshot(this)
     })
   })
 
@@ -54,7 +68,13 @@ describe('[getDotTriples withEntities]', function () {
   const uriResolvers = {
     resolvePathByNoteName: (str) => `${str}_PATH`,
     resolveURIByNoteName: (str) => `${str}_URI`,
-    getCurrentURI: () => `CURRENT_URI`,
+    getCurrentNote: () => {
+      return {
+        path: 'CURRENT_PATH',
+        uri: 'CURRENT_URI',
+        name: 'CURRENT_NAME'
+      }
+    },
   }
   phrases.forEach((current) => {
     it(`"${current}"`, async function () {
@@ -64,7 +84,10 @@ describe('[getDotTriples withEntities]', function () {
         actual = [...actual, withEntities(triple, uriResolvers)]
       }
       // console.debug(JSON.stringify(actual,null,2))
-      expect(actual).toMatchSnapshot(this)
+      expect({
+        size:actual.length,
+        triples:actual,
+      }).toMatchSnapshot(this)
     })
   })
 
@@ -75,7 +98,13 @@ describe('[getDotTriples withEntities not found]', function () {
   const uriResolvers = {
     resolvePathByNoteName: (str) => undefined,
     resolveURIByNoteName: (str) => undefined,
-    getCurrentURI: () => `CURRENT_URI`,
+    getCurrentNote: () => {
+      return {
+        path: 'CURRENT_PATH',
+        uri: 'CURRENT_URI',
+        name: 'CURRENT_NAME'
+      }
+    },
   }
   phrases.forEach((current) => {
     it(`"${current}"`, async function () {
@@ -85,7 +114,10 @@ describe('[getDotTriples withEntities not found]', function () {
         actual = [...actual, withEntities(triple, uriResolvers)]
       }
       // console.debug(JSON.stringify(actual,null,2))
-      expect(actual).toMatchSnapshot(this)
+      expect({
+        size:actual.length,
+        triples:actual,
+      }).toMatchSnapshot(this)
     })
   })
 
