@@ -8,7 +8,8 @@ type AppContext = {
     app: App,
     events: EventEmitter,
     uriResolvers: any,
-    ns: any
+    ns: any,
+    plugin: any
 }
 
 type SparqlConfig = {
@@ -35,7 +36,8 @@ type Triple = {
     object: Term
 }
 type Term = {
-    entities:any
+    entities: any,
+    raw: String
 }
 
 export {Triple, Term, ObsidianRawData, Dataset, SparqlConfig, AppContext}

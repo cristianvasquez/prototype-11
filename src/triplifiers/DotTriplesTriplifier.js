@@ -1,13 +1,15 @@
 import rdf from 'rdf-ext'
+import { ns } from '../namespaces.js'
 import 'core-js/actual/index.js'
 import { getDotTriplesFromText, withEntities } from './dotTriples.js'
 
-function canonical (str) {
-  return str.toLowerCase().replaceAll(' ', '-')
-}
-
 function rawToURI (str) {
-  return rdf.namedNode(`http://properties/${canonical(str)}`)
+
+  if ('is-a' === str.toLowerCase()) {
+    return ns.rdf.type
+  }
+
+  return rdf.namedNode(`http://props/${canonical(str)}`)
 }
 
 function toTermsSP (term) {
@@ -24,6 +26,10 @@ function toTermsO (term) {
   } else {
     return [rdf.literal(term.raw)]
   }
+}
+
+function canonical (str) {
+  return str.toLowerCase().replaceAll(' ', '-')
 }
 
 class DotTriplesTriplifier {
@@ -61,4 +67,4 @@ class DotTriplesTriplifier {
 
 }
 
-export { DotTriplesTriplifier }
+export { DotTriplesTriplifier, canonical, rawToURI }

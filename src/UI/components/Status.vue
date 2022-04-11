@@ -33,10 +33,10 @@ async function fetchCurrentDataset() {
 }
 
 async function popupRDF(dataset: Dataset) {
-  const rdfView = createApp(Quads)
-  rdfView.provide('dataset', toRaw(dataset))
-  rdfView.provide('context', context)
-  new ModalWrapper(context.app, rdfView).open()
+  const quadsView = createApp(Quads)
+  quadsView.provide('dataset', toRaw(dataset))
+  quadsView.provide('context', context)
+  new ModalWrapper(context.app, quadsView).open()
 }
 
 async function indexRDF(dataset: Dataset) {

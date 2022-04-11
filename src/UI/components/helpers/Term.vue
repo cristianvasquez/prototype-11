@@ -2,11 +2,18 @@
 import InternalLink from './InternalLink.vue'
 import { getSpans } from '../renderingUtils'
 
+const emit = defineEmits(['term-clicked'])
+
 const props = defineProps({
   term: {
     required: true
   }
 })
+
+function updateField (term) {
+  emit('term-clicked', term)
+}
+
 
 </script>
 
@@ -16,8 +23,11 @@ const props = defineProps({
       <template v-if="span.type==='link'">
         <internal-link :linkTo="span.value" class="clickable"/>
       </template>
-      <template v-else>{{ span.value }}</template>
+      <template v-else><span @click="updateField(term)">{{ span.value }}</span></template>
     </template>
   </div>
-  <div v-else>{{ term.raw }}</div>
+  <template v-else>
+    <div @click="updateField(term)">{{ term.raw }}</div>
+  </template>
+
 </template>

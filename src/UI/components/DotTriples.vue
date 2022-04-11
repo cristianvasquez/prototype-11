@@ -1,5 +1,11 @@
 <script lang="ts" setup>
 import MetadataValue from "./helpers/Term.vue"
+import {createApp, inject, toRaw} from "vue";
+import TermDetail from "./TermDetail.vue";
+import {ModalWrapper} from "./helpers/ModalWrapper";
+import {AppContext} from "../../types";
+
+const context: AppContext = inject('context')
 
 const props = defineProps({
   dotTriples: {
@@ -7,10 +13,12 @@ const props = defineProps({
   }
 })
 
-
-// onMounted(async () => {
-//   watchEffect(async () => update());
-// })
+function termDetails(term: any) {
+  const popupApp = createApp(TermDetail)
+  popupApp.provide('term', toRaw(term))
+  popupApp.provide('context', context)
+  new ModalWrapper(context.app, popupApp).open()
+}
 
 </script>
 
@@ -21,9 +29,9 @@ const props = defineProps({
     <div class="metadata-fields">
       <template v-for="triple in dotTriples">
         <template v-if="triple.subject && triple.predicate && triple.object">
-          <metadata-value :term="triple.subject"/>
-          <metadata-value :term="triple.predicate"/>
-          <metadata-value :term="triple.object"/>
+          <metadata-value :term="triple.subject" @termClicked="termDetails"/>
+          <metadata-value :term="triple.predicate" @termClicked="termDetails"/>
+          <metadata-value :term="triple.object" @termClicked="termDetails"/>
         </template>
         <template v-else>
           <div>{{ triple.raw }}</div>

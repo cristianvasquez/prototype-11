@@ -2,7 +2,7 @@ import {
     App,
     Editor,
     ItemView,
-    MarkdownPostProcessorContext, Modal,
+    MarkdownPostProcessorContext,
     Plugin,
     PluginSettingTab,
     Setting,
@@ -32,7 +32,8 @@ interface PluginSettings {
     clientSettings: ClientSettings,
     indexOnOpen: boolean,
     indexOnSave: boolean,
-    allowUpdate: boolean
+    allowUpdate: boolean,
+    customProperties: any
 }
 
 const DEFAULT_SETTINGS: PluginSettings = {
@@ -44,7 +45,10 @@ const DEFAULT_SETTINGS: PluginSettings = {
     },
     indexOnOpen: false,
     indexOnSave: true,
-    allowUpdate: false
+    allowUpdate: false,
+    customProperties: {
+        'is-a': ns.rdf.type.value
+    }
 }
 
 export default class Prototype_11 extends Plugin {
@@ -111,7 +115,6 @@ export default class Prototype_11 extends Plugin {
             saveCommandDefinition.callback = async () => {
                 const file = this.app.workspace.getActiveFile();
                 events.emit('index', file)
-                // await indexFile(file, this.app)
             };
         }
 
@@ -149,14 +152,15 @@ export default class Prototype_11 extends Plugin {
          * The apps
          */
 
-            // Debug view
+        // Debug view
         const appContext = {
                 app: this.app,
                 triplestore: triplestore,
                 events: events,
                 config: config,
                 ns: ns,
-                uriResolvers: uriResolvers(app)
+                uriResolvers: uriResolvers(app),
+                plugin: plugin
             }
 
         const debugApp = createApp(DebugView)
@@ -199,7 +203,6 @@ export default class Prototype_11 extends Plugin {
     }
 }
 export const SIDE_VIEW_ID = `${PLUGIN_NAME}-sideview`;
-
 
 
 class SampleSettingTab extends PluginSettingTab {

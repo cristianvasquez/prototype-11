@@ -58,7 +58,6 @@ function uriResolvers (app) {
     }
 
   }
-
 }
 
 function replaceSPARQL (sparql, uriResolvers) {
