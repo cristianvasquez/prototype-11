@@ -2,14 +2,15 @@
 import {onMounted, ref} from 'vue'
 import {inject} from '@vue/runtime-core'
 import NoteInfo from './components/NoteInfo.vue'
-import {Note, rawDataToDotTriples} from "../lib/Note";
+import {Note} from "../lib/Note";
+import {getDotTriplesFromText} from '../triplifiers/dotTriples.js'
 import {TAbstractFile, TFile} from "obsidian";
 import {AppContext, ObsidianRawData} from "../types";
-import {Prototype11} from "../lib/Prototype11";
 import Status from "./components/Status.vue";
 import DotTriples from "./components/DotTriples.vue";
 import {withEntities} from "../triplifiers/dotTriples";
 import {indexNote} from "../lib/indexer";
+import {getSections} from "../lib/helpers";
 
 const context: AppContext = inject('context')
 
@@ -29,9 +30,8 @@ onMounted(() => {
   })
 
   context.events.on('index', async (file: TFile) => {
-    console.log('index')
     const note = await updateView(file)
-    const size = await indexNote(context.triplestore, note, context.ns)
+    const size = await indexNote(context.triplestore, note, context.ns, context.uriResolvers)
     console.log(`indexed ${size} triples`)
     ver.value = ver.value + 1
   })
@@ -40,8 +40,7 @@ onMounted(() => {
 
 async function updateView(file: TAbstractFile) {
   if (file) {
-    const prototype = new Prototype11(context.app, file as TFile)
-    const data = await prototype.getRawData()
+    const data = await context.uriResolvers.getRawData(file)
     const note = new Note(data)
     title.value = file.name
     noteUri.value = note.noteUri
@@ -59,8 +58,17 @@ let noteInfo = ref()
 let dotTriples = ref()
 
 async function updateDotTriples(rawData: ObsidianRawData) {
-  const spo = rawDataToDotTriples(rawData)
-  dotTriples.value = spo.map((triple) => withEntities(triple, context.uriResolvers))
+  const textChunks = getSections(rawData, (section: any) => section.type !== 'code')
+  const result = []
+  for (const chunk of textChunks) {
+    for (const dotTriple of getDotTriplesFromText(chunk)) {
+      const triple = await withEntities(dotTriple, context.uriResolvers)
+      if (triple) {
+        result.push(triple)
+      }
+    }
+  }
+  dotTriples.value = result
 }
 
 </script>

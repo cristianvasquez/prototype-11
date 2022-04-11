@@ -34,7 +34,7 @@ class GithubTriplifier {
     ])
   }
 
-  triplififyText (text) {
+  triplififyText (text, uriResolvers) {
     const results = GithubTriplifier.getMatches(text)
     if (results && results[0].startsWith(GITHUB_URL)) {
       return this.getRDF(results[0])

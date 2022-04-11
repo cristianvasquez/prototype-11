@@ -1,4 +1,4 @@
-import { getDotTriples, withEntities } from '../../src/triplifiers/dotTriples.js'
+import { getDotTriplesFromText, withEntities } from '../../src/triplifiers/dotTriples.js'
 
 import expect from 'expect'
 import toMatchSnapshot from 'expect-mocha-snapshot'
@@ -50,7 +50,7 @@ describe('[getDotTriples]', function () {
     it(`"${current}"`, async function () {
 
       let actual = []
-      for (const triple of getDotTriples(current)) {
+      for (const triple of getDotTriplesFromText(current)) {
         actual = [...actual, triple]
       }
       // console.debug(JSON.stringify(actual,null,2))
@@ -80,7 +80,7 @@ describe('[getDotTriples withEntities]', function () {
     it(`"${current}"`, async function () {
 
       let actual = []
-      for (const triple of getDotTriples(current)) {
+      for (const triple of getDotTriplesFromText(current)) {
         actual = [...actual, withEntities(triple, uriResolvers)]
       }
       // console.debug(JSON.stringify(actual,null,2))
@@ -110,7 +110,7 @@ describe('[getDotTriples withEntities not found]', function () {
     it(`"${current}"`, async function () {
 
       let actual = []
-      for (const triple of getDotTriples(current)) {
+      for (const triple of getDotTriplesFromText(current)) {
         actual = [...actual, withEntities(triple, uriResolvers)]
       }
       // console.debug(JSON.stringify(actual,null,2))

@@ -2,7 +2,7 @@ import {
     App,
     Editor,
     ItemView,
-    MarkdownPostProcessorContext,
+    MarkdownPostProcessorContext, Modal,
     Plugin,
     PluginSettingTab,
     Setting,
@@ -199,6 +199,8 @@ export default class Prototype_11 extends Plugin {
     }
 }
 export const SIDE_VIEW_ID = `${PLUGIN_NAME}-sideview`;
+
+
 
 class SampleSettingTab extends PluginSettingTab {
     plugin: Prototype_11;

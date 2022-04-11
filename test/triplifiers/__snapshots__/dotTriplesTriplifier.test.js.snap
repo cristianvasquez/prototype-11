@@ -1,0 +1,439 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[triplififyText] "
+  a :: b
+  a :: b  
+  " 1`] = `
+Object {
+  "size": 1,
+  "triples": Array [
+    Quad {
+      "graph": DefaultGraph {},
+      "object": Literal {
+        "datatype": NamedNode {
+          "value": "http://www.w3.org/2001/XMLSchema#string",
+        },
+        "language": "",
+        "value": "b",
+      },
+      "predicate": NamedNode {
+        "value": "http://properties/a",
+      },
+      "subject": NamedNode {
+        "value": "http://notes/aHR0cDovL0NVUlJFTlRfTkFNRQ==",
+      },
+    },
+  ],
+}
+`;
+
+exports[`[triplififyText] "
+  a :: b
+  c :: d  
+  " 1`] = `
+Object {
+  "size": 2,
+  "triples": Array [
+    Quad {
+      "graph": DefaultGraph {},
+      "object": Literal {
+        "datatype": NamedNode {
+          "value": "http://www.w3.org/2001/XMLSchema#string",
+        },
+        "language": "",
+        "value": "b",
+      },
+      "predicate": NamedNode {
+        "value": "http://properties/a",
+      },
+      "subject": NamedNode {
+        "value": "http://notes/aHR0cDovL0NVUlJFTlRfTkFNRQ==",
+      },
+    },
+    Quad {
+      "graph": DefaultGraph {},
+      "object": Literal {
+        "datatype": NamedNode {
+          "value": "http://www.w3.org/2001/XMLSchema#string",
+        },
+        "language": "",
+        "value": "d",
+      },
+      "predicate": NamedNode {
+        "value": "http://properties/c",
+      },
+      "subject": NamedNode {
+        "value": "http://notes/aHR0cDovL0NVUlJFTlRfTkFNRQ==",
+      },
+    },
+  ],
+}
+`;
+
+exports[`[triplififyText] "
+  to simplify things, each
+  property :: value
+  spans one line
+  " 1`] = `
+Object {
+  "size": 1,
+  "triples": Array [
+    Quad {
+      "graph": DefaultGraph {},
+      "object": Literal {
+        "datatype": NamedNode {
+          "value": "http://www.w3.org/2001/XMLSchema#string",
+        },
+        "language": "",
+        "value": "value",
+      },
+      "predicate": NamedNode {
+        "value": "http://properties/property",
+      },
+      "subject": NamedNode {
+        "value": "http://notes/aHR0cDovL0NVUlJFTlRfTkFNRQ==",
+      },
+    },
+  ],
+}
+`;
+
+exports[`[triplififyText] " something :: points at :: [[Note]]" 1`] = `
+Object {
+  "size": 1,
+  "triples": Array [
+    Quad {
+      "graph": DefaultGraph {},
+      "object": NamedNode {
+        "value": "http://notes/aHR0cDovL05vdGU=",
+      },
+      "predicate": NamedNode {
+        "value": "http://properties/points-at",
+      },
+      "subject": NamedNode {
+        "value": "http://properties/something",
+      },
+    },
+  ],
+}
+`;
+
+exports[`[triplififyText] " something :: points at :: __THIS__" 1`] = `
+Object {
+  "size": 1,
+  "triples": Array [
+    Quad {
+      "graph": DefaultGraph {},
+      "object": NamedNode {
+        "value": "http://notes/aHR0cDovL0NVUlJFTlRfTkFNRQ==",
+      },
+      "predicate": NamedNode {
+        "value": "http://properties/points-at",
+      },
+      "subject": NamedNode {
+        "value": "http://properties/something",
+      },
+    },
+  ],
+}
+`;
+
+exports[`[triplififyText] "[[Note]] :: is a :: note" 1`] = `
+Object {
+  "size": 1,
+  "triples": Array [
+    Quad {
+      "graph": DefaultGraph {},
+      "object": Literal {
+        "datatype": NamedNode {
+          "value": "http://www.w3.org/2001/XMLSchema#string",
+        },
+        "language": "",
+        "value": "note",
+      },
+      "predicate": NamedNode {
+        "value": "http://properties/is-a",
+      },
+      "subject": NamedNode {
+        "value": "http://notes/aHR0cDovL05vdGU=",
+      },
+    },
+  ],
+}
+`;
+
+exports[`[triplififyText] "__THIS__ :: is a :: note" 1`] = `
+Object {
+  "size": 1,
+  "triples": Array [
+    Quad {
+      "graph": DefaultGraph {},
+      "object": Literal {
+        "datatype": NamedNode {
+          "value": "http://www.w3.org/2001/XMLSchema#string",
+        },
+        "language": "",
+        "value": "note",
+      },
+      "predicate": NamedNode {
+        "value": "http://properties/is-a",
+      },
+      "subject": NamedNode {
+        "value": "http://notes/aHR0cDovL0NVUlJFTlRfTkFNRQ==",
+      },
+    },
+  ],
+}
+`;
+
+exports[`[triplififyText] "A :: B :: C :: D" 1`] = `
+Object {
+  "size": 0,
+  "triples": Array [],
+}
+`;
+
+exports[`[triplififyText] "Maria :: climbed :: the tree" 1`] = `
+Object {
+  "size": 1,
+  "triples": Array [
+    Quad {
+      "graph": DefaultGraph {},
+      "object": Literal {
+        "datatype": NamedNode {
+          "value": "http://www.w3.org/2001/XMLSchema#string",
+        },
+        "language": "",
+        "value": "the tree",
+      },
+      "predicate": NamedNode {
+        "value": "http://properties/climbed",
+      },
+      "subject": NamedNode {
+        "value": "http://properties/maria",
+      },
+    },
+  ],
+}
+`;
+
+exports[`[triplififyText] "a :: h
+a :: i
+a :: i" 1`] = `
+Object {
+  "size": 2,
+  "triples": Array [
+    Quad {
+      "graph": DefaultGraph {},
+      "object": Literal {
+        "datatype": NamedNode {
+          "value": "http://www.w3.org/2001/XMLSchema#string",
+        },
+        "language": "",
+        "value": "h",
+      },
+      "predicate": NamedNode {
+        "value": "http://properties/a",
+      },
+      "subject": NamedNode {
+        "value": "http://notes/aHR0cDovL0NVUlJFTlRfTkFNRQ==",
+      },
+    },
+    Quad {
+      "graph": DefaultGraph {},
+      "object": Literal {
+        "datatype": NamedNode {
+          "value": "http://www.w3.org/2001/XMLSchema#string",
+        },
+        "language": "",
+        "value": "i",
+      },
+      "predicate": NamedNode {
+        "value": "http://properties/a",
+      },
+      "subject": NamedNode {
+        "value": "http://notes/aHR0cDovL0NVUlJFTlRfTkFNRQ==",
+      },
+    },
+  ],
+}
+`;
+
+exports[`[triplififyText] "date :: 2022-01-07 15:07" 1`] = `
+Object {
+  "size": 1,
+  "triples": Array [
+    Quad {
+      "graph": DefaultGraph {},
+      "object": Literal {
+        "datatype": NamedNode {
+          "value": "http://www.w3.org/2001/XMLSchema#string",
+        },
+        "language": "",
+        "value": "2022-01-07 15:07",
+      },
+      "predicate": NamedNode {
+        "value": "http://properties/date",
+      },
+      "subject": NamedNode {
+        "value": "http://notes/aHR0cDovL0NVUlJFTlRfTkFNRQ==",
+      },
+    },
+  ],
+}
+`;
+
+exports[`[triplififyText] "external link :: <http://example.org>" 1`] = `
+Object {
+  "size": 1,
+  "triples": Array [
+    Quad {
+      "graph": DefaultGraph {},
+      "object": Literal {
+        "datatype": NamedNode {
+          "value": "http://www.w3.org/2001/XMLSchema#string",
+        },
+        "language": "",
+        "value": "<http://example.org>",
+      },
+      "predicate": NamedNode {
+        "value": "http://properties/external-link",
+      },
+      "subject": NamedNode {
+        "value": "http://notes/aHR0cDovL0NVUlJFTlRfTkFNRQ==",
+      },
+    },
+  ],
+}
+`;
+
+exports[`[triplififyText] "external link :: http://example.org" 1`] = `
+Object {
+  "size": 1,
+  "triples": Array [
+    Quad {
+      "graph": DefaultGraph {},
+      "object": Literal {
+        "datatype": NamedNode {
+          "value": "http://www.w3.org/2001/XMLSchema#string",
+        },
+        "language": "",
+        "value": "http://example.org",
+      },
+      "predicate": NamedNode {
+        "value": "http://properties/external-link",
+      },
+      "subject": NamedNode {
+        "value": "http://notes/aHR0cDovL0NVUlJFTlRfTkFNRQ==",
+      },
+    },
+  ],
+}
+`;
+
+exports[`[triplififyText] "internal link :: [[link]]" 1`] = `
+Object {
+  "size": 1,
+  "triples": Array [
+    Quad {
+      "graph": DefaultGraph {},
+      "object": NamedNode {
+        "value": "http://notes/aHR0cDovL2xpbms=",
+      },
+      "predicate": NamedNode {
+        "value": "http://properties/internal-link",
+      },
+      "subject": NamedNode {
+        "value": "http://notes/aHR0cDovL0NVUlJFTlRfTkFNRQ==",
+      },
+    },
+  ],
+}
+`;
+
+exports[`[triplififyText] "is a :: [[Editor]], [[Jour]]" 1`] = `
+Object {
+  "size": 2,
+  "triples": Array [
+    Quad {
+      "graph": DefaultGraph {},
+      "object": NamedNode {
+        "value": "http://notes/aHR0cDovL0VkaXRvcg==",
+      },
+      "predicate": NamedNode {
+        "value": "http://properties/is-a",
+      },
+      "subject": NamedNode {
+        "value": "http://notes/aHR0cDovL0NVUlJFTlRfTkFNRQ==",
+      },
+    },
+    Quad {
+      "graph": DefaultGraph {},
+      "object": NamedNode {
+        "value": "http://notes/aHR0cDovL0pvdXI=",
+      },
+      "predicate": NamedNode {
+        "value": "http://properties/is-a",
+      },
+      "subject": NamedNode {
+        "value": "http://notes/aHR0cDovL0NVUlJFTlRfTkFNRQ==",
+      },
+    },
+  ],
+}
+`;
+
+exports[`[triplififyText] "properties :: and values are separated by double colons" 1`] = `
+Object {
+  "size": 1,
+  "triples": Array [
+    Quad {
+      "graph": DefaultGraph {},
+      "object": Literal {
+        "datatype": NamedNode {
+          "value": "http://www.w3.org/2001/XMLSchema#string",
+        },
+        "language": "",
+        "value": "and values are separated by double colons",
+      },
+      "predicate": NamedNode {
+        "value": "http://properties/properties",
+      },
+      "subject": NamedNode {
+        "value": "http://notes/aHR0cDovL0NVUlJFTlRfTkFNRQ==",
+      },
+    },
+  ],
+}
+`;
+
+exports[`[triplififyText] "subject :: 'Quotes escape :: characters' :: object" 1`] = `
+Object {
+  "size": 0,
+  "triples": Array [],
+}
+`;
+
+exports[`[triplififyText] "vaccination dates :: 2022-01-07, next week" 1`] = `
+Object {
+  "size": 1,
+  "triples": Array [
+    Quad {
+      "graph": DefaultGraph {},
+      "object": Literal {
+        "datatype": NamedNode {
+          "value": "http://www.w3.org/2001/XMLSchema#string",
+        },
+        "language": "",
+        "value": "2022-01-07, next week",
+      },
+      "predicate": NamedNode {
+        "value": "http://properties/vaccination-dates",
+      },
+      "subject": NamedNode {
+        "value": "http://notes/aHR0cDovL0NVUlJFTlRfTkFNRQ==",
+      },
+    },
+  ],
+}
+`;

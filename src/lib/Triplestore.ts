@@ -59,19 +59,6 @@ class Triplestore {
         return await this.client.query.update(insertQuery)
     }
 
-    async count(graphUri: NamedNodeExt) {
-        const query = `    
-        SELECT count(*) WHERE {
-          GRAPH <${graphUri.value}> {
-           ?sub ?pred ?obj .
-          }
-        }
-        `
-        const result: Array<ResultRow> = await this.client.query.select(query)
-        console.log(result)
-        return -1
-    }
-
     async construct(query: string) {
         return rdf.dataset(await this.client.query.construct(query))
     }

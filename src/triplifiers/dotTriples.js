@@ -48,9 +48,7 @@ function toSPO (text) {
 
 function setEntities (term, uriResolvers) {
   term.raw = trim(term.raw)
-
   const entities = []
-
   if (term.raw === THIS) {
     const { name, path, uri } = uriResolvers.getCurrentNote()
     entities.push({
@@ -58,13 +56,14 @@ function setEntities (term, uriResolvers) {
       name: name
     })
     term.raw = `[[${name}]]`
-  }
-
-  for (const name of getInternalLinks(term.raw)) {
-    entities.push({
-      uri: uriResolvers.resolveURIByNoteName(name),
-      name: name
-    })
+  } else {
+    for (const name of getInternalLinks(term.raw)) {
+      const uri = uriResolvers.resolveURIByNoteName(name)
+      entities.push({
+        uri: uri,
+        name: name
+      })
+    }
   }
 
   if (entities.length) {
@@ -83,7 +82,7 @@ function withEntities (triple, uriResolvers) {
   return triple
 }
 
-function * getDotTriples (fullText) {
+function * getDotTriplesFromText (fullText) {
 
   const triples = fullText.split('\n').map(toSPO)
   for (const triple of triples) {
@@ -93,4 +92,4 @@ function * getDotTriples (fullText) {
   }
 }
 
-export { getDotTriples, toSPO, withEntities }
+export { getDotTriplesFromText, withEntities }

@@ -1,6 +1,7 @@
 import { ns } from './namespaces.js'
 import { replaceInternalLinks } from './triplifiers/miniNLP.js'
 import { THIS } from './consts.js'
+import { getActiveFileContent } from 'obsidian-community-lib'
 
 // returns: NamedNode
 function encodeURI (path) {
@@ -22,6 +23,19 @@ function uriResolvers (app) {
     return app.metadataCache.getFirstLinkpathDest(noteMD, activePath)
   }
 
+  async function getFileRawData (file) {
+    const text = await getActiveFileContent(app, false)
+    return {
+      name: file.name,
+      path: file.path,
+      stat: file.stat,
+      text: text,
+      metadata: app.metadataCache.getFileCache(file),
+      links: app.metadataCache.resolvedLinks[file.path],
+      backlinks: app.metadataCache.getBacklinksForFile(file).data
+    }
+  }
+
   return {
     resolvePathByNoteName: (str) => {
       const cache = getObsidianCache(str, app)
@@ -30,17 +44,19 @@ function uriResolvers (app) {
     resolveURIByNoteName: (str) => {
       const cache = getObsidianCache(str, app)
       return encodeURI(cache?.path)
-
     },
     getCurrentNote: () => {
-
       const currentFile = app.workspace.getActiveFile()
       return {
         name: currentFile.name,
         path: currentFile.path,
         uri: encodeURI(currentFile.path)
       }
+    },
+    getRawData: async (file) => {
+      return getFileRawData(file)
     }
+
   }
 
 }
