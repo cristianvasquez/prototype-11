@@ -1,6 +1,6 @@
 # Prototype 11
 
-Allows to index and query your Notes' RDF from Obsidian. 
+Allows indexing and querying your notes' RDF from Obsidian. 
 
 Status: exploration
 
@@ -8,15 +8,13 @@ Status: exploration
 
 Each time you save a file, RDF triples are extracted and indexed in the triplestore.
 
-When saving the file, the triples are indexed in the triplestore.
-
 There is a debug panel to lookup the triples.
 
 ![alice.png](./assets/alice.png)
 
 ## Queries
 
-Prototype-11 uses a dialect of SPARQL that allows to embed references to markdown notes.
+Prototype-11 uses a dialect of SPARQL that allows to embed references to markdown notes. It's very simple, it just rewrites any occurrence of [[note]] by a known <URI> .
 
 You can use them in sparql code-block like this:
 
