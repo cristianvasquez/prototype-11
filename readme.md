@@ -14,7 +14,7 @@ There is a debug panel to lookup the triples.
 
 ## Queries
 
-Prototype-11 uses a dialect of SPARQL that allows to embed references to markdown notes. It's very simple, it just rewrites any occurrence of [[note]] by a known <URI> .
+Prototype-11 uses a dialect of SPARQL that allows to embed references to markdown notes. It's very simple, it just rewrites any occurrence of `[[note]]` by a known `<URI>` .
 
 You can use them in sparql code-block like this:
 
@@ -26,9 +26,13 @@ SELECT ?g ?p ?o WHERE {
 } LIMIT 6
 ```
 
-Such code-blocks are then rendered inline, and will contain clickable links in case of known entities. 
+Obsidian will help you to autocomplete the entities in `[[]]`
+
+Later on, such code-blocks are then rendered inline, and will contain clickable links in case of known entities. 
 
 ![query-results.png](./assets/query-results.png)
+
+This is similar to data-view in functionality, but with the expresiveness of SPARQL, and the possibility of federating external sources
 
 ## Config
 
